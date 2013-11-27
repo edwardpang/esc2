@@ -296,16 +296,28 @@ void motor_driver_enable (void) {
 	R_TMR_RD1_Start ( );
 }
 
+/***********************************************************************************************************************/
 void hall_sensor_disable (void) {
 	R_INTC1_Stop ( );
 	R_INTC2_Stop ( );
 	R_INTC3_Stop ( );
 }
 
+/***********************************************************************************************************************/
 void hall_sensor_enable (void) {
 	R_INTC1_Start ( );
 	R_INTC2_Start ( );
 	R_INTC3_Start ( );
+}
+
+/***********************************************************************************************************************/
+void throttle_enable (void) {
+	R_TAU0_Channel2_Start ( );
+}
+
+/***********************************************************************************************************************/
+void throttle_disable (void) {
+	R_TAU0_Channel2_Stop ( );	
 }
 
 /***********************************************************************************************************************/
@@ -349,6 +361,7 @@ void app_handler (void) {
 	switch (g_app_state) {
 		case APP_STATE_INIT:
 			app_config ( );
+			throttle_enable ( );
 			g_app_state = APP_STATE_MOTOR_CONTROL_PRE_IDLE;
 			break;
 			
