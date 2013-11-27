@@ -39,5 +39,76 @@ User definitions
 ***********************************************************************************************************************/
 
 /* Start user code for function. Do not edit comment generated here */
+#define MOTOR_DRV_HS_A			TRDGRB0
+#define MOTOR_DRV_HS_B			TRDGRC0
+#define MOTOR_DRV_HS_C			TRDGRD0
+#define MOTOR_DRV_LS_A			TRDGRB1
+#define MOTOR_DRV_LS_B			TRDGRC1
+#define MOTOR_DRV_LS_C			TRDGRD1
+
+#define PIN_DEBUG					P1.3
+#define PIN_HALL_SENSOR_A			P5.0
+#define PIN_HALL_SENSOR_B			P5.1
+#define PIN_HALL_SENSOR_C			P3.0
+#define PIN_LED_RED					P6.2
+#define PIN_LED_GREEN				P14.7
+#define PIN_MOTOR_DRIVER_ENABLE		P7.0
+
+#define THROTTLE_POS_SHIFT_BIT				((uint16_t) (0U))
+#define THROTTLE_POS_MAX					((uint16_t) (64000U))
+#define THROTTLE_POS_NEUTRAL				((uint16_t) (48000U))
+#define THROTTLE_POS_MIN					((uint16_t) (32000U))
+#define THROTTLE_POS_NEUTRAL_TOLERANCE_PERCENTAGE	((uint16_t) (5U))
+#define THROTTLE_POS_SAMPLE_TOLERANCE_PERCENTAGE	((uint16_t)	(1U))
+
+#define MOTOR_ENABLE			1
+#define MOTOR_DISABLE			0
+
+typedef enum _throttle_direction_t {
+	THROTTLE_DIRECTION_CW = 0,
+	THROTTLE_DIRECTION_CCW,
+	THROTTLE_DIRECTION_NEUTRAL,
+	TRHOTTLE_DIRECTION_NUM
+} throttle_direction_t;
+
+typedef enum _motor_phase_t {
+	MOTOR_PHASE_DEGREE_60 = 0,
+	MOTOR_PHASE_DEGREE_120,
+	MOTOR_PHASE_DEGREE_180,
+	MOTOR_PHASE_DEGREE_240,
+	MOTOR_PHASE_DEGREE_300,
+	MOTOR_PHASE_DEGREE_360,
+	MOTOR_PHASE_ERROR,
+	MOTOR_PHASE_OPEN,
+	MOTOR_PHASE_NUM
+} motor_phase_t;
+
+typedef enum _app_state_t {
+	APP_STATE_START = 0,
+	APP_STATE_FACTORY_INIT,
+	APP_STATE_FACTORY_RESET,
+	APP_STATE_FACTORY_MODE,
+	
+	APP_STATE_INIT,
+	
+	APP_STATE_MOTOR_CONTROL_PRE_IDLE,	
+	APP_STATE_MOTOR_CONTROL_IDLE,
+	APP_STATE_MOTOR_CONTROL_POST_IDLE,	
+	
+	APP_STATE_MOTOR_CONTROL_PRE_BREAK,
+	APP_STATE_MOTOR_CONTROL_BREAK,
+	APP_STATE_MOTOR_CONTROL_POST_BREAK,
+
+	APP_STATE_MOTOR_CONTROL_PRE_ZERO_DRIVING,
+	APP_STATE_MOTOR_CONTROL_ZERO_DRIVING,
+	APP_STATE_MOTOR_CONTROL_POST_ZERO_DRIVING,
+
+	APP_STATE_MOTOR_CONTROL_PRE_TURBO_DRIVING,
+	APP_STATE_MOTOR_CONTROL_TURBO_DRIVING,
+	APP_STATE_MOTOR_CONTROL_POST_TURBO_DRIVING,
+	
+	APP_STATE_NUM
+} app_state_t;
+
 /* End user code. Do not edit comment generated here */
 #endif

@@ -54,6 +54,22 @@ Global variables and functions
 /* For TAU0_ch2 pulse measurement */
 volatile uint32_t g_tau0_ch2_width = 0U;
 /* Start user code for global. Do not edit comment generated here */
+extern throttle_direction_t		g_throttle_direction;
+extern uint16_t		g_u16_throttle_pos_max;
+extern uint16_t		g_u16_throttle_pos_neutral;
+extern uint16_t		g_u16_throttle_pos_min;
+extern uint16_t		g_u16_throttle_pos_neutral_upper;
+extern uint16_t		g_u16_throttle_pos_neutral_lower;
+extern uint16_t		g_u16_throttle_pos_tolerance_percentage;
+extern uint16_t		g_u16_throttle_pos_in_pwm_duty_current;
+volatile uint16_t	u16_throttle_sample;
+extern uint16_t		g_u16_hs_pwm_full, g_u16_hs_pwm_empty;
+extern uint16_t		g_u16_ls_pwm_full, g_u16_ls_pwm_empty;
+
+extern const motor_phase_t	abc2phase[MOTOR_PHASE_NUM];
+extern motor_phase_t	g_motor_phase_current;
+
+
 /* End user code. Do not edit comment generated here */
 
 /***********************************************************************************************************************
@@ -74,6 +90,29 @@ __interrupt static void r_tau0_channel2_interrupt(void)
     }
 
     /* Start user code. Do not edit comment generated here */
+	u16_throttle_sample = (TDR02 + 1U);
+	if (u16_throttle_sample < g_u16_throttle_pos_min) {
+		g_u16_throttle_pos_in_pwm_duty_current = g_u16_hs_pwm_full;
+		g_throttle_direction = THROTTLE_DIRECTION_CCW;
+	}
+	else if (u16_throttle_sample < g_u16_throttle_pos_neutral_lower) {
+		g_u16_throttle_pos_in_pwm_duty_current = 16000U - (g_u16_throttle_pos_neutral - u16_throttle_sample);
+		g_u16_throttle_pos_in_pwm_duty_current = (g_u16_throttle_pos_in_pwm_duty_current >> THROTTLE_POS_SHIFT_BIT);
+		g_throttle_direction = THROTTLE_DIRECTION_CCW;
+	}
+	else if (u16_throttle_sample < g_u16_throttle_pos_neutral_upper) {
+		g_u16_throttle_pos_in_pwm_duty_current = g_u16_hs_pwm_empty;
+		g_throttle_direction = THROTTLE_DIRECTION_NEUTRAL;
+	}
+	else if (u16_throttle_sample < g_u16_throttle_pos_max) {
+		g_u16_throttle_pos_in_pwm_duty_current = 16000U - (u16_throttle_sample - g_u16_throttle_pos_neutral);
+		g_u16_throttle_pos_in_pwm_duty_current = (g_u16_throttle_pos_in_pwm_duty_current >> THROTTLE_POS_SHIFT_BIT);
+		g_throttle_direction = THROTTLE_DIRECTION_CW;
+	}
+	else {
+		g_u16_throttle_pos_in_pwm_duty_current = g_u16_hs_pwm_full;
+		g_throttle_direction = THROTTLE_DIRECTION_CW;
+	}
     /* End user code. Do not edit comment generated here */
 }
 
