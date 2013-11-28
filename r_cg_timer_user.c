@@ -28,7 +28,7 @@
 * Device(s)    : R5F104BA
 * Tool-Chain   : CA78K0R
 * Description  : This file implements device driver for TAU module.
-* Creation Date: 27/11/2013
+* Creation Date: 28/11/2013
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -62,6 +62,7 @@ extern uint16_t		g_u16_throttle_pos_neutral_upper;
 extern uint16_t		g_u16_throttle_pos_neutral_lower;
 extern uint16_t		g_u16_throttle_pos_tolerance_percentage;
 extern uint16_t		g_u16_throttle_pos_in_pwm_duty_current;
+extern uint16_t		g_u16_throttle_pos_in_pwm_duty_last;
 volatile uint16_t	u16_throttle_sample;
 extern uint16_t		g_u16_hs_pwm_full, g_u16_hs_pwm_empty;
 extern uint16_t		g_u16_ls_pwm_full, g_u16_ls_pwm_empty;
@@ -91,6 +92,7 @@ __interrupt static void r_tau0_channel2_interrupt(void)
 
     /* Start user code. Do not edit comment generated here */
 	u16_throttle_sample = (TDR02 + 1U);
+	g_u16_throttle_pos_in_pwm_duty_last = g_u16_throttle_pos_in_pwm_duty_current;
 	if (u16_throttle_sample < g_u16_throttle_pos_min) {
 		g_u16_throttle_pos_in_pwm_duty_current = g_u16_hs_pwm_full;
 		g_throttle_direction = THROTTLE_DIRECTION_CCW;

@@ -28,7 +28,7 @@
 * Device(s)    : R5F104BA
 * Tool-Chain   : CA78K0R
 * Description  : This file implements main function.
-* Creation Date: 27/11/2013
+* Creation Date: 28/11/2013
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -145,6 +145,7 @@ void motor_driver_enable (void) {
 	index |= (PIN_HALL_SENSOR_B << 1);
 	index |= (PIN_HALL_SENSOR_C);
 	g_motor_phase_current = abc2phase[index];
+	g_motor_phase_last = abc2phase[index];
 	
 	if (g_throttle_direction == THROTTLE_DIRECTION_CCW) {
 		switch (g_motor_phase_current) {
@@ -366,21 +367,33 @@ void app_handler (void) {
 			break;
 			
 		case APP_STATE_MOTOR_CONTROL_PRE_IDLE:
-			motor_driver_disable ( );
 			hall_sensor_disable ( );
+			motor_driver_disable ( );
 			g_app_state = APP_STATE_MOTOR_CONTROL_IDLE;
 			break;
 			
 		case APP_STATE_MOTOR_CONTROL_IDLE:
+			if (g_u16_throttle_pos_in_pwm_duty_current != g_u16_hs_pwm_empty) {
+				g_app_state = APP_STATE_MOTOR_CONTROL_PRE_ZERO_DRIVING;
+			}
+			break;
+
+		case APP_STATE_MOTOR_CONTROL_BREAK:
+			if (g_motor_phase_last == g_motor_phase_current) {
+				g_app_state = APP_STATE_MOTOR_CONTROL_PRE_IDLE;
+			}
 			break;
 			
 		case APP_STATE_MOTOR_CONTROL_PRE_ZERO_DRIVING:
-			hall_sensor_enable ( );
 			motor_driver_enable ( );
+			hall_sensor_enable ( );
 			g_app_state = APP_STATE_MOTOR_CONTROL_ZERO_DRIVING;
 			break;
 			
 		case APP_STATE_MOTOR_CONTROL_ZERO_DRIVING:
+			if (g_u16_throttle_pos_in_pwm_duty_current == g_u16_hs_pwm_empty) {
+				g_app_state = APP_STATE_MOTOR_CONTROL_PRE_IDLE;
+			}
 			break;
 
 		case APP_STATE_MOTOR_CONTROL_PRE_TURBO_DRIVING:

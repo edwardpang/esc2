@@ -28,17 +28,22 @@
 * Device(s)    : R5F104BA
 * Tool-Chain   : CA78K0R
 * Description  : This file implements device driver for INTC module.
-* Creation Date: 27/11/2013
+* Creation Date: 28/11/2013
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
 Pragma directive
 ***********************************************************************************************************************/
 #pragma interrupt INTP0 r_intc0_interrupt
+#if 0
 #pragma interrupt INTP1 r_intc1_interrupt
 #pragma interrupt INTP2 r_intc2_interrupt
 #pragma interrupt INTP3 r_intc3_interrupt
+#endif
 /* Start user code for pragma. Do not edit comment generated here */
+#pragma interrupt INTP1 r_hall_sensor_common_interrupt
+#pragma interrupt INTP2 r_hall_sensor_common_interrupt
+#pragma interrupt INTP3 r_hall_sensor_common_interrupt
 /* End user code. Do not edit comment generated here */
 
 /***********************************************************************************************************************
@@ -54,6 +59,16 @@ Includes
 Global variables and functions
 ***********************************************************************************************************************/
 /* Start user code for global. Do not edit comment generated here */
+extern app_state_t 	g_app_state;
+
+extern motor_phase_t	g_motor_phase_current;
+extern motor_phase_t	g_motor_phase_last;
+extern const motor_phase_t	abc2phase[MOTOR_PHASE_NUM];
+
+extern uint16_t	g_u16_ls_pwm_full, g_u16_ls_pwm_empty;
+extern uint16_t	g_u16_hs_pwm_full, g_u16_hs_pwm_empty;
+extern throttle_direction_t	g_throttle_direction;
+extern uint16_t	g_u16_throttle_pos_in_pwm_duty_current;
 /* End user code. Do not edit comment generated here */
 
 /***********************************************************************************************************************
@@ -105,4 +120,161 @@ __interrupt static void r_intc3_interrupt(void)
 }
 
 /* Start user code for adding. Do not edit comment generated here */
+__interrupt static void r_hall_sensor_common_interrupt (void) {
+	uint16_t	index;
+
+	/* Update Phase */
+	index = (PIN_HALL_SENSOR_A << 2);
+	index |= (PIN_HALL_SENSOR_B << 1);
+	index |= (PIN_HALL_SENSOR_C);
+	g_motor_phase_last = g_motor_phase_current;
+	g_motor_phase_current = abc2phase[index];
+
+	/* Update Motor Control */
+	if (g_throttle_direction == THROTTLE_DIRECTION_CCW) {
+		if (g_app_state == APP_STATE_MOTOR_CONTROL_ZERO_DRIVING) {
+			switch (g_motor_phase_current) {
+				case MOTOR_PHASE_DEGREE_60:
+				    //MOTOR_DRV_HS_A = g_u16_hs_pwm_empty;	// skip
+				    //MOTOR_DRV_HS_B = g_u16_hs_pwm_empty;	// skip
+				    //MOTOR_DRV_HS_C = g_u16_throttle_pos_in_pwm_duty_current;		// skip
+				    MOTOR_DRV_LS_A = g_u16_ls_pwm_empty;
+				    MOTOR_DRV_LS_B = g_u16_ls_pwm_full;
+				    //MOTOR_DRV_LS_C = g_u16_ls_pwm_empty;	// skip
+					break;
+					
+				case MOTOR_PHASE_DEGREE_120:
+				    MOTOR_DRV_HS_A = g_u16_throttle_pos_in_pwm_duty_current;
+				    //MOTOR_DRV_HS_B = g_u16_hs_pwm_empty;	// skip
+				    MOTOR_DRV_HS_C = g_u16_hs_pwm_empty;
+				    //MOTOR_DRV_LS_A = g_u16_ls_pwm_empty;	// skip
+				    //MOTOR_DRV_LS_B = g_u16_ls_pwm_full;	// skip
+				    //MOTOR_DRV_LS_C = g_u16_ls_pwm_empty;	// skip
+					break;
+					
+				case MOTOR_PHASE_DEGREE_180:
+				    //MOTOR_DRV_HS_A = g_u16_throttle_pos_in_pwm_duty_current;		// skip
+				    //MOTOR_DRV_HS_B = g_u16_hs_pwm_empty;	// skip
+				    //MOTOR_DRV_HS_C = g_u16_hs_pwm_empty;	// skip
+				    //MOTOR_DRV_LS_A = g_u16_ls_pwm_empty;	// skip
+				    MOTOR_DRV_LS_B = g_u16_ls_pwm_empty;
+				    MOTOR_DRV_LS_C = g_u16_ls_pwm_full;
+					break;
+					
+				case MOTOR_PHASE_DEGREE_240:
+				    MOTOR_DRV_HS_A = g_u16_hs_pwm_empty;
+				    MOTOR_DRV_HS_B = g_u16_throttle_pos_in_pwm_duty_current;
+				    //MOTOR_DRV_HS_C = g_u16_hs_pwm_empty;	// skip
+				    //MOTOR_DRV_LS_A = g_u16_ls_pwm_empty;	// skip
+				    //MOTOR_DRV_LS_B = g_u16_ls_pwm_empty;	// skip
+				    //MOTOR_DRV_LS_C = g_u16_ls_pwm_full;	// skip
+					break;
+					
+				case MOTOR_PHASE_DEGREE_300:
+				    //MOTOR_DRV_HS_A = g_u16_hs_pwm_empty;	// skip
+				    //MOTOR_DRV_HS_B = g_u16_throttle_pos_in_pwm_duty_current;		// skip
+				    //MOTOR_DRV_HS_C = g_u16_hs_pwm_empty;	// skip
+				    MOTOR_DRV_LS_A = g_u16_ls_pwm_full;
+				    //MOTOR_DRV_LS_B = g_u16_ls_pwm_empty;	// skip
+				    MOTOR_DRV_LS_C = g_u16_ls_pwm_empty;
+					break;
+					
+				case MOTOR_PHASE_DEGREE_360:
+				    //MOTOR_DRV_HS_A = g_u16_hs_pwm_empty;	// skip
+				    MOTOR_DRV_HS_B = g_u16_hs_pwm_empty;
+				    MOTOR_DRV_HS_C = g_u16_throttle_pos_in_pwm_duty_current;
+				    //MOTOR_DRV_LS_A = g_u16_ls_pwm_full;	// skip
+				    //MOTOR_DRV_LS_B = g_u16_ls_pwm_empty;	// skip
+				    //MOTOR_DRV_LS_C = g_u16_ls_pwm_empty;	// skip
+					break;
+
+				case MOTOR_PHASE_OPEN:
+				case MOTOR_PHASE_ERROR:
+				default:
+				    MOTOR_DRV_HS_A = g_u16_hs_pwm_empty;
+				    MOTOR_DRV_HS_B = g_u16_hs_pwm_empty;
+				    MOTOR_DRV_HS_C = g_u16_hs_pwm_empty;
+				    MOTOR_DRV_LS_A = g_u16_ls_pwm_empty;
+				    MOTOR_DRV_LS_B = g_u16_ls_pwm_empty;
+				    MOTOR_DRV_LS_C = g_u16_ls_pwm_empty;
+					break;
+			}
+		}
+		else {
+			// Delay Driving
+		}
+	}
+	else if (g_throttle_direction == THROTTLE_DIRECTION_CW) {
+		// CW must be zero timing driving
+		switch (g_motor_phase_current) {
+			case MOTOR_PHASE_DEGREE_60:
+			    MOTOR_DRV_HS_A = g_u16_throttle_pos_in_pwm_duty_current;
+			    MOTOR_DRV_HS_B = g_u16_hs_pwm_empty;
+			    //MOTOR_DRV_HS_C = g_u16_hs_pwm_empty;	// skip
+			    //MOTOR_DRV_LS_A = g_u16_ls_pwm_empty;	// skip
+			    //MOTOR_DRV_LS_B = g_u16_ls_pwm_empty;	// skip
+			    //MOTOR_DRV_LS_C = g_u16_ls_pwm_full;	// skip
+				break;
+				
+			case MOTOR_PHASE_DEGREE_120:
+			    //MOTOR_DRV_HS_A = g_u16_hs_pwm_empty;	// skip
+			    //MOTOR_DRV_HS_B = g_u16_throttle_pos_in_pwm_duty_current;		// skip
+			    //MOTOR_DRV_HS_C = g_u16_hs_pwm_empty;	// skip
+			    MOTOR_DRV_LS_A = g_u16_ls_pwm_empty;
+			    //MOTOR_DRV_LS_B = g_u16_ls_pwm_empty;	// skip
+			    MOTOR_DRV_LS_C = g_u16_ls_pwm_full;
+				break;
+				
+			case MOTOR_PHASE_DEGREE_180:
+			    //MOTOR_DRV_HS_A = g_u16_hs_pwm_empty;	// skip
+			    MOTOR_DRV_HS_B = g_u16_throttle_pos_in_pwm_duty_current;
+			    MOTOR_DRV_HS_C = g_u16_hs_pwm_empty;
+			    //MOTOR_DRV_LS_A = g_u16_ls_pwm_full;	// skip
+			    //MOTOR_DRV_LS_B = g_u16_ls_pwm_empty;	// skip
+			    //MOTOR_DRV_LS_C = g_u16_ls_pwm_empty;	// skip
+				break;
+				
+			case MOTOR_PHASE_DEGREE_240:
+			    //MOTOR_DRV_HS_A = g_u16_hs_pwm_empty;	// skip
+			    //MOTOR_DRV_HS_B = g_u16_hs_pwm_empty;	// skip
+			    //MOTOR_DRV_HS_C = g_u16_throttle_pos_in_pwm_duty_current;		// skip
+			    MOTOR_DRV_LS_A = g_u16_ls_pwm_full;
+			    MOTOR_DRV_LS_B = g_u16_ls_pwm_empty;
+			    //MOTOR_DRV_LS_C = g_u16_ls_pwm_empty;	// skip
+				break;
+				
+			case MOTOR_PHASE_DEGREE_300:
+			    MOTOR_DRV_HS_A = g_u16_hs_pwm_empty;
+			    //MOTOR_DRV_HS_B = g_u16_hs_pwm_empty;	// skip
+			    MOTOR_DRV_HS_C = g_u16_throttle_pos_in_pwm_duty_current;
+			    //MOTOR_DRV_LS_A = g_u16_ls_pwm_empty;	// skip
+			    //MOTOR_DRV_LS_B = g_u16_ls_pwm_full;	// skip
+			    //MOTOR_DRV_LS_C = g_u16_ls_pwm_empty;	// skip
+				break;
+				
+			case MOTOR_PHASE_DEGREE_360:
+			    //MOTOR_DRV_HS_A = g_u16_throttle_pos_in_pwm_duty_current;		// skip
+			    //MOTOR_DRV_HS_B = g_u16_hs_pwm_empty;	// skip
+			    //MOTOR_DRV_HS_C = g_u16_hs_pwm_empty;	// skip
+			    //MOTOR_DRV_LS_A = g_u16_ls_pwm_empty;
+			    MOTOR_DRV_LS_B = g_u16_ls_pwm_full;
+			    MOTOR_DRV_LS_C = g_u16_ls_pwm_empty;
+				break;
+
+			case MOTOR_PHASE_OPEN:
+			case MOTOR_PHASE_ERROR:
+			default:
+			    MOTOR_DRV_HS_A = g_u16_hs_pwm_empty;
+			    MOTOR_DRV_HS_B = g_u16_hs_pwm_empty;
+			    MOTOR_DRV_HS_C = g_u16_hs_pwm_empty;
+			    MOTOR_DRV_LS_A = g_u16_ls_pwm_empty;
+			    MOTOR_DRV_LS_B = g_u16_ls_pwm_empty;
+			    MOTOR_DRV_LS_C = g_u16_ls_pwm_empty;
+				break;
+		}
+	}
+	else {
+		// no direction => stop or brake
+	}
+}
 /* End user code. Do not edit comment generated here */

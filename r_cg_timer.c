@@ -28,7 +28,7 @@
 * Device(s)    : R5F104BA
 * Tool-Chain   : CA78K0R
 * Description  : This file implements device driver for TAU module.
-* Creation Date: 27/11/2013
+* Creation Date: 28/11/2013
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -309,10 +309,10 @@ void R_TMR_RD1_Create(void)
     TRDCR1 |= _00_TMRD_INETNAL_CLOCK_F1_FIH | _20_TMRD_COUNTER_CLEAR_TRDGRA;
     TRDIER1 = _00_TMRD_IMIA_DISABLE | _00_TMRD_IMIB_DISABLE | _00_TMRD_IMIC_DISABLE | _00_TMRD_IMID_DISABLE;
     TRDPOCR1 = _01_TMRD_TRDIOB_OUTPUT_ACTIVE_H | _02_TMRD_TRDIOC_OUTPUT_ACTIVE_H | _04_TMRD_TRDIOD_OUTPUT_ACTIVE_H;
-    TRDGRA1 = _7CFF_TMRD_TRDGRA1_VALUE;
-    TRDGRB1 = _7D00_TMRD_TRDGRB1_VALUE;
-    TRDGRC1 = _7D00_TMRD_TRDGRC1_VALUE;
-    TRDGRD1 = _7D00_TMRD_TRDGRD1_VALUE;
+    TRDGRA1 = _0007_TMRD_TRDGRA1_VALUE;
+    TRDGRB1 = _0008_TMRD_TRDGRB1_VALUE;
+    TRDGRC1 = _0008_TMRD_TRDGRC1_VALUE;
+    TRDGRD1 = _0008_TMRD_TRDGRD1_VALUE;
     /* Set TRDIOB1 pin */
     P1 &= 0xFBU;
     PM1 &= 0xFBU;
