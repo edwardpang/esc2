@@ -349,10 +349,10 @@ void app_config (void) {
 
 	g_u16_throttle_pos_sample_tolerance = tmp * THROTTLE_POS_SAMPLE_TOLERANCE_PERCENTAGE;
 	
-	g_u16_hs_pwm_full = TRDGRA0;
-	g_u16_hs_pwm_empty = TRDGRA0 + 1U;
-	g_u16_ls_pwm_full = TRDGRA1;
-	g_u16_ls_pwm_empty = TRDGRA1 + 1U;
+	g_u16_hs_pwm_full = MOTOR_DRV_HS_PERIOD;
+	g_u16_hs_pwm_empty = MOTOR_DRV_HS_PERIOD + 1U;
+	g_u16_ls_pwm_full = MOTOR_DRV_LS_PERIOD;
+	g_u16_ls_pwm_empty = MOTOR_DRV_LS_PERIOD + 1U;
 	g_u16_throttle_pos_in_pwm_duty_current = g_u16_hs_pwm_empty;
 	g_u16_throttle_pos_in_pwm_duty_last = g_u16_hs_pwm_empty;
 }
