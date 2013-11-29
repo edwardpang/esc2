@@ -39,11 +39,9 @@ User definitions
 ***********************************************************************************************************************/
 
 /* Start user code for function. Do not edit comment generated here */
-#define MOTOR_DRV_HS_PERIOD		TRDGRA0
 #define MOTOR_DRV_HS_A			TRDGRB0
 #define MOTOR_DRV_HS_B			TRDGRC0
 #define MOTOR_DRV_HS_C			TRDGRD0
-#define MOTOR_DRV_LS_PERIOD		TRDGRA0
 #define MOTOR_DRV_LS_A			TRDGRB1
 #define MOTOR_DRV_LS_B			TRDGRC1
 #define MOTOR_DRV_LS_C			TRDGRD1
