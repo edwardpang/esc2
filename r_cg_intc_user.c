@@ -131,81 +131,75 @@ __interrupt static void r_hall_sensor_common_interrupt (void) {
 	g_motor_phase_current = abc2phase[index];
 
 	/* Update Motor Control */
-	if (g_throttle_direction == THROTTLE_DIRECTION_CCW) {
-		if (g_app_state == APP_STATE_MOTOR_CONTROL_ZERO_DRIVING) {
-			switch (g_motor_phase_current) {
-				case MOTOR_PHASE_DEGREE_60:
-				    //MOTOR_DRV_HS_A = g_u16_hs_pwm_empty;	// skip
-				    //MOTOR_DRV_HS_B = g_u16_hs_pwm_empty;	// skip
-				    //MOTOR_DRV_HS_C = g_u16_throttle_pos_in_pwm_duty_current;		// skip
-				    MOTOR_DRV_LS_A = g_u16_ls_pwm_empty;
-				    MOTOR_DRV_LS_B = g_u16_ls_pwm_full;
-				    //MOTOR_DRV_LS_C = g_u16_ls_pwm_empty;	// skip
-					break;
-					
-				case MOTOR_PHASE_DEGREE_120:
-				    MOTOR_DRV_HS_A = g_u16_throttle_pos_in_pwm_duty_current;
-				    //MOTOR_DRV_HS_B = g_u16_hs_pwm_empty;	// skip
-				    MOTOR_DRV_HS_C = g_u16_hs_pwm_empty;
-				    //MOTOR_DRV_LS_A = g_u16_ls_pwm_empty;	// skip
-				    //MOTOR_DRV_LS_B = g_u16_ls_pwm_full;	// skip
-				    //MOTOR_DRV_LS_C = g_u16_ls_pwm_empty;	// skip
-					break;
-					
-				case MOTOR_PHASE_DEGREE_180:
-				    //MOTOR_DRV_HS_A = g_u16_throttle_pos_in_pwm_duty_current;		// skip
-				    //MOTOR_DRV_HS_B = g_u16_hs_pwm_empty;	// skip
-				    //MOTOR_DRV_HS_C = g_u16_hs_pwm_empty;	// skip
-				    //MOTOR_DRV_LS_A = g_u16_ls_pwm_empty;	// skip
-				    MOTOR_DRV_LS_B = g_u16_ls_pwm_empty;
-				    MOTOR_DRV_LS_C = g_u16_ls_pwm_full;
-					break;
-					
-				case MOTOR_PHASE_DEGREE_240:
-				    MOTOR_DRV_HS_A = g_u16_hs_pwm_empty;
-				    MOTOR_DRV_HS_B = g_u16_throttle_pos_in_pwm_duty_current;
-				    //MOTOR_DRV_HS_C = g_u16_hs_pwm_empty;	// skip
-				    //MOTOR_DRV_LS_A = g_u16_ls_pwm_empty;	// skip
-				    //MOTOR_DRV_LS_B = g_u16_ls_pwm_empty;	// skip
-				    //MOTOR_DRV_LS_C = g_u16_ls_pwm_full;	// skip
-					break;
-					
-				case MOTOR_PHASE_DEGREE_300:
-				    //MOTOR_DRV_HS_A = g_u16_hs_pwm_empty;	// skip
-				    //MOTOR_DRV_HS_B = g_u16_throttle_pos_in_pwm_duty_current;		// skip
-				    //MOTOR_DRV_HS_C = g_u16_hs_pwm_empty;	// skip
-				    MOTOR_DRV_LS_A = g_u16_ls_pwm_full;
-				    //MOTOR_DRV_LS_B = g_u16_ls_pwm_empty;	// skip
-				    MOTOR_DRV_LS_C = g_u16_ls_pwm_empty;
-					break;
-					
-				case MOTOR_PHASE_DEGREE_360:
-				    //MOTOR_DRV_HS_A = g_u16_hs_pwm_empty;	// skip
-				    MOTOR_DRV_HS_B = g_u16_hs_pwm_empty;
-				    MOTOR_DRV_HS_C = g_u16_throttle_pos_in_pwm_duty_current;
-				    //MOTOR_DRV_LS_A = g_u16_ls_pwm_full;	// skip
-				    //MOTOR_DRV_LS_B = g_u16_ls_pwm_empty;	// skip
-				    //MOTOR_DRV_LS_C = g_u16_ls_pwm_empty;	// skip
-					break;
+	if (g_app_state == APP_STATE_MOTOR_CONTROL_FWD_DRIVING) {
+		switch (g_motor_phase_current) {
+			case MOTOR_PHASE_DEGREE_60:
+			    //MOTOR_DRV_HS_A = g_u16_hs_pwm_empty;	// skip
+			    //MOTOR_DRV_HS_B = g_u16_hs_pwm_empty;	// skip
+			    //MOTOR_DRV_HS_C = g_u16_throttle_pos_in_pwm_duty_current;		// skip
+			    MOTOR_DRV_LS_A = g_u16_ls_pwm_empty;
+			    MOTOR_DRV_LS_B = g_u16_ls_pwm_full;
+			    //MOTOR_DRV_LS_C = g_u16_ls_pwm_empty;	// skip
+				break;
+				
+			case MOTOR_PHASE_DEGREE_120:
+			    MOTOR_DRV_HS_A = g_u16_throttle_pos_in_pwm_duty_current;
+			    //MOTOR_DRV_HS_B = g_u16_hs_pwm_empty;	// skip
+			    MOTOR_DRV_HS_C = g_u16_hs_pwm_empty;
+			    //MOTOR_DRV_LS_A = g_u16_ls_pwm_empty;	// skip
+			    //MOTOR_DRV_LS_B = g_u16_ls_pwm_full;	// skip
+			    //MOTOR_DRV_LS_C = g_u16_ls_pwm_empty;	// skip
+				break;
+				
+			case MOTOR_PHASE_DEGREE_180:
+			    //MOTOR_DRV_HS_A = g_u16_throttle_pos_in_pwm_duty_current;		// skip
+			    //MOTOR_DRV_HS_B = g_u16_hs_pwm_empty;	// skip
+			    //MOTOR_DRV_HS_C = g_u16_hs_pwm_empty;	// skip
+			    //MOTOR_DRV_LS_A = g_u16_ls_pwm_empty;	// skip
+			    MOTOR_DRV_LS_B = g_u16_ls_pwm_empty;
+			    MOTOR_DRV_LS_C = g_u16_ls_pwm_full;
+				break;
+				
+			case MOTOR_PHASE_DEGREE_240:
+			    MOTOR_DRV_HS_A = g_u16_hs_pwm_empty;
+			    MOTOR_DRV_HS_B = g_u16_throttle_pos_in_pwm_duty_current;
+			    //MOTOR_DRV_HS_C = g_u16_hs_pwm_empty;	// skip
+			    //MOTOR_DRV_LS_A = g_u16_ls_pwm_empty;	// skip
+			    //MOTOR_DRV_LS_B = g_u16_ls_pwm_empty;	// skip
+			    //MOTOR_DRV_LS_C = g_u16_ls_pwm_full;	// skip
+				break;
+				
+			case MOTOR_PHASE_DEGREE_300:
+			    //MOTOR_DRV_HS_A = g_u16_hs_pwm_empty;	// skip
+			    //MOTOR_DRV_HS_B = g_u16_throttle_pos_in_pwm_duty_current;		// skip
+			    //MOTOR_DRV_HS_C = g_u16_hs_pwm_empty;	// skip
+			    MOTOR_DRV_LS_A = g_u16_ls_pwm_full;
+			    //MOTOR_DRV_LS_B = g_u16_ls_pwm_empty;	// skip
+			    MOTOR_DRV_LS_C = g_u16_ls_pwm_empty;
+				break;
+				
+			case MOTOR_PHASE_DEGREE_360:
+			    //MOTOR_DRV_HS_A = g_u16_hs_pwm_empty;	// skip
+			    MOTOR_DRV_HS_B = g_u16_hs_pwm_empty;
+			    MOTOR_DRV_HS_C = g_u16_throttle_pos_in_pwm_duty_current;
+			    //MOTOR_DRV_LS_A = g_u16_ls_pwm_full;	// skip
+			    //MOTOR_DRV_LS_B = g_u16_ls_pwm_empty;	// skip
+			    //MOTOR_DRV_LS_C = g_u16_ls_pwm_empty;	// skip
+				break;
 
-				case MOTOR_PHASE_OPEN:
-				case MOTOR_PHASE_ERROR:
-				default:
-				    MOTOR_DRV_HS_A = g_u16_hs_pwm_empty;
-				    MOTOR_DRV_HS_B = g_u16_hs_pwm_empty;
-				    MOTOR_DRV_HS_C = g_u16_hs_pwm_empty;
-				    MOTOR_DRV_LS_A = g_u16_ls_pwm_empty;
-				    MOTOR_DRV_LS_B = g_u16_ls_pwm_empty;
-				    MOTOR_DRV_LS_C = g_u16_ls_pwm_empty;
-					break;
-			}
-		}
-		else {
-			// Delay Driving
+			case MOTOR_PHASE_OPEN:
+			case MOTOR_PHASE_ERROR:
+			default:
+			    MOTOR_DRV_HS_A = g_u16_hs_pwm_empty;
+			    MOTOR_DRV_HS_B = g_u16_hs_pwm_empty;
+			    MOTOR_DRV_HS_C = g_u16_hs_pwm_empty;
+			    MOTOR_DRV_LS_A = g_u16_ls_pwm_empty;
+			    MOTOR_DRV_LS_B = g_u16_ls_pwm_empty;
+			    MOTOR_DRV_LS_C = g_u16_ls_pwm_empty;
+				break;
 		}
 	}
-	else if (g_throttle_direction == THROTTLE_DIRECTION_CW) {
-		// CW must be zero timing driving
+	else if (g_app_state == APP_STATE_MOTOR_CONTROL_REV_DRIVING) {
 		switch (g_motor_phase_current) {
 			case MOTOR_PHASE_DEGREE_60:
 			    MOTOR_DRV_HS_A = g_u16_throttle_pos_in_pwm_duty_current;
@@ -273,8 +267,10 @@ __interrupt static void r_hall_sensor_common_interrupt (void) {
 				break;
 		}
 	}
-	else {
-		// no direction => stop or brake
+	else if (g_app_state == APP_STATE_MOTOR_CONTROL_BREAK) {
+	    MOTOR_DRV_LS_A = (g_u16_throttle_pos_in_pwm_duty_current << 2);
+	    MOTOR_DRV_LS_B = (g_u16_throttle_pos_in_pwm_duty_current << 2);
+	    MOTOR_DRV_LS_C = (g_u16_throttle_pos_in_pwm_duty_current << 2);
 	}
 }
 /* End user code. Do not edit comment generated here */
