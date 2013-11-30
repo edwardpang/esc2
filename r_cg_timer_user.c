@@ -91,7 +91,10 @@ __interrupt static void r_tau0_channel2_interrupt(void)
     }
 
     /* Start user code. Do not edit comment generated here */
-	u16_throttle_sample = (TDR02 + 1U);
+	if (g_tau0_ch2_width > 0xFFFFU)
+		u16_throttle_sample = 0xFFFFU;
+	else
+		u16_throttle_sample = (TDR02 + 1U);
 	g_u16_throttle_pos_in_pwm_duty_last = g_u16_throttle_pos_in_pwm_duty_current;
 	if (u16_throttle_sample < g_u16_throttle_pos_min) {
 		g_u16_throttle_pos_in_pwm_duty_current = g_u16_hs_pwm_full;
@@ -117,9 +120,16 @@ __interrupt static void r_tau0_channel2_interrupt(void)
 	}
 	
 	if (g_app_state == APP_STATE_MOTOR_CONTROL_BREAK) {
-		MOTOR_DRV_LS_A = (g_u16_throttle_pos_in_pwm_duty_current << 2);
-		MOTOR_DRV_LS_B = (g_u16_throttle_pos_in_pwm_duty_current << 2);
-		MOTOR_DRV_LS_C = (g_u16_throttle_pos_in_pwm_duty_current << 2);
+		if (g_u16_throttle_pos_in_pwm_duty_current != g_u16_hs_pwm_full) {
+			MOTOR_DRV_LS_A = (g_u16_throttle_pos_in_pwm_duty_current << 2);
+			MOTOR_DRV_LS_B = (g_u16_throttle_pos_in_pwm_duty_current << 2);
+			MOTOR_DRV_LS_C = (g_u16_throttle_pos_in_pwm_duty_current << 2);
+		}
+		else {
+			MOTOR_DRV_LS_A = BREAK_PERIOD;
+			MOTOR_DRV_LS_B = BREAK_PERIOD;
+			MOTOR_DRV_LS_C = BREAK_PERIOD;
+		}
 	}
     /* End user code. Do not edit comment generated here */
 }
