@@ -117,9 +117,9 @@ __interrupt static void r_tau0_channel2_interrupt(void)
 	}
 	
 	if (g_app_state == APP_STATE_MOTOR_CONTROL_BREAK) {
-	    MOTOR_DRV_LS_A = (g_u16_throttle_pos_in_pwm_duty_current << 2);
-    	MOTOR_DRV_LS_B = (g_u16_throttle_pos_in_pwm_duty_current << 2);
-    	MOTOR_DRV_LS_C = (g_u16_throttle_pos_in_pwm_duty_current << 2);
+		MOTOR_DRV_LS_A = (g_u16_throttle_pos_in_pwm_duty_current << 2);
+		MOTOR_DRV_LS_B = (g_u16_throttle_pos_in_pwm_duty_current << 2);
+		MOTOR_DRV_LS_C = (g_u16_throttle_pos_in_pwm_duty_current << 2);
 	}
     /* End user code. Do not edit comment generated here */
 }
