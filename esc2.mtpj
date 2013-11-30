@@ -1232,10 +1232,133 @@ cl78mf
       <PinConfigTopViewPropertyFunctionDisplay>DisplayAll</PinConfigTopViewPropertyFunctionDisplay>
     </Instance>
     <Instance Guid="ba6251f6-617d-42ff-9ebd-1dd7a0d34100">
-      <KEY_SAVE_CREATED_PROJECT_DATA>True</KEY_SAVE_CREATED_PROJECT_DATA>
-      <KEY_SAVE_DEVICE_CHANGED_COUNTER>0</KEY_SAVE_DEVICE_CHANGED_COUNTER>
-      <FormatVersion>1.0</FormatVersion>
-      <KeyExtPartsCount>0</KeyExtPartsCount>
+      <KeyDatasRowCount>32,25,93,0,0</KeyDatasRowCount>
+      <KeyUserAddedColumnCount>0</KeyUserAddedColumnCount>
+      <KeyPinGridData0>Free,-,-,,</KeyPinGridData0>
+      <KeyPinGridData1>_RESET,I,-,,</KeyPinGridData1>
+      <KeyPinGridData2>INTP0,I,-,,</KeyPinGridData2>
+      <KeyPinGridData3>Free,-,-,,</KeyPinGridData3>
+      <KeyPinGridData4>Free,-,-,,</KeyPinGridData4>
+      <KeyPinGridData5>REGC,-,-,,</KeyPinGridData5>
+      <KeyPinGridData6>VSS,-,-,,</KeyPinGridData6>
+      <KeyPinGridData7>VDD,-,-,,</KeyPinGridData7>
+      <KeyPinGridData8>Free,-,-,,</KeyPinGridData8>
+      <KeyPinGridData9>Free,-,-,,</KeyPinGridData9>
+      <KeyPinGridData10>P62,O,No,,</KeyPinGridData10>
+      <KeyPinGridData11>Free,-,-,,</KeyPinGridData11>
+      <KeyPinGridData12>P70,O,-,,</KeyPinGridData12>
+      <KeyPinGridData13>INTP3,I,-,,</KeyPinGridData13>
+      <KeyPinGridData14>INTP1,I,-,,</KeyPinGridData14>
+      <KeyPinGridData15>INTP2,I,-,,</KeyPinGridData15>
+      <KeyPinGridData16>TI02,I,-,,</KeyPinGridData16>
+      <KeyPinGridData17>TRDIOC0,I/O,-,,</KeyPinGridData17>
+      <KeyPinGridData18>TRDIOB0,I/O,No,,</KeyPinGridData18>
+      <KeyPinGridData19>TRDIOD0,I/O,No,,</KeyPinGridData19>
+      <KeyPinGridData20>P13,O,No,,</KeyPinGridData20>
+      <KeyPinGridData21>TRDIOB1,I/O,-,,</KeyPinGridData21>
+      <KeyPinGridData22>TRDIOC1,I/O,No,,</KeyPinGridData22>
+      <KeyPinGridData23>TRDIOD1,I/O,No,,</KeyPinGridData23>
+      <KeyPinGridData24>P147,O,-,,</KeyPinGridData24>
+      <KeyPinGridData25>Free,-,-,,</KeyPinGridData25>
+      <KeyPinGridData26>Free,-,-,,</KeyPinGridData26>
+      <KeyPinGridData27>Free,-,-,,</KeyPinGridData27>
+      <KeyPinGridData28>Free,-,-,,</KeyPinGridData28>
+      <KeyPinGridData29>RxD1,I,-,,</KeyPinGridData29>
+      <KeyPinGridData30>TxD1,O,No,,</KeyPinGridData30>
+      <KeyPinGridData31>Free,-,-,,</KeyPinGridData31>
+      <KeyMacGridData0>Free,-,-,,</KeyMacGridData0>
+      <KeyMacGridData1>INTP3,I,-,,</KeyMacGridData1>
+      <KeyMacGridData2>RxD1,I,-,,</KeyMacGridData2>
+      <KeyMacGridData3>TxD1,O,No,,</KeyMacGridData3>
+      <KeyMacGridData4>REGC,-,-,,</KeyMacGridData4>
+      <KeyMacGridData5>Free,-,-,,</KeyMacGridData5>
+      <KeyMacGridData6>Free,-,-,,</KeyMacGridData6>
+      <KeyMacGridData7>P62,O,No,,</KeyMacGridData7>
+      <KeyMacGridData8>P70,O,-,,</KeyMacGridData8>
+      <KeyMacGridData9>Free,-,-,,</KeyMacGridData9>
+      <KeyMacGridData10>INTP1,I,-,,</KeyMacGridData10>
+      <KeyMacGridData11>INTP2,I,-,,</KeyMacGridData11>
+      <KeyMacGridData12>Free,-,-,,</KeyMacGridData12>
+      <KeyMacGridData13>Free,-,-,,</KeyMacGridData13>
+      <KeyMacGridData14>Free,-,-,,</KeyMacGridData14>
+      <KeyMacGridData15>INTP1,I,-,,</KeyMacGridData15>
+      <KeyMacGridData16>INTP2,I,-,,</KeyMacGridData16>
+      <KeyMacGridData17>RxD1,I,-,,</KeyMacGridData17>
+      <KeyMacGridData18>TxD1,O,No,,</KeyMacGridData18>
+      <KeyMacGridData19>INTP0,I,-,,</KeyMacGridData19>
+      <KeyMacGridData20>Free,-,-,,</KeyMacGridData20>
+      <KeyMacGridData21>INTP3,I,-,,</KeyMacGridData21>
+      <KeyMacGridData22>INTP1,I,-,,</KeyMacGridData22>
+      <KeyMacGridData23>INTP2,I,-,,</KeyMacGridData23>
+      <KeyMacGridData24>TRDIOC0,I/O,-,,</KeyMacGridData24>
+      <KeyMacGridData25>P62,O,No,,</KeyMacGridData25>
+      <KeyMacGridData26>INTP3,I,-,,</KeyMacGridData26>
+      <KeyMacGridData27>INTP1,I,-,,</KeyMacGridData27>
+      <KeyMacGridData28>INTP2,I,-,,</KeyMacGridData28>
+      <KeyMacGridData29>TI02,I,-,,</KeyMacGridData29>
+      <KeyMacGridData30>TRDIOC0,I/O,-,,</KeyMacGridData30>
+      <KeyMacGridData31>TRDIOB1,I/O,-,,</KeyMacGridData31>
+      <KeyMacGridData32>TRDIOC1,I/O,No,,</KeyMacGridData32>
+      <KeyMacGridData33>TRDIOD1,I/O,No,,</KeyMacGridData33>
+      <KeyMacGridData34>RxD1,I,-,,</KeyMacGridData34>
+      <KeyMacGridData35>TxD1,O,No,,</KeyMacGridData35>
+      <KeyMacGridData36>Free,-,-,,</KeyMacGridData36>
+      <KeyMacGridData37>Free,-,-,,</KeyMacGridData37>
+      <KeyMacGridData38>TRDIOB0,I/O,No,,</KeyMacGridData38>
+      <KeyMacGridData39>TRDIOD0,I/O,No,,</KeyMacGridData39>
+      <KeyMacGridData40>_RESET,I,-,,</KeyMacGridData40>
+      <KeyMacGridData41>P147,O,-,,</KeyMacGridData41>
+      <KeyMacGridData42>INTP0,I,-,,</KeyMacGridData42>
+      <KeyMacGridData43>Free,-,-,,</KeyMacGridData43>
+      <KeyMacGridData44>INTP1,I,-,,</KeyMacGridData44>
+      <KeyMacGridData45>INTP2,I,-,,</KeyMacGridData45>
+      <KeyMacGridData46>TI02,I,-,,</KeyMacGridData46>
+      <KeyMacGridData47>TRDIOC0,I/O,-,,</KeyMacGridData47>
+      <KeyMacGridData48>TRDIOB0,I/O,No,,</KeyMacGridData48>
+      <KeyMacGridData49>TRDIOD0,I/O,No,,</KeyMacGridData49>
+      <KeyMacGridData50>P13,O,No,,</KeyMacGridData50>
+      <KeyMacGridData51>TRDIOB1,I/O,-,,</KeyMacGridData51>
+      <KeyMacGridData52>TRDIOC1,I/O,No,,</KeyMacGridData52>
+      <KeyMacGridData53>TRDIOD1,I/O,No,,</KeyMacGridData53>
+      <KeyMacGridData54>TI02,I,-,,</KeyMacGridData54>
+      <KeyMacGridData55>TRDIOC0,I/O,-,,</KeyMacGridData55>
+      <KeyMacGridData56>TRDIOB0,I/O,No,,</KeyMacGridData56>
+      <KeyMacGridData57>TRDIOD0,I/O,No,,</KeyMacGridData57>
+      <KeyMacGridData58>P13,O,No,,</KeyMacGridData58>
+      <KeyMacGridData59>TRDIOB1,I/O,-,,</KeyMacGridData59>
+      <KeyMacGridData60>TRDIOC1,I/O,No,,</KeyMacGridData60>
+      <KeyMacGridData61>TRDIOD1,I/O,No,,</KeyMacGridData61>
+      <KeyMacGridData62>P147,O,-,,</KeyMacGridData62>
+      <KeyMacGridData63>Free,-,-,,</KeyMacGridData63>
+      <KeyMacGridData64>Free,-,-,,</KeyMacGridData64>
+      <KeyMacGridData65>Free,-,-,,</KeyMacGridData65>
+      <KeyMacGridData66>Free,-,-,,</KeyMacGridData66>
+      <KeyMacGridData67>RxD1,I,-,,</KeyMacGridData67>
+      <KeyMacGridData68>TxD1,O,No,,</KeyMacGridData68>
+      <KeyMacGridData69>Free,-,-,,</KeyMacGridData69>
+      <KeyMacGridData70>Free,-,-,,</KeyMacGridData70>
+      <KeyMacGridData71>TI02,I,-,,</KeyMacGridData71>
+      <KeyMacGridData72>TRDIOC0,I/O,-,,</KeyMacGridData72>
+      <KeyMacGridData73>RxD1,I,-,,</KeyMacGridData73>
+      <KeyMacGridData74>TxD1,O,No,,</KeyMacGridData74>
+      <KeyMacGridData75>Free,-,-,,</KeyMacGridData75>
+      <KeyMacGridData76>Free,-,-,,</KeyMacGridData76>
+      <KeyMacGridData77>Free,-,-,,</KeyMacGridData77>
+      <KeyMacGridData78>TRDIOB0,I/O,No,,</KeyMacGridData78>
+      <KeyMacGridData79>VSS,-,-,,</KeyMacGridData79>
+      <KeyMacGridData80>VDD,-,-,,</KeyMacGridData80>
+      <KeyMacGridData81>Free,-,-,,</KeyMacGridData81>
+      <KeyMacGridData82>INTP3,I,-,,</KeyMacGridData82>
+      <KeyMacGridData83>INTP1,I,-,,</KeyMacGridData83>
+      <KeyMacGridData84>RxD1,I,-,,</KeyMacGridData84>
+      <KeyMacGridData85>TxD1,O,No,,</KeyMacGridData85>
+      <KeyMacGridData86>TRDIOB0,I/O,No,,</KeyMacGridData86>
+      <KeyMacGridData87>TRDIOD0,I/O,No,,</KeyMacGridData87>
+      <KeyMacGridData88>P13,O,No,,</KeyMacGridData88>
+      <KeyMacGridData89>Free,-,-,,</KeyMacGridData89>
+      <KeyMacGridData90>Free,-,-,,</KeyMacGridData90>
+      <KeyMacGridData91>Free,-,-,,</KeyMacGridData91>
+      <KeyMacGridData92>Free,-,-,,</KeyMacGridData92>
       <KeyPinGridLayout>&lt;SOAP-ENV:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:clr="http://schemas.microsoft.com/soap/encoding/clr/1.0" SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"&gt;
 &lt;SOAP-ENV:Body&gt;
 &lt;a1:UltraGridDisplayLayout id="ref-1" xmlns:a1="http://schemas.microsoft.com/clr/nsassem/Infragistics.Win.UltraWinGrid/Infragistics4.Win.UltraWinGrid.v12.2"&gt;
@@ -2237,6 +2360,7 @@ cl78mf
 &lt;/SOAP-ENV:Body&gt;
 &lt;/SOAP-ENV:Envelope&gt;
 </KeyMacGridLayout>
+      <KeyExtPartsCount>0</KeyExtPartsCount>
       <KeyExtGridLayout>&lt;SOAP-ENV:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:clr="http://schemas.microsoft.com/soap/encoding/clr/1.0" SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"&gt;
 &lt;SOAP-ENV:Body&gt;
 &lt;a1:UltraGridDisplayLayout id="ref-1" xmlns:a1="http://schemas.microsoft.com/clr/nsassem/Infragistics.Win.UltraWinGrid/Infragistics4.Win.UltraWinGrid.v12.2"&gt;
@@ -2702,133 +2826,9 @@ cl78mf
 &lt;/SOAP-ENV:Body&gt;
 &lt;/SOAP-ENV:Envelope&gt;
 </KeyExtGridLayout>
-      <KeyDatasRowCount>32,25,93,0,0</KeyDatasRowCount>
-      <KeyUserAddedColumnCount>0</KeyUserAddedColumnCount>
-      <KeyPinGridData0>Free,-,-,,</KeyPinGridData0>
-      <KeyPinGridData1>_RESET,I,-,,</KeyPinGridData1>
-      <KeyPinGridData2>INTP0,I,-,,</KeyPinGridData2>
-      <KeyPinGridData3>Free,-,-,,</KeyPinGridData3>
-      <KeyPinGridData4>Free,-,-,,</KeyPinGridData4>
-      <KeyPinGridData5>REGC,-,-,,</KeyPinGridData5>
-      <KeyPinGridData6>VSS,-,-,,</KeyPinGridData6>
-      <KeyPinGridData7>VDD,-,-,,</KeyPinGridData7>
-      <KeyPinGridData8>Free,-,-,,</KeyPinGridData8>
-      <KeyPinGridData9>Free,-,-,,</KeyPinGridData9>
-      <KeyPinGridData10>P62,O,No,,</KeyPinGridData10>
-      <KeyPinGridData11>Free,-,-,,</KeyPinGridData11>
-      <KeyPinGridData12>P70,O,-,,</KeyPinGridData12>
-      <KeyPinGridData13>INTP3,I,-,,</KeyPinGridData13>
-      <KeyPinGridData14>INTP1,I,-,,</KeyPinGridData14>
-      <KeyPinGridData15>INTP2,I,-,,</KeyPinGridData15>
-      <KeyPinGridData16>TI02,I,-,,</KeyPinGridData16>
-      <KeyPinGridData17>TRDIOC0,I/O,-,,</KeyPinGridData17>
-      <KeyPinGridData18>TRDIOB0,I/O,No,,</KeyPinGridData18>
-      <KeyPinGridData19>TRDIOD0,I/O,No,,</KeyPinGridData19>
-      <KeyPinGridData20>P13,O,No,,</KeyPinGridData20>
-      <KeyPinGridData21>TRDIOB1,I/O,-,,</KeyPinGridData21>
-      <KeyPinGridData22>TRDIOC1,I/O,No,,</KeyPinGridData22>
-      <KeyPinGridData23>TRDIOD1,I/O,No,,</KeyPinGridData23>
-      <KeyPinGridData24>P147,O,-,,</KeyPinGridData24>
-      <KeyPinGridData25>Free,-,-,,</KeyPinGridData25>
-      <KeyPinGridData26>Free,-,-,,</KeyPinGridData26>
-      <KeyPinGridData27>Free,-,-,,</KeyPinGridData27>
-      <KeyPinGridData28>Free,-,-,,</KeyPinGridData28>
-      <KeyPinGridData29>RxD1,I,-,,</KeyPinGridData29>
-      <KeyPinGridData30>TxD1,O,No,,</KeyPinGridData30>
-      <KeyPinGridData31>Free,-,-,,</KeyPinGridData31>
-      <KeyMacGridData0>Free,-,-,,</KeyMacGridData0>
-      <KeyMacGridData1>INTP3,I,-,,</KeyMacGridData1>
-      <KeyMacGridData2>RxD1,I,-,,</KeyMacGridData2>
-      <KeyMacGridData3>TxD1,O,No,,</KeyMacGridData3>
-      <KeyMacGridData4>REGC,-,-,,</KeyMacGridData4>
-      <KeyMacGridData5>Free,-,-,,</KeyMacGridData5>
-      <KeyMacGridData6>Free,-,-,,</KeyMacGridData6>
-      <KeyMacGridData7>P62,O,No,,</KeyMacGridData7>
-      <KeyMacGridData8>P70,O,-,,</KeyMacGridData8>
-      <KeyMacGridData9>Free,-,-,,</KeyMacGridData9>
-      <KeyMacGridData10>INTP1,I,-,,</KeyMacGridData10>
-      <KeyMacGridData11>INTP2,I,-,,</KeyMacGridData11>
-      <KeyMacGridData12>Free,-,-,,</KeyMacGridData12>
-      <KeyMacGridData13>Free,-,-,,</KeyMacGridData13>
-      <KeyMacGridData14>Free,-,-,,</KeyMacGridData14>
-      <KeyMacGridData15>INTP1,I,-,,</KeyMacGridData15>
-      <KeyMacGridData16>INTP2,I,-,,</KeyMacGridData16>
-      <KeyMacGridData17>RxD1,I,-,,</KeyMacGridData17>
-      <KeyMacGridData18>TxD1,O,No,,</KeyMacGridData18>
-      <KeyMacGridData19>INTP0,I,-,,</KeyMacGridData19>
-      <KeyMacGridData20>Free,-,-,,</KeyMacGridData20>
-      <KeyMacGridData21>INTP3,I,-,,</KeyMacGridData21>
-      <KeyMacGridData22>INTP1,I,-,,</KeyMacGridData22>
-      <KeyMacGridData23>INTP2,I,-,,</KeyMacGridData23>
-      <KeyMacGridData24>TRDIOC0,I/O,-,,</KeyMacGridData24>
-      <KeyMacGridData25>P62,O,No,,</KeyMacGridData25>
-      <KeyMacGridData26>INTP3,I,-,,</KeyMacGridData26>
-      <KeyMacGridData27>INTP1,I,-,,</KeyMacGridData27>
-      <KeyMacGridData28>INTP2,I,-,,</KeyMacGridData28>
-      <KeyMacGridData29>TI02,I,-,,</KeyMacGridData29>
-      <KeyMacGridData30>TRDIOC0,I/O,-,,</KeyMacGridData30>
-      <KeyMacGridData31>TRDIOB1,I/O,-,,</KeyMacGridData31>
-      <KeyMacGridData32>TRDIOC1,I/O,No,,</KeyMacGridData32>
-      <KeyMacGridData33>TRDIOD1,I/O,No,,</KeyMacGridData33>
-      <KeyMacGridData34>RxD1,I,-,,</KeyMacGridData34>
-      <KeyMacGridData35>TxD1,O,No,,</KeyMacGridData35>
-      <KeyMacGridData36>Free,-,-,,</KeyMacGridData36>
-      <KeyMacGridData37>Free,-,-,,</KeyMacGridData37>
-      <KeyMacGridData38>TRDIOB0,I/O,No,,</KeyMacGridData38>
-      <KeyMacGridData39>TRDIOD0,I/O,No,,</KeyMacGridData39>
-      <KeyMacGridData40>_RESET,I,-,,</KeyMacGridData40>
-      <KeyMacGridData41>P147,O,-,,</KeyMacGridData41>
-      <KeyMacGridData42>INTP0,I,-,,</KeyMacGridData42>
-      <KeyMacGridData43>Free,-,-,,</KeyMacGridData43>
-      <KeyMacGridData44>INTP1,I,-,,</KeyMacGridData44>
-      <KeyMacGridData45>INTP2,I,-,,</KeyMacGridData45>
-      <KeyMacGridData46>TI02,I,-,,</KeyMacGridData46>
-      <KeyMacGridData47>TRDIOC0,I/O,-,,</KeyMacGridData47>
-      <KeyMacGridData48>TRDIOB0,I/O,No,,</KeyMacGridData48>
-      <KeyMacGridData49>TRDIOD0,I/O,No,,</KeyMacGridData49>
-      <KeyMacGridData50>P13,O,No,,</KeyMacGridData50>
-      <KeyMacGridData51>TRDIOB1,I/O,-,,</KeyMacGridData51>
-      <KeyMacGridData52>TRDIOC1,I/O,No,,</KeyMacGridData52>
-      <KeyMacGridData53>TRDIOD1,I/O,No,,</KeyMacGridData53>
-      <KeyMacGridData54>TI02,I,-,,</KeyMacGridData54>
-      <KeyMacGridData55>TRDIOC0,I/O,-,,</KeyMacGridData55>
-      <KeyMacGridData56>TRDIOB0,I/O,No,,</KeyMacGridData56>
-      <KeyMacGridData57>TRDIOD0,I/O,No,,</KeyMacGridData57>
-      <KeyMacGridData58>P13,O,No,,</KeyMacGridData58>
-      <KeyMacGridData59>TRDIOB1,I/O,-,,</KeyMacGridData59>
-      <KeyMacGridData60>TRDIOC1,I/O,No,,</KeyMacGridData60>
-      <KeyMacGridData61>TRDIOD1,I/O,No,,</KeyMacGridData61>
-      <KeyMacGridData62>P147,O,-,,</KeyMacGridData62>
-      <KeyMacGridData63>Free,-,-,,</KeyMacGridData63>
-      <KeyMacGridData64>Free,-,-,,</KeyMacGridData64>
-      <KeyMacGridData65>Free,-,-,,</KeyMacGridData65>
-      <KeyMacGridData66>Free,-,-,,</KeyMacGridData66>
-      <KeyMacGridData67>RxD1,I,-,,</KeyMacGridData67>
-      <KeyMacGridData68>TxD1,O,No,,</KeyMacGridData68>
-      <KeyMacGridData69>Free,-,-,,</KeyMacGridData69>
-      <KeyMacGridData70>Free,-,-,,</KeyMacGridData70>
-      <KeyMacGridData71>TI02,I,-,,</KeyMacGridData71>
-      <KeyMacGridData72>TRDIOC0,I/O,-,,</KeyMacGridData72>
-      <KeyMacGridData73>RxD1,I,-,,</KeyMacGridData73>
-      <KeyMacGridData74>TxD1,O,No,,</KeyMacGridData74>
-      <KeyMacGridData75>Free,-,-,,</KeyMacGridData75>
-      <KeyMacGridData76>Free,-,-,,</KeyMacGridData76>
-      <KeyMacGridData77>Free,-,-,,</KeyMacGridData77>
-      <KeyMacGridData78>TRDIOB0,I/O,No,,</KeyMacGridData78>
-      <KeyMacGridData79>VSS,-,-,,</KeyMacGridData79>
-      <KeyMacGridData80>VDD,-,-,,</KeyMacGridData80>
-      <KeyMacGridData81>Free,-,-,,</KeyMacGridData81>
-      <KeyMacGridData82>INTP3,I,-,,</KeyMacGridData82>
-      <KeyMacGridData83>INTP1,I,-,,</KeyMacGridData83>
-      <KeyMacGridData84>RxD1,I,-,,</KeyMacGridData84>
-      <KeyMacGridData85>TxD1,O,No,,</KeyMacGridData85>
-      <KeyMacGridData86>TRDIOB0,I/O,No,,</KeyMacGridData86>
-      <KeyMacGridData87>TRDIOD0,I/O,No,,</KeyMacGridData87>
-      <KeyMacGridData88>P13,O,No,,</KeyMacGridData88>
-      <KeyMacGridData89>Free,-,-,,</KeyMacGridData89>
-      <KeyMacGridData90>Free,-,-,,</KeyMacGridData90>
-      <KeyMacGridData91>Free,-,-,,</KeyMacGridData91>
-      <KeyMacGridData92>Free,-,-,,</KeyMacGridData92>
+      <KeyTopViewZoom />
+      <KeyTopViewAngle />
+      <KeyTopViewPartsCollapsed />
       <KEY_SAVE_ALLOCATED_FUNCTION>True</KEY_SAVE_ALLOCATED_FUNCTION>
       <KEY_SAVE_ALLOCATED_FUNCTION_TERMINAL_NUMBER_COLLECTION>12,15,17,18,19,20,31</KEY_SAVE_ALLOCATED_FUNCTION_TERMINAL_NUMBER_COLLECTION>
       <KEY_SAVE_ALLOCATED_FCUNTION_COLLECTION12>12,P31,TI03,TO03,INTP4,PCLBUZ0</KEY_SAVE_ALLOCATED_FCUNTION_COLLECTION12>
@@ -2844,11 +2844,8 @@ cl78mf
       <KEY_SAVE_COLUMN_WIDTH_MACRO_CHILD>0:98:98,1:77:77,2:77:77,3:292:292,4:61:61,5:40:40,6:50:50,7:160:160,8:210:210,9:210:210,10:210:210,11:100:100</KEY_SAVE_COLUMN_WIDTH_MACRO_CHILD>
       <KEY_SAVE_COLUMN_WIDTH_EXTERNAL_PARENT>0:98:98,1:100:100,2:43:43,3:150:150</KEY_SAVE_COLUMN_WIDTH_EXTERNAL_PARENT>
       <KEY_SAVE_COLUMN_WIDTH_EXTERNAL_CHILD>0:98:98,1:78:78,2:77:77,3:292:292,4:61:61,5:40:40,6:50:50,7:160:160,8:210:210,9:210:210,10:210:210</KEY_SAVE_COLUMN_WIDTH_EXTERNAL_CHILD>
-    </Instance>
-    <Instance Guid="aacae7da-f24b-4709-81fa-541016e73641">
-      <KeyTopViewZoom>1</KeyTopViewZoom>
-      <KeyTopViewAngle>0</KeyTopViewAngle>
-      <KeyTopViewPartsCollapsed>False</KeyTopViewPartsCollapsed>
+      <KEY_SAVE_CREATED_PROJECT_DATA>True</KEY_SAVE_CREATED_PROJECT_DATA>
+      <KEY_SAVE_DEVICE_CHANGED_COUNTER>0</KEY_SAVE_DEVICE_CHANGED_COUNTER>
     </Instance>
   </Class>
   <Class Guid="67508d11-a84e-4956-9db4-04c1eefe9e7a">
@@ -3044,8 +3041,8 @@ cl78mf
     &lt;TO03_PWM Name="TO03_PWM" Text="false" /&gt;
     &lt;INPT0USE0 Name="INPT0USE0" Text="true" /&gt;
     &lt;TRDINTP0LINK0 Name="TRDINTP0LINK0" Text="false" /&gt;
-    &lt;TRDIOC1_PWM Name="TRDIOC1_PWM" Text="true" /&gt;
-    &lt;TRDIOD1_PWM Name="TRDIOD1_PWM" Text="true" /&gt;
+    &lt;TRDIOC1_PWM Name="TRDIOC1_PWM" Text="false" /&gt;
+    &lt;TRDIOD1_PWM Name="TRDIOD1_PWM" Text="false" /&gt;
     &lt;INPT0USE1 Name="INPT0USE1" Text="false" /&gt;
     &lt;TRDINTP0LINK1 Name="TRDINTP0LINK1" Text="false" /&gt;
     &lt;INTP0USE1 Name="INTP0USE1" Text="true" /&gt;
@@ -4043,22 +4040,22 @@ cl78mf
         &lt;cg_security7 Name="cg_security7" Value="00" /&gt;
         &lt;pior1_value Name="pior1_value" Value="00" /&gt;
         &lt;cg_security5 Name="cg_security5" Value="00" /&gt;
-        &lt;ocdstart Name="ocdstart" Value="03E00" /&gt;
+        &lt;cg_crc_area Name="cg_crc_area" Value="00" /&gt;
         &lt;cg_security3 Name="cg_security3" Value="00" /&gt;
         &lt;cg_security0 Name="cg_security0" Value="00" /&gt;
         &lt;cg_security1 Name="cg_security1" Value="00" /&gt;
-        &lt;cg_crc_area Name="cg_crc_area" Value="00" /&gt;
         &lt;clock_option Name="clock_option" Value="F8" /&gt;
         &lt;pior_value Name="pior_value" Value="00" /&gt;
         &lt;cg_option Name="cg_option" Value="04" /&gt;
         &lt;cg_security8 Name="cg_security8" Value="00" /&gt;
         &lt;cg_security6 Name="cg_security6" Value="00" /&gt;
-        &lt;cg_security4 Name="cg_security4" Value="00" /&gt;
+        &lt;ocdstart Name="ocdstart" Value="03E00" /&gt;
         &lt;cg_pms_value Name="cg_pms_value" Value="00" /&gt;
         &lt;cg_security2 Name="cg_security2" Value="00" /&gt;
         &lt;cg_iawctl_value Name="cg_iawctl_value" Value="00" /&gt;
         &lt;lvi_option Name="lvi_option" Value="FF" /&gt;
         &lt;wdt_option Name="wdt_option" Value="EF" /&gt;
+        &lt;cg_security4 Name="cg_security4" Value="00" /&gt;
       &lt;/GlobleUserTag&gt;
     &lt;/TAG&gt;
   &lt;/DIR&gt;

@@ -57,6 +57,7 @@ Global variables and functions
 /* Start user code for global. Do not edit comment generated here */
 app_state_t 	g_app_state;
 
+
 motor_phase_t	g_motor_phase_current;
 motor_phase_t	g_motor_phase_last;
 const motor_phase_t	abc2phase[MOTOR_PHASE_NUM] = {
@@ -125,6 +126,17 @@ void R_MAIN_UserInit(void)
 
 /* Start user code for adding. Do not edit comment generated here */
 /***********************************************************************************************************************/
+void motor_phase_reset (void) {
+	uint16_t	index;
+	
+	index = (PIN_HALL_SENSOR_A << 2);
+	index |= (PIN_HALL_SENSOR_B << 1);
+	index |= (PIN_HALL_SENSOR_C);
+	g_motor_phase_current = abc2phase[index];
+	g_motor_phase_last = abc2phase[index];
+}
+
+/***********************************************************************************************************************/
 void motor_driver_disable (void) {
 	PIN_MOTOR_DRIVER_ENABLE = MOTOR_DISABLE;
 	MOTOR_DRV_HS_A = g_u16_hs_pwm_empty;
@@ -138,160 +150,170 @@ void motor_driver_disable (void) {
 }
 
 /***********************************************************************************************************************/
-void motor_driver_enable (void) {
-	uint16_t	index;
+void motor_driver_farward_enable (void) {
 	
-	index = (PIN_HALL_SENSOR_A << 2);
-	index |= (PIN_HALL_SENSOR_B << 1);
-	index |= (PIN_HALL_SENSOR_C);
-	g_motor_phase_current = abc2phase[index];
-	g_motor_phase_last = abc2phase[index];
+	motor_phase_reset ( );
 	
-	if (g_throttle_direction == THROTTLE_DIRECTION_CCW) {
-		switch (g_motor_phase_current) {
-			case MOTOR_PHASE_DEGREE_60:
-			    MOTOR_DRV_HS_A = g_u16_hs_pwm_empty;	// skip
-			    MOTOR_DRV_HS_B = g_u16_hs_pwm_empty;	// skip
-			    MOTOR_DRV_HS_C = g_u16_throttle_pos_in_pwm_duty_current;		// skip
-			    MOTOR_DRV_LS_A = g_u16_ls_pwm_empty;
-			    MOTOR_DRV_LS_B = g_u16_ls_pwm_full;
-			    MOTOR_DRV_LS_C = g_u16_ls_pwm_empty;	// skip
-				break;
-				
-			case MOTOR_PHASE_DEGREE_120:
-			    MOTOR_DRV_HS_A = g_u16_throttle_pos_in_pwm_duty_current;
-			    MOTOR_DRV_HS_B = g_u16_hs_pwm_empty;	// skip
-			    MOTOR_DRV_HS_C = g_u16_hs_pwm_empty;
-			    MOTOR_DRV_LS_A = g_u16_ls_pwm_empty;	// skip
-			    MOTOR_DRV_LS_B = g_u16_ls_pwm_full;	// skip
-			    MOTOR_DRV_LS_C = g_u16_ls_pwm_empty;	// skip
-				break;
-				
-			case MOTOR_PHASE_DEGREE_180:
-			    MOTOR_DRV_HS_A = g_u16_throttle_pos_in_pwm_duty_current;		// skip
-			    MOTOR_DRV_HS_B = g_u16_hs_pwm_empty;	// skip
-			    MOTOR_DRV_HS_C = g_u16_hs_pwm_empty;	// skip
-			    MOTOR_DRV_LS_A = g_u16_ls_pwm_empty;	// skip
-			    MOTOR_DRV_LS_B = g_u16_ls_pwm_empty;
-			    MOTOR_DRV_LS_C = g_u16_ls_pwm_full;
-				break;
-				
-			case MOTOR_PHASE_DEGREE_240:
-			    MOTOR_DRV_HS_A = g_u16_hs_pwm_empty;
-			    MOTOR_DRV_HS_B = g_u16_throttle_pos_in_pwm_duty_current;
-			    MOTOR_DRV_HS_C = g_u16_hs_pwm_empty;	// skip
-			    MOTOR_DRV_LS_A = g_u16_ls_pwm_empty;	// skip
-			    MOTOR_DRV_LS_B = g_u16_ls_pwm_empty;	// skip
-			    MOTOR_DRV_LS_C = g_u16_ls_pwm_full;	// skip
-				break;
-				
-			case MOTOR_PHASE_DEGREE_300:
-			    MOTOR_DRV_HS_A = g_u16_hs_pwm_empty;	// skip
-			    MOTOR_DRV_HS_B = g_u16_throttle_pos_in_pwm_duty_current;		// skip
-			    MOTOR_DRV_HS_C = g_u16_hs_pwm_empty;	// skip
-			    MOTOR_DRV_LS_A = g_u16_ls_pwm_full;
-			    MOTOR_DRV_LS_B = g_u16_ls_pwm_empty;	// skip
-			    MOTOR_DRV_LS_C = g_u16_ls_pwm_empty;
-				break;
-				
-			case MOTOR_PHASE_DEGREE_360:
-			    MOTOR_DRV_HS_A = g_u16_hs_pwm_empty;	// skip
-			    MOTOR_DRV_HS_B = g_u16_hs_pwm_empty;
-			    MOTOR_DRV_HS_C = g_u16_throttle_pos_in_pwm_duty_current;
-			    MOTOR_DRV_LS_A = g_u16_ls_pwm_full;	// skip
-			    MOTOR_DRV_LS_B = g_u16_ls_pwm_empty;	// skip
-			    MOTOR_DRV_LS_C = g_u16_ls_pwm_empty;	// skip
-				break;
+	MOTOR_DRV_LS_PERIOD = g_u16_ls_pwm_full;
+	switch (g_motor_phase_current) {
+		case MOTOR_PHASE_DEGREE_60:
+		    MOTOR_DRV_HS_A = g_u16_hs_pwm_empty;	// skip
+		    MOTOR_DRV_HS_B = g_u16_hs_pwm_empty;	// skip
+		    MOTOR_DRV_HS_C = g_u16_throttle_pos_in_pwm_duty_current;		// skip
+		    MOTOR_DRV_LS_A = g_u16_ls_pwm_empty;
+		    MOTOR_DRV_LS_B = g_u16_ls_pwm_full;
+		    MOTOR_DRV_LS_C = g_u16_ls_pwm_empty;	// skip
+			break;
+			
+		case MOTOR_PHASE_DEGREE_120:
+		    MOTOR_DRV_HS_A = g_u16_throttle_pos_in_pwm_duty_current;
+		    MOTOR_DRV_HS_B = g_u16_hs_pwm_empty;	// skip
+		    MOTOR_DRV_HS_C = g_u16_hs_pwm_empty;
+		    MOTOR_DRV_LS_A = g_u16_ls_pwm_empty;	// skip
+		    MOTOR_DRV_LS_B = g_u16_ls_pwm_full;	// skip
+		    MOTOR_DRV_LS_C = g_u16_ls_pwm_empty;	// skip
+			break;
+			
+		case MOTOR_PHASE_DEGREE_180:
+		    MOTOR_DRV_HS_A = g_u16_throttle_pos_in_pwm_duty_current;		// skip
+		    MOTOR_DRV_HS_B = g_u16_hs_pwm_empty;	// skip
+		    MOTOR_DRV_HS_C = g_u16_hs_pwm_empty;	// skip
+		    MOTOR_DRV_LS_A = g_u16_ls_pwm_empty;	// skip
+		    MOTOR_DRV_LS_B = g_u16_ls_pwm_empty;
+		    MOTOR_DRV_LS_C = g_u16_ls_pwm_full;
+			break;
+			
+		case MOTOR_PHASE_DEGREE_240:
+		    MOTOR_DRV_HS_A = g_u16_hs_pwm_empty;
+		    MOTOR_DRV_HS_B = g_u16_throttle_pos_in_pwm_duty_current;
+		    MOTOR_DRV_HS_C = g_u16_hs_pwm_empty;	// skip
+		    MOTOR_DRV_LS_A = g_u16_ls_pwm_empty;	// skip
+		    MOTOR_DRV_LS_B = g_u16_ls_pwm_empty;	// skip
+		    MOTOR_DRV_LS_C = g_u16_ls_pwm_full;	// skip
+			break;
+			
+		case MOTOR_PHASE_DEGREE_300:
+		    MOTOR_DRV_HS_A = g_u16_hs_pwm_empty;	// skip
+		    MOTOR_DRV_HS_B = g_u16_throttle_pos_in_pwm_duty_current;		// skip
+		    MOTOR_DRV_HS_C = g_u16_hs_pwm_empty;	// skip
+		    MOTOR_DRV_LS_A = g_u16_ls_pwm_full;
+		    MOTOR_DRV_LS_B = g_u16_ls_pwm_empty;	// skip
+		    MOTOR_DRV_LS_C = g_u16_ls_pwm_empty;
+			break;
+			
+		case MOTOR_PHASE_DEGREE_360:
+		    MOTOR_DRV_HS_A = g_u16_hs_pwm_empty;	// skip
+		    MOTOR_DRV_HS_B = g_u16_hs_pwm_empty;
+		    MOTOR_DRV_HS_C = g_u16_throttle_pos_in_pwm_duty_current;
+		    MOTOR_DRV_LS_A = g_u16_ls_pwm_full;	// skip
+		    MOTOR_DRV_LS_B = g_u16_ls_pwm_empty;	// skip
+		    MOTOR_DRV_LS_C = g_u16_ls_pwm_empty;	// skip
+			break;
 
-			case MOTOR_PHASE_OPEN:
-			case MOTOR_PHASE_ERROR:
-			default:
-			    MOTOR_DRV_HS_A = g_u16_hs_pwm_empty;
-			    MOTOR_DRV_HS_B = g_u16_hs_pwm_empty;
-			    MOTOR_DRV_HS_C = g_u16_hs_pwm_empty;
-			    MOTOR_DRV_LS_A = g_u16_ls_pwm_empty;
-			    MOTOR_DRV_LS_B = g_u16_ls_pwm_empty;
-			    MOTOR_DRV_LS_C = g_u16_ls_pwm_empty;
-				break;
-		}
-	}
-	else if (g_throttle_direction == THROTTLE_DIRECTION_CW) {
-		switch (g_motor_phase_current) {
-			case MOTOR_PHASE_DEGREE_60:
-			    MOTOR_DRV_HS_A = g_u16_throttle_pos_in_pwm_duty_current;
-			    MOTOR_DRV_HS_B = g_u16_hs_pwm_empty;
-			    MOTOR_DRV_HS_C = g_u16_hs_pwm_empty;	// skip
-			    MOTOR_DRV_LS_A = g_u16_ls_pwm_empty;	// skip
-			    MOTOR_DRV_LS_B = g_u16_ls_pwm_empty;	// skip
-			    MOTOR_DRV_LS_C = g_u16_ls_pwm_full;	// skip
-				break;
-				
-			case MOTOR_PHASE_DEGREE_120:
-			    MOTOR_DRV_HS_A = g_u16_hs_pwm_empty;	// skip
-			    MOTOR_DRV_HS_B = g_u16_throttle_pos_in_pwm_duty_current;		// skip
-			    MOTOR_DRV_HS_C = g_u16_hs_pwm_empty;	// skip
-			    MOTOR_DRV_LS_A = g_u16_ls_pwm_empty;
-			    MOTOR_DRV_LS_B = g_u16_ls_pwm_empty;	// skip
-			    MOTOR_DRV_LS_C = g_u16_ls_pwm_full;
-				break;
-				
-			case MOTOR_PHASE_DEGREE_180:
-			    MOTOR_DRV_HS_A = g_u16_hs_pwm_empty;	// skip
-			    MOTOR_DRV_HS_B = g_u16_throttle_pos_in_pwm_duty_current;
-			    MOTOR_DRV_HS_C = g_u16_hs_pwm_empty;
-			    MOTOR_DRV_LS_A = g_u16_ls_pwm_full;	// skip
-			    MOTOR_DRV_LS_B = g_u16_ls_pwm_empty;	// skip
-			    MOTOR_DRV_LS_C = g_u16_ls_pwm_empty;	// skip
-				break;
-				
-			case MOTOR_PHASE_DEGREE_240:
-			    MOTOR_DRV_HS_A = g_u16_hs_pwm_empty;	// skip
-			    MOTOR_DRV_HS_B = g_u16_hs_pwm_empty;	// skip
-			    MOTOR_DRV_HS_C = g_u16_throttle_pos_in_pwm_duty_current;		// skip
-			    MOTOR_DRV_LS_A = g_u16_ls_pwm_full;
-			    MOTOR_DRV_LS_B = g_u16_ls_pwm_empty;
-			    MOTOR_DRV_LS_C = g_u16_ls_pwm_empty;	// skip
-				break;
-				
-			case MOTOR_PHASE_DEGREE_300:
-			    MOTOR_DRV_HS_A = g_u16_hs_pwm_empty;
-			    MOTOR_DRV_HS_B = g_u16_hs_pwm_empty;	// skip
-			    MOTOR_DRV_HS_C = g_u16_throttle_pos_in_pwm_duty_current;
-			    MOTOR_DRV_LS_A = g_u16_ls_pwm_empty;	// skip
-			    MOTOR_DRV_LS_B = g_u16_ls_pwm_full;	// skip
-			    MOTOR_DRV_LS_C = g_u16_ls_pwm_empty;	// skip
-				break;
-				
-			case MOTOR_PHASE_DEGREE_360:
-			    MOTOR_DRV_HS_A = g_u16_throttle_pos_in_pwm_duty_current;		// skip
-			    MOTOR_DRV_HS_B = g_u16_hs_pwm_empty;	// skip
-			    MOTOR_DRV_HS_C = g_u16_hs_pwm_empty;	// skip
-			    MOTOR_DRV_LS_A = g_u16_ls_pwm_empty;
-			    MOTOR_DRV_LS_B = g_u16_ls_pwm_full;
-			    MOTOR_DRV_LS_C = g_u16_ls_pwm_empty;
-				break;
-
-			case MOTOR_PHASE_OPEN:
-			case MOTOR_PHASE_ERROR:
-			default:
-			   	MOTOR_DRV_HS_A = g_u16_hs_pwm_empty;
-				MOTOR_DRV_HS_B = g_u16_hs_pwm_empty;
-				MOTOR_DRV_HS_C = g_u16_hs_pwm_empty;
-				MOTOR_DRV_LS_A = g_u16_ls_pwm_empty;
-				MOTOR_DRV_LS_B = g_u16_ls_pwm_empty;
-				MOTOR_DRV_LS_C = g_u16_ls_pwm_empty;
-				break;
-		}
-	}
-	else if (g_throttle_direction == THROTTLE_DIRECTION_NEUTRAL) {
-		MOTOR_DRV_HS_A = g_u16_hs_pwm_empty;
-		MOTOR_DRV_HS_B = g_u16_hs_pwm_empty;
-		MOTOR_DRV_HS_C = g_u16_hs_pwm_empty;
-		MOTOR_DRV_LS_A = g_u16_ls_pwm_empty;
-		MOTOR_DRV_LS_B = g_u16_ls_pwm_empty;
-		MOTOR_DRV_LS_C = g_u16_ls_pwm_empty;
+		case MOTOR_PHASE_OPEN:
+		case MOTOR_PHASE_ERROR:
+		default:
+		    MOTOR_DRV_HS_A = g_u16_hs_pwm_empty;
+		    MOTOR_DRV_HS_B = g_u16_hs_pwm_empty;
+		    MOTOR_DRV_HS_C = g_u16_hs_pwm_empty;
+		    MOTOR_DRV_LS_A = g_u16_ls_pwm_empty;
+		    MOTOR_DRV_LS_B = g_u16_ls_pwm_empty;
+		    MOTOR_DRV_LS_C = g_u16_ls_pwm_empty;
+			break;
 	}
 	
+	PIN_MOTOR_DRIVER_ENABLE = MOTOR_ENABLE;
+	R_TMR_RD0_Start ( );
+	R_TMR_RD1_Start ( );
+}
+
+/***********************************************************************************************************************/
+void motor_driver_reverse_enable (void) {
+
+	motor_phase_reset ( );
+	
+	MOTOR_DRV_LS_PERIOD = g_u16_ls_pwm_full;
+	switch (g_motor_phase_current) {
+		case MOTOR_PHASE_DEGREE_60:
+		    MOTOR_DRV_HS_A = g_u16_throttle_pos_in_pwm_duty_current;
+		    MOTOR_DRV_HS_B = g_u16_hs_pwm_empty;
+		    MOTOR_DRV_HS_C = g_u16_hs_pwm_empty;	// skip
+		    MOTOR_DRV_LS_A = g_u16_ls_pwm_empty;	// skip
+		    MOTOR_DRV_LS_B = g_u16_ls_pwm_empty;	// skip
+		    MOTOR_DRV_LS_C = g_u16_ls_pwm_full;	// skip
+			break;
+			
+		case MOTOR_PHASE_DEGREE_120:
+		    MOTOR_DRV_HS_A = g_u16_hs_pwm_empty;	// skip
+		    MOTOR_DRV_HS_B = g_u16_throttle_pos_in_pwm_duty_current;		// skip
+		    MOTOR_DRV_HS_C = g_u16_hs_pwm_empty;	// skip
+		    MOTOR_DRV_LS_A = g_u16_ls_pwm_empty;
+		    MOTOR_DRV_LS_B = g_u16_ls_pwm_empty;	// skip
+		    MOTOR_DRV_LS_C = g_u16_ls_pwm_full;
+			break;
+			
+		case MOTOR_PHASE_DEGREE_180:
+		    MOTOR_DRV_HS_A = g_u16_hs_pwm_empty;	// skip
+		    MOTOR_DRV_HS_B = g_u16_throttle_pos_in_pwm_duty_current;
+		    MOTOR_DRV_HS_C = g_u16_hs_pwm_empty;
+		    MOTOR_DRV_LS_A = g_u16_ls_pwm_full;	// skip
+		    MOTOR_DRV_LS_B = g_u16_ls_pwm_empty;	// skip
+		    MOTOR_DRV_LS_C = g_u16_ls_pwm_empty;	// skip
+			break;
+			
+		case MOTOR_PHASE_DEGREE_240:
+		    MOTOR_DRV_HS_A = g_u16_hs_pwm_empty;	// skip
+		    MOTOR_DRV_HS_B = g_u16_hs_pwm_empty;	// skip
+		    MOTOR_DRV_HS_C = g_u16_throttle_pos_in_pwm_duty_current;		// skip
+		    MOTOR_DRV_LS_A = g_u16_ls_pwm_full;
+		    MOTOR_DRV_LS_B = g_u16_ls_pwm_empty;
+		    MOTOR_DRV_LS_C = g_u16_ls_pwm_empty;	// skip
+			break;
+			
+		case MOTOR_PHASE_DEGREE_300:
+		    MOTOR_DRV_HS_A = g_u16_hs_pwm_empty;
+		    MOTOR_DRV_HS_B = g_u16_hs_pwm_empty;	// skip
+		    MOTOR_DRV_HS_C = g_u16_throttle_pos_in_pwm_duty_current;
+		    MOTOR_DRV_LS_A = g_u16_ls_pwm_empty;	// skip
+		    MOTOR_DRV_LS_B = g_u16_ls_pwm_full;	// skip
+		    MOTOR_DRV_LS_C = g_u16_ls_pwm_empty;	// skip
+			break;
+			
+		case MOTOR_PHASE_DEGREE_360:
+		    MOTOR_DRV_HS_A = g_u16_throttle_pos_in_pwm_duty_current;		// skip
+		    MOTOR_DRV_HS_B = g_u16_hs_pwm_empty;	// skip
+		    MOTOR_DRV_HS_C = g_u16_hs_pwm_empty;	// skip
+		    MOTOR_DRV_LS_A = g_u16_ls_pwm_empty;
+		    MOTOR_DRV_LS_B = g_u16_ls_pwm_full;
+		    MOTOR_DRV_LS_C = g_u16_ls_pwm_empty;
+			break;
+
+		case MOTOR_PHASE_OPEN:
+		case MOTOR_PHASE_ERROR:
+		default:
+		   	MOTOR_DRV_HS_A = g_u16_hs_pwm_empty;
+			MOTOR_DRV_HS_B = g_u16_hs_pwm_empty;
+			MOTOR_DRV_HS_C = g_u16_hs_pwm_empty;
+			MOTOR_DRV_LS_A = g_u16_ls_pwm_empty;
+			MOTOR_DRV_LS_B = g_u16_ls_pwm_empty;
+			MOTOR_DRV_LS_C = g_u16_ls_pwm_empty;
+			break;
+	}
+	
+	PIN_MOTOR_DRIVER_ENABLE = MOTOR_ENABLE;
+	R_TMR_RD0_Start ( );
+	R_TMR_RD1_Start ( );
+}
+
+/***********************************************************************************************************************/
+void motor_driver_break_enable (void) {
+   	MOTOR_DRV_HS_A = g_u16_hs_pwm_empty;
+	MOTOR_DRV_HS_B = g_u16_hs_pwm_empty;
+	MOTOR_DRV_HS_C = g_u16_hs_pwm_empty;
+	MOTOR_DRV_LS_PERIOD = BREAK_PERIOD;
+    MOTOR_DRV_LS_A = (g_u16_throttle_pos_in_pwm_duty_current << 2);
+    MOTOR_DRV_LS_B = (g_u16_throttle_pos_in_pwm_duty_current << 2);
+    MOTOR_DRV_LS_C = (g_u16_throttle_pos_in_pwm_duty_current << 2);
 	PIN_MOTOR_DRIVER_ENABLE = MOTOR_ENABLE;
 	R_TMR_RD0_Start ( );
 	R_TMR_RD1_Start ( );
@@ -349,10 +371,10 @@ void app_config (void) {
 
 	g_u16_throttle_pos_sample_tolerance = tmp * THROTTLE_POS_SAMPLE_TOLERANCE_PERCENTAGE;
 	
-	g_u16_hs_pwm_full = TRDGRA0;
-	g_u16_hs_pwm_empty = TRDGRA0 + 1U;
-	g_u16_ls_pwm_full = TRDGRA1;
-	g_u16_ls_pwm_empty = TRDGRA1 + 1U;
+	g_u16_hs_pwm_full = MOTOR_DRV_HS_PERIOD;
+	g_u16_hs_pwm_empty = MOTOR_DRV_HS_PERIOD + 1U;
+	g_u16_ls_pwm_full = MOTOR_DRV_LS_PERIOD;
+	g_u16_ls_pwm_empty = MOTOR_DRV_LS_PERIOD + 1U;
 	g_u16_throttle_pos_in_pwm_duty_current = g_u16_hs_pwm_empty;
 	g_u16_throttle_pos_in_pwm_duty_last = g_u16_hs_pwm_empty;
 }
@@ -365,7 +387,8 @@ void app_handler (void) {
 			throttle_enable ( );
 			g_app_state = APP_STATE_MOTOR_CONTROL_PRE_IDLE;
 			break;
-			
+
+		/* IDLE */
 		case APP_STATE_MOTOR_CONTROL_PRE_IDLE:
 			hall_sensor_disable ( );
 			motor_driver_disable ( );
@@ -374,32 +397,69 @@ void app_handler (void) {
 			
 		case APP_STATE_MOTOR_CONTROL_IDLE:
 			if (g_u16_throttle_pos_in_pwm_duty_current != g_u16_hs_pwm_empty) {
-				g_app_state = APP_STATE_MOTOR_CONTROL_PRE_ZERO_DRIVING;
+				if (g_throttle_direction == THROTTLE_DIRECTION_CCW)
+					g_app_state = APP_STATE_MOTOR_CONTROL_PRE_FWD_DRIVING;
+				else if (g_throttle_direction == THROTTLE_DIRECTION_CW)
+					g_app_state = APP_STATE_MOTOR_CONTROL_PRE_BREAK;
 			}
 			break;
 
-		case APP_STATE_MOTOR_CONTROL_BREAK:
-			if (g_motor_phase_last == g_motor_phase_current) {
-				g_app_state = APP_STATE_MOTOR_CONTROL_PRE_IDLE;
-			}
+		/* IDLE REVERSIBLE */
+		case APP_STATE_MOTOR_CONTROL_PRE_IDLE_REVERSIBLE:
+			hall_sensor_disable ( );
+			motor_driver_disable ( );
+			g_app_state = APP_STATE_MOTOR_CONTROL_IDLE_REVERSIBLE;
 			break;
 			
-		case APP_STATE_MOTOR_CONTROL_PRE_ZERO_DRIVING:
-			motor_driver_enable ( );
+		case APP_STATE_MOTOR_CONTROL_IDLE_REVERSIBLE:
+			if (g_u16_throttle_pos_in_pwm_duty_current != g_u16_hs_pwm_empty) {
+				if (g_throttle_direction == THROTTLE_DIRECTION_CCW)
+					g_app_state = APP_STATE_MOTOR_CONTROL_PRE_FWD_DRIVING;
+				else if (g_throttle_direction == THROTTLE_DIRECTION_CW)
+					g_app_state = APP_STATE_MOTOR_CONTROL_PRE_REV_DRIVING;
+			}
+			break;
+
+		/* BREAK */
+		case APP_STATE_MOTOR_CONTROL_PRE_BREAK:
+			motor_driver_break_enable ( );
 			hall_sensor_enable ( );
-			g_app_state = APP_STATE_MOTOR_CONTROL_ZERO_DRIVING;
+			g_app_state = APP_STATE_MOTOR_CONTROL_BREAK;
 			break;
 			
-		case APP_STATE_MOTOR_CONTROL_ZERO_DRIVING:
-			if (g_u16_throttle_pos_in_pwm_duty_current == g_u16_hs_pwm_empty) {
+		case APP_STATE_MOTOR_CONTROL_BREAK:
+			if (g_u16_throttle_pos_in_pwm_duty_current == g_u16_hs_pwm_empty)
+				g_app_state = APP_STATE_MOTOR_CONTROL_PRE_IDLE_REVERSIBLE;
+			else if (g_throttle_direction == THROTTLE_DIRECTION_CCW)
+				g_app_state = APP_STATE_MOTOR_CONTROL_PRE_FWD_DRIVING;
+			break;
+		
+		/* FWD */
+		case APP_STATE_MOTOR_CONTROL_PRE_FWD_DRIVING:
+			motor_driver_farward_enable ( );
+			hall_sensor_enable ( );
+			g_app_state = APP_STATE_MOTOR_CONTROL_FWD_DRIVING;
+			break;
+			
+		case APP_STATE_MOTOR_CONTROL_FWD_DRIVING:
+			if (g_u16_throttle_pos_in_pwm_duty_current == g_u16_hs_pwm_empty)
 				g_app_state = APP_STATE_MOTOR_CONTROL_PRE_IDLE;
-			}
+			else if (g_throttle_direction == THROTTLE_DIRECTION_CW)
+				g_app_state = APP_STATE_MOTOR_CONTROL_PRE_BREAK;
 			break;
 
-		case APP_STATE_MOTOR_CONTROL_PRE_TURBO_DRIVING:
+		/* REV */
+		case APP_STATE_MOTOR_CONTROL_PRE_REV_DRIVING:
+			motor_driver_reverse_enable ( );
+			hall_sensor_enable ( );
+			g_app_state = APP_STATE_MOTOR_CONTROL_REV_DRIVING;
 			break;
 			
-		case APP_STATE_MOTOR_CONTROL_TURBO_DRIVING:
+		case APP_STATE_MOTOR_CONTROL_REV_DRIVING:
+			if (g_u16_throttle_pos_in_pwm_duty_current == g_u16_hs_pwm_empty)
+				g_app_state = APP_STATE_MOTOR_CONTROL_PRE_IDLE;
+			else if (g_throttle_direction == THROTTLE_DIRECTION_CCW)
+				g_app_state = APP_STATE_MOTOR_CONTROL_PRE_FWD_DRIVING;
 			break;
 			
 		default:
