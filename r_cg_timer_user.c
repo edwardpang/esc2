@@ -70,7 +70,7 @@ extern uint16_t		g_u16_ls_pwm_full, g_u16_ls_pwm_empty;
 extern const motor_phase_t	abc2phase[MOTOR_PHASE_NUM];
 extern motor_phase_t	g_motor_phase_current;
 
-
+extern app_state_t 	g_app_state;
 /* End user code. Do not edit comment generated here */
 
 /***********************************************************************************************************************
@@ -114,6 +114,12 @@ __interrupt static void r_tau0_channel2_interrupt(void)
 	else {
 		g_u16_throttle_pos_in_pwm_duty_current = g_u16_hs_pwm_full;
 		g_throttle_direction = THROTTLE_DIRECTION_CW;
+	}
+	
+	if (g_app_state == APP_STATE_MOTOR_CONTROL_BREAK) {
+	    MOTOR_DRV_LS_A = (g_u16_throttle_pos_in_pwm_duty_current << 2);
+    	MOTOR_DRV_LS_B = (g_u16_throttle_pos_in_pwm_duty_current << 2);
+    	MOTOR_DRV_LS_C = (g_u16_throttle_pos_in_pwm_duty_current << 2);
 	}
     /* End user code. Do not edit comment generated here */
 }
