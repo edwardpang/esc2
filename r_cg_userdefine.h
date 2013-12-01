@@ -39,6 +39,9 @@ User definitions
 ***********************************************************************************************************************/
 
 /* Start user code for function. Do not edit comment generated here */
+#define SW_CONF_REALTIME_UPDATE_TH
+
+
 #define MOTOR_DRV_HS_PERIOD		TRDGRA0
 #define MOTOR_DRV_HS_A			TRDGRB0
 #define MOTOR_DRV_HS_B			TRDGRC0
