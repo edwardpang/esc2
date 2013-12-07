@@ -3041,8 +3041,8 @@ cl78mf
     &lt;TO03_PWM Name="TO03_PWM" Text="false" /&gt;
     &lt;INPT0USE0 Name="INPT0USE0" Text="true" /&gt;
     &lt;TRDINTP0LINK0 Name="TRDINTP0LINK0" Text="false" /&gt;
-    &lt;TRDIOC1_PWM Name="TRDIOC1_PWM" Text="false" /&gt;
-    &lt;TRDIOD1_PWM Name="TRDIOD1_PWM" Text="false" /&gt;
+    &lt;TRDIOC1_PWM Name="TRDIOC1_PWM" Text="true" /&gt;
+    &lt;TRDIOD1_PWM Name="TRDIOD1_PWM" Text="true" /&gt;
     &lt;INPT0USE1 Name="INPT0USE1" Text="false" /&gt;
     &lt;TRDINTP0LINK1 Name="TRDINTP0LINK1" Text="false" /&gt;
     &lt;INTP0USE1 Name="INTP0USE1" Text="true" /&gt;
@@ -4627,7 +4627,7 @@ cl78mf
         &lt;setting name="Duty3" value="0" /&gt;
         &lt;setting name="Duty2" value="0" /&gt;
         &lt;setting name="Duty1" value="0" /&gt;
-        &lt;setting name="Period" value="0.125" /&gt;
+        &lt;setting name="Period" value="250" /&gt;
         &lt;setting name="Duty3_Inuse" value="use" /&gt;
         &lt;setting name="Duty2_Inuse" value="use" /&gt;
         &lt;setting name="Duty1_Inuse" value="use" /&gt;
