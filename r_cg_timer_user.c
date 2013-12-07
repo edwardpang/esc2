@@ -119,7 +119,6 @@ __interrupt static void r_tau0_channel2_interrupt(void)
 		g_throttle_direction = THROTTLE_DIRECTION_CW;
 	}
 
-#ifdef SW_CONF_REALTIME_UPDATE_TH
 	if (g_app_state == APP_STATE_MOTOR_CONTROL_BREAK) {
 		if (g_u16_throttle_pos_in_pwm_duty_current != g_u16_hs_pwm_full) {
 			MOTOR_DRV_LS_A = (g_u16_throttle_pos_in_pwm_duty_current << 2);
@@ -132,43 +131,12 @@ __interrupt static void r_tau0_channel2_interrupt(void)
 			MOTOR_DRV_LS_C = BREAK_PERIOD;
 		}
 	}
-	else if (g_app_state == APP_STATE_MOTOR_CONTROL_FWD_DRIVING) {
-		switch (g_motor_phase_current) {
-			case MOTOR_PHASE_DEGREE_60:
-			case MOTOR_PHASE_DEGREE_360:
-			    MOTOR_DRV_HS_C = g_u16_throttle_pos_in_pwm_duty_current;
-				break;
-				
-			case MOTOR_PHASE_DEGREE_120:
-			case MOTOR_PHASE_DEGREE_180:
-			    MOTOR_DRV_HS_A = g_u16_throttle_pos_in_pwm_duty_current;
-				break;
-				
-			case MOTOR_PHASE_DEGREE_240:
-			case MOTOR_PHASE_DEGREE_300:
-			    MOTOR_DRV_HS_B = g_u16_throttle_pos_in_pwm_duty_current;
-				break;
-		}
+	else if (g_app_state == APP_STATE_MOTOR_CONTROL_FWD_DRIVING ||
+			g_app_state == APP_STATE_MOTOR_CONTROL_REV_DRIVING) {
+	    MOTOR_DRV_HS_A = g_u16_throttle_pos_in_pwm_duty_current;
+	    MOTOR_DRV_HS_B = g_u16_throttle_pos_in_pwm_duty_current;
+	    MOTOR_DRV_HS_C = g_u16_throttle_pos_in_pwm_duty_current;
 	}
-	else if (g_app_state == APP_STATE_MOTOR_CONTROL_REV_DRIVING) {
-		switch (g_motor_phase_current) {
-			case MOTOR_PHASE_DEGREE_60:
-			case MOTOR_PHASE_DEGREE_360:
-			    MOTOR_DRV_HS_A = g_u16_throttle_pos_in_pwm_duty_current;
-				break;
-				
-			case MOTOR_PHASE_DEGREE_120:
-			case MOTOR_PHASE_DEGREE_180:
-			    MOTOR_DRV_HS_B = g_u16_throttle_pos_in_pwm_duty_current;
-				break;
-				
-			case MOTOR_PHASE_DEGREE_240:
-			case MOTOR_PHASE_DEGREE_300:
-			    MOTOR_DRV_HS_C = g_u16_throttle_pos_in_pwm_duty_current;
-				break;
-		}				
-	}
-#endif
     /* End user code. Do not edit comment generated here */
 }
 

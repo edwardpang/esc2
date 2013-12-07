@@ -155,70 +155,42 @@ void motor_driver_farward_enable (void) {
 	motor_phase_reset ( );
 	
 	MOTOR_DRV_LS_PERIOD = g_u16_ls_pwm_full;
+
+	TRDOER1 |= MOTOR_DRV_DISABLE_ALL_MASK;
+	MOTOR_DRV_HS_A = g_u16_throttle_pos_in_pwm_duty_current;
+	MOTOR_DRV_HS_B = g_u16_throttle_pos_in_pwm_duty_current;
+	MOTOR_DRV_HS_C = g_u16_throttle_pos_in_pwm_duty_current;
+	MOTOR_DRV_LS_A = g_u16_ls_pwm_full;
+	MOTOR_DRV_LS_B = g_u16_ls_pwm_full;
+	MOTOR_DRV_LS_C = g_u16_ls_pwm_full;
 	switch (g_motor_phase_current) {
 		case MOTOR_PHASE_DEGREE_60:
-		    MOTOR_DRV_HS_A = g_u16_hs_pwm_empty;	// skip
-		    MOTOR_DRV_HS_B = g_u16_hs_pwm_empty;	// skip
-		    MOTOR_DRV_HS_C = g_u16_throttle_pos_in_pwm_duty_current;		// skip
-		    MOTOR_DRV_LS_A = g_u16_ls_pwm_empty;
-		    MOTOR_DRV_LS_B = g_u16_ls_pwm_full;
-		    MOTOR_DRV_LS_C = g_u16_ls_pwm_empty;	// skip
+			TRDOER1 &= ~(MOTOR_DRV_HS_ENABLE_C_MASK | MOTOR_DRV_LS_ENABLE_B_MASK);
 			break;
 			
 		case MOTOR_PHASE_DEGREE_120:
-		    MOTOR_DRV_HS_A = g_u16_throttle_pos_in_pwm_duty_current;
-		    MOTOR_DRV_HS_B = g_u16_hs_pwm_empty;	// skip
-		    MOTOR_DRV_HS_C = g_u16_hs_pwm_empty;
-		    MOTOR_DRV_LS_A = g_u16_ls_pwm_empty;	// skip
-		    MOTOR_DRV_LS_B = g_u16_ls_pwm_full;	// skip
-		    MOTOR_DRV_LS_C = g_u16_ls_pwm_empty;	// skip
+			TRDOER1 &= ~(MOTOR_DRV_HS_ENABLE_A_MASK | MOTOR_DRV_LS_ENABLE_B_MASK);
 			break;
 			
 		case MOTOR_PHASE_DEGREE_180:
-		    MOTOR_DRV_HS_A = g_u16_throttle_pos_in_pwm_duty_current;		// skip
-		    MOTOR_DRV_HS_B = g_u16_hs_pwm_empty;	// skip
-		    MOTOR_DRV_HS_C = g_u16_hs_pwm_empty;	// skip
-		    MOTOR_DRV_LS_A = g_u16_ls_pwm_empty;	// skip
-		    MOTOR_DRV_LS_B = g_u16_ls_pwm_empty;
-		    MOTOR_DRV_LS_C = g_u16_ls_pwm_full;
+			TRDOER1 &= ~(MOTOR_DRV_HS_ENABLE_A_MASK | MOTOR_DRV_LS_ENABLE_C_MASK);
 			break;
 			
 		case MOTOR_PHASE_DEGREE_240:
-		    MOTOR_DRV_HS_A = g_u16_hs_pwm_empty;
-		    MOTOR_DRV_HS_B = g_u16_throttle_pos_in_pwm_duty_current;
-		    MOTOR_DRV_HS_C = g_u16_hs_pwm_empty;	// skip
-		    MOTOR_DRV_LS_A = g_u16_ls_pwm_empty;	// skip
-		    MOTOR_DRV_LS_B = g_u16_ls_pwm_empty;	// skip
-		    MOTOR_DRV_LS_C = g_u16_ls_pwm_full;	// skip
+			TRDOER1 &= ~(MOTOR_DRV_HS_ENABLE_B_MASK | MOTOR_DRV_LS_ENABLE_C_MASK);
 			break;
 			
 		case MOTOR_PHASE_DEGREE_300:
-		    MOTOR_DRV_HS_A = g_u16_hs_pwm_empty;	// skip
-		    MOTOR_DRV_HS_B = g_u16_throttle_pos_in_pwm_duty_current;		// skip
-		    MOTOR_DRV_HS_C = g_u16_hs_pwm_empty;	// skip
-		    MOTOR_DRV_LS_A = g_u16_ls_pwm_full;
-		    MOTOR_DRV_LS_B = g_u16_ls_pwm_empty;	// skip
-		    MOTOR_DRV_LS_C = g_u16_ls_pwm_empty;
+			TRDOER1 &= ~(MOTOR_DRV_HS_ENABLE_B_MASK | MOTOR_DRV_LS_ENABLE_A_MASK);
 			break;
 			
 		case MOTOR_PHASE_DEGREE_360:
-		    MOTOR_DRV_HS_A = g_u16_hs_pwm_empty;	// skip
-		    MOTOR_DRV_HS_B = g_u16_hs_pwm_empty;
-		    MOTOR_DRV_HS_C = g_u16_throttle_pos_in_pwm_duty_current;
-		    MOTOR_DRV_LS_A = g_u16_ls_pwm_full;	// skip
-		    MOTOR_DRV_LS_B = g_u16_ls_pwm_empty;	// skip
-		    MOTOR_DRV_LS_C = g_u16_ls_pwm_empty;	// skip
+			TRDOER1 &= ~(MOTOR_DRV_HS_ENABLE_C_MASK | MOTOR_DRV_LS_ENABLE_A_MASK);
 			break;
 
 		case MOTOR_PHASE_OPEN:
 		case MOTOR_PHASE_ERROR:
 		default:
-		    MOTOR_DRV_HS_A = g_u16_hs_pwm_empty;
-		    MOTOR_DRV_HS_B = g_u16_hs_pwm_empty;
-		    MOTOR_DRV_HS_C = g_u16_hs_pwm_empty;
-		    MOTOR_DRV_LS_A = g_u16_ls_pwm_empty;
-		    MOTOR_DRV_LS_B = g_u16_ls_pwm_empty;
-		    MOTOR_DRV_LS_C = g_u16_ls_pwm_empty;
 			break;
 	}
 	
@@ -233,70 +205,42 @@ void motor_driver_reverse_enable (void) {
 	motor_phase_reset ( );
 	
 	MOTOR_DRV_LS_PERIOD = g_u16_ls_pwm_full;
+
+	TRDOER1 |= MOTOR_DRV_DISABLE_ALL_MASK;
+	MOTOR_DRV_HS_A = g_u16_throttle_pos_in_pwm_duty_current;
+	MOTOR_DRV_HS_B = g_u16_throttle_pos_in_pwm_duty_current;
+	MOTOR_DRV_HS_C = g_u16_throttle_pos_in_pwm_duty_current;
+	MOTOR_DRV_LS_A = g_u16_ls_pwm_full;
+	MOTOR_DRV_LS_B = g_u16_ls_pwm_full;
+	MOTOR_DRV_LS_C = g_u16_ls_pwm_full;
 	switch (g_motor_phase_current) {
 		case MOTOR_PHASE_DEGREE_60:
-		    MOTOR_DRV_HS_A = g_u16_throttle_pos_in_pwm_duty_current;
-		    MOTOR_DRV_HS_B = g_u16_hs_pwm_empty;
-		    MOTOR_DRV_HS_C = g_u16_hs_pwm_empty;	// skip
-		    MOTOR_DRV_LS_A = g_u16_ls_pwm_empty;	// skip
-		    MOTOR_DRV_LS_B = g_u16_ls_pwm_empty;	// skip
-		    MOTOR_DRV_LS_C = g_u16_ls_pwm_full;	// skip
+			TRDOER1 &= ~(MOTOR_DRV_HS_ENABLE_A_MASK | MOTOR_DRV_LS_ENABLE_C_MASK);
 			break;
 			
 		case MOTOR_PHASE_DEGREE_120:
-		    MOTOR_DRV_HS_A = g_u16_hs_pwm_empty;	// skip
-		    MOTOR_DRV_HS_B = g_u16_throttle_pos_in_pwm_duty_current;		// skip
-		    MOTOR_DRV_HS_C = g_u16_hs_pwm_empty;	// skip
-		    MOTOR_DRV_LS_A = g_u16_ls_pwm_empty;
-		    MOTOR_DRV_LS_B = g_u16_ls_pwm_empty;	// skip
-		    MOTOR_DRV_LS_C = g_u16_ls_pwm_full;
+			TRDOER1 &= ~(MOTOR_DRV_HS_ENABLE_B_MASK | MOTOR_DRV_LS_ENABLE_C_MASK);
 			break;
 			
 		case MOTOR_PHASE_DEGREE_180:
-		    MOTOR_DRV_HS_A = g_u16_hs_pwm_empty;	// skip
-		    MOTOR_DRV_HS_B = g_u16_throttle_pos_in_pwm_duty_current;
-		    MOTOR_DRV_HS_C = g_u16_hs_pwm_empty;
-		    MOTOR_DRV_LS_A = g_u16_ls_pwm_full;	// skip
-		    MOTOR_DRV_LS_B = g_u16_ls_pwm_empty;	// skip
-		    MOTOR_DRV_LS_C = g_u16_ls_pwm_empty;	// skip
+			TRDOER1 &= ~(MOTOR_DRV_HS_ENABLE_B_MASK | MOTOR_DRV_LS_ENABLE_A_MASK);
 			break;
 			
 		case MOTOR_PHASE_DEGREE_240:
-		    MOTOR_DRV_HS_A = g_u16_hs_pwm_empty;	// skip
-		    MOTOR_DRV_HS_B = g_u16_hs_pwm_empty;	// skip
-		    MOTOR_DRV_HS_C = g_u16_throttle_pos_in_pwm_duty_current;		// skip
-		    MOTOR_DRV_LS_A = g_u16_ls_pwm_full;
-		    MOTOR_DRV_LS_B = g_u16_ls_pwm_empty;
-		    MOTOR_DRV_LS_C = g_u16_ls_pwm_empty;	// skip
+			TRDOER1 &= ~(MOTOR_DRV_HS_ENABLE_C_MASK | MOTOR_DRV_LS_ENABLE_A_MASK);
 			break;
 			
 		case MOTOR_PHASE_DEGREE_300:
-		    MOTOR_DRV_HS_A = g_u16_hs_pwm_empty;
-		    MOTOR_DRV_HS_B = g_u16_hs_pwm_empty;	// skip
-		    MOTOR_DRV_HS_C = g_u16_throttle_pos_in_pwm_duty_current;
-		    MOTOR_DRV_LS_A = g_u16_ls_pwm_empty;	// skip
-		    MOTOR_DRV_LS_B = g_u16_ls_pwm_full;	// skip
-		    MOTOR_DRV_LS_C = g_u16_ls_pwm_empty;	// skip
+			TRDOER1 &= ~(MOTOR_DRV_HS_ENABLE_C_MASK | MOTOR_DRV_LS_ENABLE_B_MASK);
 			break;
 			
 		case MOTOR_PHASE_DEGREE_360:
-		    MOTOR_DRV_HS_A = g_u16_throttle_pos_in_pwm_duty_current;		// skip
-		    MOTOR_DRV_HS_B = g_u16_hs_pwm_empty;	// skip
-		    MOTOR_DRV_HS_C = g_u16_hs_pwm_empty;	// skip
-		    MOTOR_DRV_LS_A = g_u16_ls_pwm_empty;
-		    MOTOR_DRV_LS_B = g_u16_ls_pwm_full;
-		    MOTOR_DRV_LS_C = g_u16_ls_pwm_empty;
+			TRDOER1 &= ~(MOTOR_DRV_HS_ENABLE_A_MASK | MOTOR_DRV_LS_ENABLE_B_MASK);
 			break;
 
 		case MOTOR_PHASE_OPEN:
 		case MOTOR_PHASE_ERROR:
 		default:
-		   	MOTOR_DRV_HS_A = g_u16_hs_pwm_empty;
-			MOTOR_DRV_HS_B = g_u16_hs_pwm_empty;
-			MOTOR_DRV_HS_C = g_u16_hs_pwm_empty;
-			MOTOR_DRV_LS_A = g_u16_ls_pwm_empty;
-			MOTOR_DRV_LS_B = g_u16_ls_pwm_empty;
-			MOTOR_DRV_LS_C = g_u16_ls_pwm_empty;
 			break;
 	}
 	
@@ -314,6 +258,7 @@ void motor_driver_break_enable (void) {
     MOTOR_DRV_LS_A = (g_u16_throttle_pos_in_pwm_duty_current << 2);
     MOTOR_DRV_LS_B = (g_u16_throttle_pos_in_pwm_duty_current << 2);
     MOTOR_DRV_LS_C = (g_u16_throttle_pos_in_pwm_duty_current << 2);
+	TRDOER1 &= ~(MOTOR_DRV_DISABLE_ALL_MASK);
 	PIN_MOTOR_DRIVER_ENABLE = MOTOR_ENABLE;
 	R_TMR_RD0_Start ( );
 	R_TMR_RD1_Start ( );
