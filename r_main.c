@@ -139,6 +139,8 @@ void motor_phase_reset (void) {
 /***********************************************************************************************************************/
 void motor_driver_disable (void) {
 	PIN_MOTOR_DRIVER_ENABLE = MOTOR_DISABLE;
+	PM1 |= (PIN_MOTOR_DRV_HS_A |PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_HS_C | 
+			PIN_MOTOR_DRV_LS_A | PIN_MOTOR_DRV_LS_B | PIN_MOTOR_DRV_LS_C);
 	MOTOR_DRV_HS_A = g_u16_hs_pwm_empty;
 	MOTOR_DRV_HS_B = g_u16_hs_pwm_empty;
 	MOTOR_DRV_HS_C = g_u16_hs_pwm_empty;
@@ -156,7 +158,6 @@ void motor_driver_farward_enable (void) {
 	
 	MOTOR_DRV_LS_PERIOD = g_u16_ls_pwm_full;
 
-	TRDOER1 |= MOTOR_DRV_DISABLE_ALL_MASK;
 	MOTOR_DRV_HS_A = g_u16_throttle_pos_in_pwm_duty_current;
 	MOTOR_DRV_HS_B = g_u16_throttle_pos_in_pwm_duty_current;
 	MOTOR_DRV_HS_C = g_u16_throttle_pos_in_pwm_duty_current;
@@ -165,27 +166,33 @@ void motor_driver_farward_enable (void) {
 	MOTOR_DRV_LS_C = g_u16_ls_pwm_full;
 	switch (g_motor_phase_current) {
 		case MOTOR_PHASE_DEGREE_60:
-			TRDOER1 &= ~(MOTOR_DRV_HS_ENABLE_C_MASK | MOTOR_DRV_LS_ENABLE_B_MASK);
+			PM1 |= (PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_LS_A | PIN_MOTOR_DRV_LS_C);
+			PM1 &= ~(PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_B);
 			break;
 			
 		case MOTOR_PHASE_DEGREE_120:
-			TRDOER1 &= ~(MOTOR_DRV_HS_ENABLE_A_MASK | MOTOR_DRV_LS_ENABLE_B_MASK);
+			PM1 |= (PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_A | PIN_MOTOR_DRV_LS_C);
+			PM1 &= ~(PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_LS_B);
 			break;
 			
 		case MOTOR_PHASE_DEGREE_180:
-			TRDOER1 &= ~(MOTOR_DRV_HS_ENABLE_A_MASK | MOTOR_DRV_LS_ENABLE_C_MASK);
+			PM1 |= (PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_A | PIN_MOTOR_DRV_LS_B);
+			PM1 &= ~(PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_LS_C);
 			break;
 			
 		case MOTOR_PHASE_DEGREE_240:
-			TRDOER1 &= ~(MOTOR_DRV_HS_ENABLE_B_MASK | MOTOR_DRV_LS_ENABLE_C_MASK);
+			PM1 |= (PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_A | PIN_MOTOR_DRV_LS_B);
+			PM1 &= ~(PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_LS_C);
 			break;
 			
 		case MOTOR_PHASE_DEGREE_300:
-			TRDOER1 &= ~(MOTOR_DRV_HS_ENABLE_B_MASK | MOTOR_DRV_LS_ENABLE_A_MASK);
+			PM1 |= (PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_B | PIN_MOTOR_DRV_LS_C);
+			PM1 &= ~(PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_LS_A);
 			break;
 			
 		case MOTOR_PHASE_DEGREE_360:
-			TRDOER1 &= ~(MOTOR_DRV_HS_ENABLE_C_MASK | MOTOR_DRV_LS_ENABLE_A_MASK);
+			PM1 |= (PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_LS_B | PIN_MOTOR_DRV_LS_C);
+			PM1 &= ~(PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_A);
 			break;
 
 		case MOTOR_PHASE_OPEN:
@@ -206,7 +213,6 @@ void motor_driver_reverse_enable (void) {
 	
 	MOTOR_DRV_LS_PERIOD = g_u16_ls_pwm_full;
 
-	TRDOER1 |= MOTOR_DRV_DISABLE_ALL_MASK;
 	MOTOR_DRV_HS_A = g_u16_throttle_pos_in_pwm_duty_current;
 	MOTOR_DRV_HS_B = g_u16_throttle_pos_in_pwm_duty_current;
 	MOTOR_DRV_HS_C = g_u16_throttle_pos_in_pwm_duty_current;
@@ -215,27 +221,33 @@ void motor_driver_reverse_enable (void) {
 	MOTOR_DRV_LS_C = g_u16_ls_pwm_full;
 	switch (g_motor_phase_current) {
 		case MOTOR_PHASE_DEGREE_60:
-			TRDOER1 &= ~(MOTOR_DRV_HS_ENABLE_A_MASK | MOTOR_DRV_LS_ENABLE_C_MASK);
+			PM1 |= (PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_A | PIN_MOTOR_DRV_LS_B);
+			PM1 &= ~(PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_LS_C);
 			break;
 			
 		case MOTOR_PHASE_DEGREE_120:
-			TRDOER1 &= ~(MOTOR_DRV_HS_ENABLE_B_MASK | MOTOR_DRV_LS_ENABLE_C_MASK);
+			PM1 |= (PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_A | PIN_MOTOR_DRV_LS_B);
+			PM1 &= ~(PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_LS_C);
 			break;
 			
 		case MOTOR_PHASE_DEGREE_180:
-			TRDOER1 &= ~(MOTOR_DRV_HS_ENABLE_B_MASK | MOTOR_DRV_LS_ENABLE_A_MASK);
+			PM1 |= (PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_B | PIN_MOTOR_DRV_LS_C);
+			PM1 &= ~(PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_LS_A);
 			break;
 			
 		case MOTOR_PHASE_DEGREE_240:
-			TRDOER1 &= ~(MOTOR_DRV_HS_ENABLE_C_MASK | MOTOR_DRV_LS_ENABLE_A_MASK);
+			PM1 |= (PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_LS_B | PIN_MOTOR_DRV_LS_C);
+			PM1 &= ~(PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_A);
 			break;
 			
 		case MOTOR_PHASE_DEGREE_300:
-			TRDOER1 &= ~(MOTOR_DRV_HS_ENABLE_C_MASK | MOTOR_DRV_LS_ENABLE_B_MASK);
+			PM1 |= (PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_LS_A | PIN_MOTOR_DRV_LS_C);
+			PM1 &= ~(PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_B);
 			break;
 			
 		case MOTOR_PHASE_DEGREE_360:
-			TRDOER1 &= ~(MOTOR_DRV_HS_ENABLE_A_MASK | MOTOR_DRV_LS_ENABLE_B_MASK);
+			PM1 |= (PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_A | PIN_MOTOR_DRV_LS_C);
+			PM1 &= ~(PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_LS_B);
 			break;
 
 		case MOTOR_PHASE_OPEN:
@@ -258,7 +270,8 @@ void motor_driver_break_enable (void) {
     MOTOR_DRV_LS_A = (g_u16_throttle_pos_in_pwm_duty_current << 2);
     MOTOR_DRV_LS_B = (g_u16_throttle_pos_in_pwm_duty_current << 2);
     MOTOR_DRV_LS_C = (g_u16_throttle_pos_in_pwm_duty_current << 2);
-	TRDOER1 &= ~(MOTOR_DRV_DISABLE_ALL_MASK);
+	PM1 &= ~(PIN_MOTOR_DRV_HS_A |PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_HS_C | 
+			PIN_MOTOR_DRV_LS_A | PIN_MOTOR_DRV_LS_B | PIN_MOTOR_DRV_LS_C);
 	PIN_MOTOR_DRIVER_ENABLE = MOTOR_ENABLE;
 	R_TMR_RD0_Start ( );
 	R_TMR_RD1_Start ( );
