@@ -41,6 +41,12 @@ User definitions
 /* Start user code for function. Do not edit comment generated here */
 #include "r_cg_timer.h"
 
+#define MOTOR_DRIVER_CONF_HS_ACTIVE_H
+//#define MOTOR_DRIVER_CONF_HS_ACTIVE_L
+
+#define MOTOR_DRIVER_CONF_LS_ACTIVE_H
+//#define MOTOR_DRIVER_CONF_LS_ACTIVE_L
+
 #define MOTOR_DRV_HS_PERIOD		TRDGRA0
 #define MOTOR_DRV_HS_A			TRDGRB0
 #define MOTOR_DRV_HS_B			TRDGRC0
