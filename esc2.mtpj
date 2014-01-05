@@ -2893,7 +2893,7 @@ cl78mf
         &lt;RTC /&gt;
       &lt;/Effect&gt;
     &lt;/fIL&gt;
-    &lt;fRTC Name="fRTC" Value="0" Comment="15k" Trigger="fRTC"&gt;
+    &lt;fRTC Name="fRTC" Value="15" Comment="15k" Trigger="fRTC"&gt;
       &lt;Effect&gt;
         &lt;RTC /&gt;
         &lt;IT /&gt;
@@ -4144,7 +4144,7 @@ cl78mf
       &lt;setting name="Subclock_in_halt" value="0" /&gt;
       &lt;setting name="CPU_clock" value="0" /&gt;
       &lt;setting name="Internal_low-speed_clock" value="15" /&gt;
-      &lt;setting name="RTC_clcok_selection" value="0" /&gt;
+      &lt;setting name="RTC_clcok_selection" value="1" /&gt;
       &lt;setting name="RESET_PIN_USED" value="true" /&gt;
       &lt;setting name="RESET_PIN_UNUSED" value="false" /&gt;
       &lt;setting name="On_chip_debug" value="unused" /&gt;

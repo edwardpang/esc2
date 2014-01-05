@@ -28,7 +28,7 @@
 * Device(s)    : R5F104BA
 * Tool-Chain   : CA78K0R
 * Description  : This file implements device driver for CGC module.
-* Creation Date: 27/11/2013
+* Creation Date: 05/01/2014
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -65,7 +65,7 @@ void R_CGC_Create(void)
     MSTOP = 1U;
     /* Set fMAIN */
     MCM0 = 0U;
-    OSMC = _00_CGC_RTC_CLK_NO;
+    OSMC = _10_CGC_RTC_CLK_FIL;
     /* Set fIH */
     HIOSTOP = 0U;
 }
