@@ -23,79 +23,44 @@
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name    : r_systeminit.c
+* File Name    : r_cg_it.h
 * Version      : CodeGenerator for RL78/G14 V2.01.00.02 [09 Aug 2013]
 * Device(s)    : R5F104BA
 * Tool-Chain   : CA78K0R
-* Description  : This file implements system initializing function.
+* Description  : This file implements device driver for IT module.
 * Creation Date: 05/01/2014
 ***********************************************************************************************************************/
 
+#ifndef IT_H
+#define IT_H
+
 /***********************************************************************************************************************
-Pragma directive
+Macro definitions (Register bit)
 ***********************************************************************************************************************/
-/* Start user code for pragma. Do not edit comment generated here */
+/* 
+    Interval timer control register (ITMC)
+*/
+/* Interval timer operation enable/disable specification (RINTE) */
+#define _0000_IT_OPERATION_DISABLE    (0x0000U)    /* disable interval timer operation */
+#define _8000_IT_OPERATION_ENABLE     (0x8000U)    /* enable interval timer operation */
+
+/***********************************************************************************************************************
+Macro definitions
+***********************************************************************************************************************/
+/* Interval timer compare value (ITMCMP11 - 0) */
+#define _0095_ITMCMP_VALUE            (0x0095U)
+
+/***********************************************************************************************************************
+Typedef definitions
+***********************************************************************************************************************/
+
+/***********************************************************************************************************************
+Global functions
+***********************************************************************************************************************/
+void R_IT_Create(void);
+void R_IT_Start(void);
+void R_IT_Stop(void);
+
+/* Start user code for function. Do not edit comment generated here */
 /* End user code. Do not edit comment generated here */
-
-/***********************************************************************************************************************
-Includes
-***********************************************************************************************************************/
-#include "r_cg_macrodriver.h"
-#include "r_cg_cgc.h"
-#include "r_cg_port.h"
-#include "r_cg_intc.h"
-#include "r_cg_serial.h"
-#include "r_cg_timer.h"
-#include "r_cg_it.h"
-#include "r_cg_elc.h"
-/* Start user code for include. Do not edit comment generated here */
-/* End user code. Do not edit comment generated here */
-#include "r_cg_userdefine.h"
-
-/***********************************************************************************************************************
-Global variables and functions
-***********************************************************************************************************************/
-/* Start user code for global. Do not edit comment generated here */
-/* End user code. Do not edit comment generated here */
-
-/***********************************************************************************************************************
-* Function Name: R_Systeminit
-* Description  : This function initializes every macro.
-* Arguments    : None
-* Return Value : None
-***********************************************************************************************************************/
-void R_Systeminit(void)
-{
-    PIOR0 = 0x00U;
-    PIOR1 = 0x00U;
-    R_CGC_Get_ResetSource();
-    R_PORT_Create();
-    R_CGC_Create();
-    R_SAU0_Create();
-    R_TAU0_Create();
-    R_IT_Create();
-    R_INTC_Create();
-    R_TMR_RJ0_Create();
-    R_TMR_RD0_Create();
-    R_TMR_RD1_Create();
-    R_ELC_Create();
-    CRC0CTL = 0x00U;
-    IAWCTL = 0x00U;
-    PMS = 0x00U;
-}
-
-
-/***********************************************************************************************************************
-* Function Name: hdwinit
-* Description  : This function initializes hardware setting.
-* Arguments    : None
-* Return Value : None
-***********************************************************************************************************************/
-void hdwinit(void)
-{
-    DI();
-    R_Systeminit();
-}
-
-/* Start user code for adding. Do not edit comment generated here */
-/* End user code. Do not edit comment generated here */
+#endif

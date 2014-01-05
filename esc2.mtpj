@@ -130,6 +130,7 @@
       <RelativePath>r_cg_macrodriver.h</RelativePath>
       <TreeImageGuid>03cad1e8-2eb3-4cde-a8a3-982423631122</TreeImageGuid>
       <ParentItem>09da16f3-af6e-4f98-9581-26c9ae3a01c4</ParentItem>
+      <Property>1193edf5-e2fb-40ca-b553-d00603e5243d</Property>
     </Instance>
     <Instance Guid="e92357c8-4287-447d-9924-b03819f55c2e">
       <Name>r_cg_userdefine.h</Name>
@@ -208,6 +209,9 @@
       <MemoCount>0</MemoCount>
     </Instance>
     <Instance Guid="4f5c45c0-425b-4528-b218-5578bd8bce6f">
+      <MemoCount>0</MemoCount>
+    </Instance>
+    <Instance Guid="1193edf5-e2fb-40ca-b553-d00603e5243d">
       <MemoCount>0</MemoCount>
     </Instance>
   </Class>
@@ -3398,7 +3402,7 @@ cl78mf
         &lt;INTRTC InUse="0" ISR="r_rtc_interrupt" /&gt;
       &lt;/RTC&gt;
       &lt;IT&gt;
-        &lt;INTIT InUse="0" ISR="r_it_interrupt" /&gt;
+        &lt;INTIT InUse="1" ISR="r_it_interrupt" /&gt;
       &lt;/IT&gt;
       &lt;WDT&gt;
         &lt;INTWDTI InUse="0" ISR="r_wdt_interrupt" /&gt;
@@ -3861,19 +3865,19 @@ cl78mf
         &lt;r_cg_rtc.h UserName="r_cg_rtc.h" LibName=".h" InUse="0" /&gt;
       &lt;/RTC&gt;
       &lt;IT&gt;
-        &lt;r_cg_it.c UserName="r_cg_it.c" LibName=".c" InUse="0"&gt;
+        &lt;r_cg_it.c UserName="r_cg_it.c" LibName=".c" InUse="1"&gt;
           &lt;Type R_IT_Create="void R_IT_Create(void)" R_IT_Start="void R_IT_Start(void)" R_IT_Stop="void R_IT_Stop(void)" R_IT_Set_PowerOff="void R_IT_Set_PowerOff(void)" /&gt;
-          &lt;R_IT_Create UserName="R_IT_Create" LibName="R_IT_Create" InUse="0" Init="1" InitMode="" /&gt;
-          &lt;R_IT_Start UserName="R_IT_Start" LibName="R_IT_Start" InUse="0" /&gt;
-          &lt;R_IT_Stop UserName="R_IT_Stop" LibName="R_IT_Stop" InUse="0" /&gt;
+          &lt;R_IT_Create UserName="R_IT_Create" LibName="R_IT_Create" InUse="1" Init="1" InitMode="" /&gt;
+          &lt;R_IT_Start UserName="R_IT_Start" LibName="R_IT_Start" InUse="1" /&gt;
+          &lt;R_IT_Stop UserName="R_IT_Stop" LibName="R_IT_Stop" InUse="1" /&gt;
           &lt;R_IT_Set_PowerOff UserName="R_IT_Set_PowerOff" LibName="R_IT_Set_PowerOff" InUse="0" /&gt;
         &lt;/r_cg_it.c&gt;
-        &lt;r_cg_it_user.c UserName="r_cg_it_user.c" LibName="_user.c" InUse="0"&gt;
+        &lt;r_cg_it_user.c UserName="r_cg_it_user.c" LibName="_user.c" InUse="1"&gt;
           &lt;Type R_IT_Create_UserInit="void R_IT_Create_UserInit(void)" r_it_interrupt="__interrupt static void r_it_interrupt(void)" /&gt;
           &lt;R_IT_Create_UserInit UserName="R_IT_Create_UserInit" LibName="R_IT_Create_UserInit" InUse="0" /&gt;
-          &lt;r_it_interrupt UserName="r_it_interrupt" INTHandle="" LibName="r_it_interrupt" InUse="0" /&gt;
+          &lt;r_it_interrupt UserName="r_it_interrupt" INTHandle="" LibName="r_it_interrupt" InUse="1" /&gt;
         &lt;/r_cg_it_user.c&gt;
-        &lt;r_cg_it.h UserName="r_cg_it.h" LibName=".h" InUse="0" /&gt;
+        &lt;r_cg_it.h UserName="r_cg_it.h" LibName=".h" InUse="1" /&gt;
       &lt;/IT&gt;
       &lt;PCLBUZ&gt;
         &lt;r_cg_pclbuz.c UserName="r_cg_pclbuz.c" LibName=".c" InUse=""&gt;
@@ -4098,8 +4102,8 @@ cl78mf
     &lt;RTC SetFlag="False" HelpID="rtc" NeedRefresh="False"&gt;
       &lt;RTC MacroName="RTC" SetFlag="False" /&gt;
     &lt;/RTC&gt;
-    &lt;IT SetFlag="False" HelpID="intervaltimer" NeedRefresh="False"&gt;
-      &lt;IT MacroName="IntervalTM" SetFlag="False" /&gt;
+    &lt;IT SetFlag="True" HelpID="intervaltimer" NeedRefresh="False"&gt;
+      &lt;IT MacroName="IntervalTM" SetFlag="True" /&gt;
     &lt;/IT&gt;
     &lt;PCLBUZ SetFlag="" HelpID="PCLBUZ" NeedRefresh="False"&gt;
       &lt;PCLBUZ0 MacroName="PCLBUZ" Channel="0" /&gt;
@@ -4817,9 +4821,9 @@ cl78mf
       &lt;/DTCD23&gt;
     &lt;/DTC&gt;
     &lt;IT&gt;
-      &lt;setting name="IntervalValue" value="100" /&gt;
-      &lt;setting name="ValueScale" value="1" /&gt;
-      &lt;setting name="Operation" value="disable" /&gt;
+      &lt;setting name="IntervalValue" value="10" /&gt;
+      &lt;setting name="ValueScale" value="0" /&gt;
+      &lt;setting name="Operation" value="enable" /&gt;
       &lt;setting name="INTTIT_priority" value="3" /&gt;
       &lt;setting name="INTITUse" value="true" /&gt;
     &lt;/IT&gt;

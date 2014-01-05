@@ -23,11 +23,11 @@
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name    : r_systeminit.c
+* File Name    : r_cg_it.c
 * Version      : CodeGenerator for RL78/G14 V2.01.00.02 [09 Aug 2013]
 * Device(s)    : R5F104BA
 * Tool-Chain   : CA78K0R
-* Description  : This file implements system initializing function.
+* Description  : This file implements device driver for IT module.
 * Creation Date: 05/01/2014
 ***********************************************************************************************************************/
 
@@ -41,13 +41,7 @@ Pragma directive
 Includes
 ***********************************************************************************************************************/
 #include "r_cg_macrodriver.h"
-#include "r_cg_cgc.h"
-#include "r_cg_port.h"
-#include "r_cg_intc.h"
-#include "r_cg_serial.h"
-#include "r_cg_timer.h"
 #include "r_cg_it.h"
-#include "r_cg_elc.h"
 /* Start user code for include. Do not edit comment generated here */
 /* End user code. Do not edit comment generated here */
 #include "r_cg_userdefine.h"
@@ -59,42 +53,47 @@ Global variables and functions
 /* End user code. Do not edit comment generated here */
 
 /***********************************************************************************************************************
-* Function Name: R_Systeminit
-* Description  : This function initializes every macro.
+* Function Name: R_IT_Create
+* Description  : This function initializes the IT module.
 * Arguments    : None
 * Return Value : None
 ***********************************************************************************************************************/
-void R_Systeminit(void)
+void R_IT_Create(void)
 {
-    PIOR0 = 0x00U;
-    PIOR1 = 0x00U;
-    R_CGC_Get_ResetSource();
-    R_PORT_Create();
-    R_CGC_Create();
-    R_SAU0_Create();
-    R_TAU0_Create();
-    R_IT_Create();
-    R_INTC_Create();
-    R_TMR_RJ0_Create();
-    R_TMR_RD0_Create();
-    R_TMR_RD1_Create();
-    R_ELC_Create();
-    CRC0CTL = 0x00U;
-    IAWCTL = 0x00U;
-    PMS = 0x00U;
+    RTCEN = 1U;    /* supply IT clock */
+    ITMC = _0000_IT_OPERATION_DISABLE;    /* disable IT operation */
+    ITMK = 1U;    /* disable INTIT interrupt */
+    ITIF = 0U;    /* clear INTIT interrupt flag */
+    /* Set INTIT low priority */
+    ITPR1 = 1U;
+    ITPR0 = 1U;
+    ITMC = _0095_ITMCMP_VALUE;
 }
 
-
 /***********************************************************************************************************************
-* Function Name: hdwinit
-* Description  : This function initializes hardware setting.
+* Function Name: R_IT_Start
+* Description  : This function starts IT module operation.
 * Arguments    : None
 * Return Value : None
 ***********************************************************************************************************************/
-void hdwinit(void)
+void R_IT_Start(void)
 {
-    DI();
-    R_Systeminit();
+    ITIF = 0U;    /* clear INTIT interrupt flag */
+    ITMK = 0U;    /* enable INTIT interrupt */
+    ITMC |= _8000_IT_OPERATION_ENABLE;    /* enable IT operation */
+}
+
+/***********************************************************************************************************************
+* Function Name: R_IT_Stop
+* Description  : This function stops IT module operation.
+* Arguments    : None
+* Return Value : None
+***********************************************************************************************************************/
+void R_IT_Stop(void)
+{
+    ITMK = 1U;    /* disable INTIT interrupt */
+    ITIF = 0U;    /* clear INTIT interrupt flag */
+    ITMC &= (uint16_t)~_8000_IT_OPERATION_ENABLE;    /* disable IT operation */
 }
 
 /* Start user code for adding. Do not edit comment generated here */
