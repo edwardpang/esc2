@@ -85,6 +85,10 @@ uint16_t	g_u16_throttle_pos_sample_tolerance;
 uint16_t	g_u16_throttle_pos_in_pwm_duty_current;
 uint16_t	g_u16_throttle_pos_in_pwm_duty_last;
 
+bit g_bit_rx_busy, g_bit_tx_busy;
+uint8_t	g_u8_tx_buf[64];
+uint8_t	g_u8_rx_buf[64];
+
 void motor_driver_enable (void);
 void motor_driver_disable (void);
 void app_init (void);
@@ -338,11 +342,28 @@ void app_config (void) {
 }
 
 /***********************************************************************************************************************/
+void com_enable (void) {
+	g_bit_rx_busy = 0;
+	g_bit_tx_busy = 0;
+}
+
+void com_tx_request (void) {
+	if (!g_bit_tx_busy) {
+	}
+}
+
+void com_rx_request (void) {
+	if (!g_bit_rx_busy) {
+	}
+}
+
+/***********************************************************************************************************************/
 void app_handler (void) {
 	switch (g_app_state) {
 		case APP_STATE_INIT:
 			app_config ( );
 			throttle_enable ( );
+			com_enable ( );
 			g_app_state = APP_STATE_MOTOR_CONTROL_PRE_IDLE;
 			break;
 

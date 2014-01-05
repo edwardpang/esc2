@@ -57,6 +57,7 @@ extern volatile uint8_t * gp_uart1_rx_address;         /* uart1 receive buffer a
 extern volatile uint16_t  g_uart1_rx_count;            /* uart1 receive data number */
 extern volatile uint16_t  g_uart1_rx_length;           /* uart1 receive data length */
 /* Start user code for global. Do not edit comment generated here */
+extern bit g_bit_rx_busy, g_bit_tx_busy;
 /* End user code. Do not edit comment generated here */
 
 /***********************************************************************************************************************
@@ -116,6 +117,7 @@ __interrupt static void r_uart1_interrupt_send(void)
 static void r_uart1_callback_receiveend(void)
 {
     /* Start user code. Do not edit comment generated here */
+	g_bit_rx_busy = 0;
     /* End user code. Do not edit comment generated here */
 }
 
@@ -128,6 +130,7 @@ static void r_uart1_callback_receiveend(void)
 static void r_uart1_callback_sendend(void)
 {
     /* Start user code. Do not edit comment generated here */
+	g_bit_tx_busy = 0;
     /* End user code. Do not edit comment generated here */
 }
 
