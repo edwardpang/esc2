@@ -51,6 +51,8 @@ Includes
 Global variables and functions
 ***********************************************************************************************************************/
 /* Start user code for global. Do not edit comment generated here */
+extern bit g_bit_tick_overflow;
+extern uint32_t	g_u32_tick;
 /* End user code. Do not edit comment generated here */
 
 /***********************************************************************************************************************
@@ -62,6 +64,10 @@ Global variables and functions
 __interrupt static void r_it_interrupt(void)
 {
     /* Start user code. Do not edit comment generated here */
+	/* tick per 100ms */
+	g_u32_tick ++;
+	if (!g_u32_tick)
+		g_bit_tick_overflow = 1;
     /* End user code. Do not edit comment generated here */
 }
 

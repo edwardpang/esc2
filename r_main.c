@@ -90,6 +90,9 @@ bit g_bit_rx_busy, g_bit_tx_busy;
 uint8_t	g_u8_tx_buf[64];
 uint8_t	g_u8_rx_buf[64];
 
+uint32_t	g_u32_tick;
+bit			g_bit_tick_overflow;
+
 void motor_driver_enable (void);
 void motor_driver_disable (void);
 void app_init (void);
@@ -357,6 +360,12 @@ void com_rx_request (void) {
 	if (!g_bit_rx_busy) {
 	}
 }
+/***********************************************************************************************************************/
+void tick_enable (void) {
+	g_u32_tick = 0;
+	g_bit_tick_overflow = 0;
+	R_IT_Start ( );
+}
 
 /***********************************************************************************************************************/
 void app_handler (void) {
@@ -365,6 +374,7 @@ void app_handler (void) {
 			app_config ( );
 			throttle_enable ( );
 			com_enable ( );
+			tick_enable ( );
 			g_app_state = APP_STATE_MOTOR_CONTROL_PRE_IDLE;
 			break;
 
