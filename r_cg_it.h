@@ -48,7 +48,7 @@ Macro definitions (Register bit)
 Macro definitions
 ***********************************************************************************************************************/
 /* Interval timer compare value (ITMCMP11 - 0) */
-#define _0095_ITMCMP_VALUE            (0x0095U)
+#define _05DB_ITMCMP_VALUE            (0x05DBU)
 
 /***********************************************************************************************************************
 Typedef definitions

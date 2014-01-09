@@ -189,6 +189,7 @@
       <RelativePath>r_cg_it.c</RelativePath>
       <TreeImageGuid>941832c1-fc3b-4e1b-94e8-01ea17128b42</TreeImageGuid>
       <ParentItem>09da16f3-af6e-4f98-9581-26c9ae3a01c4</ParentItem>
+      <Property>1eec70f6-96e9-41e6-b4de-d337b293accb</Property>
     </Instance>
     <Instance Guid="8c7bbee6-afb7-406c-af0b-b5721bb2af5a">
       <Name>r_cg_it_user.c</Name>
@@ -196,6 +197,7 @@
       <RelativePath>r_cg_it_user.c</RelativePath>
       <TreeImageGuid>941832c1-fc3b-4e1b-94e8-01ea17128b42</TreeImageGuid>
       <ParentItem>09da16f3-af6e-4f98-9581-26c9ae3a01c4</ParentItem>
+      <Property>c1760efd-a2b1-4ae3-b195-9c40313af37b</Property>
     </Instance>
     <Instance Guid="3ba4fc5b-e296-4da4-a959-ba9b2308fc67">
       <Name>r_cg_it.h</Name>
@@ -203,6 +205,7 @@
       <RelativePath>r_cg_it.h</RelativePath>
       <TreeImageGuid>03cad1e8-2eb3-4cde-a8a3-982423631122</TreeImageGuid>
       <ParentItem>09da16f3-af6e-4f98-9581-26c9ae3a01c4</ParentItem>
+      <Property>b8c61c3b-3d38-4ec5-80f9-904c86b13d84</Property>
     </Instance>
   </Class>
   <Class Guid="fb98844b-2c27-4275-9804-f6e63e204da0">
@@ -226,13 +229,22 @@
     <Instance Guid="4c4f8a99-4303-4bc6-91a7-f419164706df">
       <MemoCount>0</MemoCount>
     </Instance>
+    <Instance Guid="1193edf5-e2fb-40ca-b553-d00603e5243d">
+      <MemoCount>0</MemoCount>
+    </Instance>
     <Instance Guid="d2547a4d-5c22-4b2a-842e-93270fc9f5bf">
       <MemoCount>0</MemoCount>
     </Instance>
     <Instance Guid="4f5c45c0-425b-4528-b218-5578bd8bce6f">
       <MemoCount>0</MemoCount>
     </Instance>
-    <Instance Guid="1193edf5-e2fb-40ca-b553-d00603e5243d">
+    <Instance Guid="b8c61c3b-3d38-4ec5-80f9-904c86b13d84">
+      <MemoCount>0</MemoCount>
+    </Instance>
+    <Instance Guid="c1760efd-a2b1-4ae3-b195-9c40313af37b">
+      <MemoCount>0</MemoCount>
+    </Instance>
+    <Instance Guid="1eec70f6-96e9-41e6-b4de-d337b293accb">
       <MemoCount>0</MemoCount>
     </Instance>
   </Class>
@@ -4866,7 +4878,7 @@ cl78mf
       &lt;/DTCD23&gt;
     &lt;/DTC&gt;
     &lt;IT&gt;
-      &lt;setting name="IntervalValue" value="10" /&gt;
+      &lt;setting name="IntervalValue" value="100" /&gt;
       &lt;setting name="ValueScale" value="0" /&gt;
       &lt;setting name="Operation" value="enable" /&gt;
       &lt;setting name="INTTIT_priority" value="3" /&gt;

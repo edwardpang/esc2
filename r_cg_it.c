@@ -67,7 +67,7 @@ void R_IT_Create(void)
     /* Set INTIT low priority */
     ITPR1 = 1U;
     ITPR0 = 1U;
-    ITMC = _0095_ITMCMP_VALUE;
+    ITMC = _05DB_ITMCMP_VALUE;
 }
 
 /***********************************************************************************************************************
