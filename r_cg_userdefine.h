@@ -133,5 +133,30 @@ typedef enum _app_state_t {
 	APP_STATE_NUM
 } app_state_t;
 
+#define COM_PREAMBLE	0xA5
+#define COM_TERMINATOR	0x5A
+
+typedef enum _com_command_t {
+	COM_COMMAND_00_GET_STATUS = 0x00,
+	COM_COMMAND_NUM
+};
+
+typedef enum _com_state_t {
+	COM_STATE_START = 0,
+	COM_STATE_INIT,
+	COM_STATE_IDLE,
+	COM_STATE_WAIT_PREAMBLE,
+	COM_STATE_RX_PREAMBLE,
+	COM_STATE_WAIT_LENGTH,
+	COM_STATE_RX_LENGTH,
+	COM_STATE_WAIT_COMMAND,
+	COM_STATE_RX_COMMAND,
+	COM_STATE_WAIT_PARAMETER,
+	COM_STATE_RX_PARAMETER,
+	COM_STATE_WAIT_TERMINATOR,
+	COM_STATE_RX_TERMINATOR,
+	COM_STATE_NUM
+} com_state_t;
+
 /* End user code. Do not edit comment generated here */
 #endif

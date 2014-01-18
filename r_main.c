@@ -86,9 +86,14 @@ uint16_t	g_u16_throttle_pos_sample_tolerance;
 uint16_t	g_u16_throttle_pos_in_pwm_duty_current;
 uint16_t	g_u16_throttle_pos_in_pwm_duty_last;
 
+com_state_t	g_com_state;
+uint8_t		g_u8_length, g_u8_command;
+
+#define RX_BUF_SIZE		64
+#define TX_BUF_SIZE		64
 bit g_bit_rx_busy, g_bit_tx_busy;
-uint8_t	g_u8_tx_buf[64];
-uint8_t	g_u8_rx_buf[64];
+uint8_t	g_u8_tx_buf[TX_BUF_SIZE];
+uint8_t	g_u8_rx_buf[RX_BUF_SIZE];
 
 uint32_t	g_u32_tick;
 bit			g_bit_tick_overflow;
@@ -98,6 +103,8 @@ void motor_driver_disable (void);
 void app_init (void);
 void app_config (void);
 void app_handler (void);
+void com_init (void);
+void com_handler (void);
 /* End user code. Do not edit comment generated here */
 void R_MAIN_UserInit(void);
 
@@ -114,6 +121,7 @@ void main(void)
     while (1U)
     {
         app_handler ( );
+		com_handler ( );
     }
     /* End user code. Do not edit comment generated here */
 }
@@ -128,6 +136,7 @@ void R_MAIN_UserInit(void)
 {
     /* Start user code. Do not edit comment generated here */
 	app_init ( );
+	com_init ( );
     EI();
     /* End user code. Do not edit comment generated here */
 }
@@ -346,20 +355,141 @@ void app_config (void) {
 }
 
 /***********************************************************************************************************************/
-void com_enable (void) {
-	g_bit_rx_busy = 0;
-	g_bit_tx_busy = 0;
+uint8_t com_process_command (void) {
+	uint8_t	msb, lsb;
+	uint8_t	retval = 0;
+	
+	switch (g_u8_command) {
+		case COM_COMMAND_00_GET_STATUS:
+			g_u8_tx_buf[0] = COM_PREAMBLE;
+			g_u8_tx_buf[1] = 8;
+			g_u8_tx_buf[2] = COM_COMMAND_00_GET_STATUS;
+			g_u8_tx_buf[3] = g_app_state;
+			g_u8_tx_buf[4] = g_throttle_direction;
+			msb = (uint8_t) ((g_u16_throttle_pos_in_pwm_duty_current & 0xFF00) >> 8);
+			lsb = (uint8_t) (g_u16_throttle_pos_in_pwm_duty_current & 0x00FF);
+			g_u8_tx_buf[5] = msb;
+			g_u8_tx_buf[6] = lsb;
+			g_u8_tx_buf[7] = 0;
+			g_u8_tx_buf[8] = 0;
+			g_u8_tx_buf[9] = COM_TERMINATOR;
+			if (!g_bit_tx_busy) {
+				g_bit_tx_busy = 1;
+				R_UART1_Send (g_u8_tx_buf, 10);
+				retval = 1;
+			}			
+			break;
+	}
+	return retval;
 }
 
-void com_tx_request (void) {
-	if (!g_bit_tx_busy) {
+void com_init (void) {
+	g_com_state = COM_STATE_INIT;
+}
+
+void com_handler (void) {
+	uint8_t	i;
+
+	switch (g_com_state) {
+		case COM_STATE_START:
+			break;
+			
+		case COM_STATE_INIT:
+			g_u8_length = 0;
+			g_u8_command = 0;
+			
+			g_bit_rx_busy = 0;
+			g_bit_tx_busy = 0;
+			for (i=0; i<TX_BUF_SIZE; i++)
+				g_u8_tx_buf[i] = 0;
+			for (i=0; i<RX_BUF_SIZE; i++)
+				g_u8_rx_buf[i] = 0;
+			R_UART1_Start ( );
+			g_com_state = COM_STATE_IDLE;
+			break;
+			
+		case COM_STATE_IDLE:
+			if (!g_bit_rx_busy) {
+				g_bit_rx_busy = 1;
+				R_UART1_Receive (g_u8_rx_buf, 1);
+				g_com_state = COM_STATE_WAIT_PREAMBLE;
+			}
+			break;
+		
+		case COM_STATE_WAIT_PREAMBLE:
+			if (!g_bit_rx_busy) {
+				if (g_u8_rx_buf[0] == COM_PREAMBLE)
+					g_com_state = COM_STATE_RX_PREAMBLE;		// preamble received
+				else
+					g_com_state = COM_STATE_IDLE;				// discard unexpected byte
+			}
+			break;
+			
+		case COM_STATE_RX_PREAMBLE:
+			if (!g_bit_rx_busy) {
+				g_bit_rx_busy = 1;
+				R_UART1_Receive (g_u8_rx_buf, 1);
+				g_com_state = COM_STATE_WAIT_LENGTH;
+			}
+			break;
+
+		case COM_STATE_WAIT_LENGTH:
+			if (!g_bit_rx_busy) {
+				g_u8_length = g_u8_rx_buf[0];
+				g_com_state = COM_STATE_RX_LENGTH;
+			}
+			break;
+		
+		case COM_STATE_RX_LENGTH:
+			if (!g_bit_rx_busy) {
+				g_bit_rx_busy = 1;
+				R_UART1_Receive (g_u8_rx_buf, 1);
+				g_com_state = COM_STATE_WAIT_COMMAND;
+			}
+			break;
+
+		case COM_STATE_WAIT_COMMAND:
+			if (!g_bit_rx_busy) {
+				g_u8_length --;
+				g_u8_command = g_u8_rx_buf[0];
+				g_com_state = COM_STATE_RX_COMMAND;		// preamble received
+			}
+			break;
+
+		case COM_STATE_RX_COMMAND:
+			if (!g_bit_rx_busy) {
+				g_bit_rx_busy = 1;
+				if (g_u8_length > 1) {
+					R_UART1_Receive (g_u8_rx_buf, g_u8_length-1);
+					g_com_state = COM_STATE_WAIT_PARAMETER;
+				}
+				else {
+					R_UART1_Receive (g_u8_rx_buf, 1);
+					g_com_state = COM_STATE_WAIT_TERMINATOR;
+				}
+			}
+			break;
+
+		case COM_STATE_WAIT_TERMINATOR:
+			if (!g_bit_rx_busy) {
+				if (g_u8_rx_buf[0] == COM_TERMINATOR)
+					g_com_state = COM_STATE_RX_TERMINATOR;		// terminator received
+				else
+					g_com_state = COM_STATE_IDLE;				// discard unexpected byte
+			}
+			break;
+
+		case COM_STATE_RX_TERMINATOR:
+			// Only process the command and parameter in this state
+			if (com_process_command ( ))
+				g_com_state = COM_STATE_IDLE;
+			break;
+			
+		default:
+			break;
 	}
 }
 
-void com_rx_request (void) {
-	if (!g_bit_rx_busy) {
-	}
-}
 /***********************************************************************************************************************/
 void tick_enable (void) {
 	g_u32_tick = 0;
@@ -373,7 +503,6 @@ void app_handler (void) {
 		case APP_STATE_INIT:
 			app_config ( );
 			throttle_enable ( );
-			com_enable ( );
 			tick_enable ( );
 			g_app_state = APP_STATE_MOTOR_CONTROL_PRE_IDLE;
 			break;

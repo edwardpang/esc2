@@ -86,6 +86,7 @@
       <RelativePath>r_cg_serial.c</RelativePath>
       <TreeImageGuid>941832c1-fc3b-4e1b-94e8-01ea17128b42</TreeImageGuid>
       <ParentItem>09da16f3-af6e-4f98-9581-26c9ae3a01c4</ParentItem>
+      <Property>1cd01f8b-2ca9-4ce0-b89c-a6dfe8880247</Property>
     </Instance>
     <Instance Guid="6923526d-f215-43c6-b23f-ca122499ef40">
       <Name>r_cg_serial_user.c</Name>
@@ -93,6 +94,7 @@
       <RelativePath>r_cg_serial_user.c</RelativePath>
       <TreeImageGuid>941832c1-fc3b-4e1b-94e8-01ea17128b42</TreeImageGuid>
       <ParentItem>09da16f3-af6e-4f98-9581-26c9ae3a01c4</ParentItem>
+      <Property>17aacd54-df3c-4bab-ba09-96c06eb95651</Property>
     </Instance>
     <Instance Guid="05225948-fe8f-4ad5-9a49-19a15da2ce6a">
       <Name>r_cg_timer.c</Name>
@@ -167,6 +169,7 @@
       <RelativePath>r_cg_serial.h</RelativePath>
       <TreeImageGuid>03cad1e8-2eb3-4cde-a8a3-982423631122</TreeImageGuid>
       <ParentItem>09da16f3-af6e-4f98-9581-26c9ae3a01c4</ParentItem>
+      <Property>120b33ca-6869-40f8-a960-3ea8e2b4bbb7</Property>
     </Instance>
     <Instance Guid="9aafd711-6b3e-4972-a192-fb380ed826f6">
       <Name>r_cg_timer.h</Name>
@@ -235,16 +238,25 @@
     <Instance Guid="d2547a4d-5c22-4b2a-842e-93270fc9f5bf">
       <MemoCount>0</MemoCount>
     </Instance>
+    <Instance Guid="120b33ca-6869-40f8-a960-3ea8e2b4bbb7">
+      <MemoCount>0</MemoCount>
+    </Instance>
     <Instance Guid="4f5c45c0-425b-4528-b218-5578bd8bce6f">
       <MemoCount>0</MemoCount>
     </Instance>
-    <Instance Guid="b8c61c3b-3d38-4ec5-80f9-904c86b13d84">
+    <Instance Guid="1eec70f6-96e9-41e6-b4de-d337b293accb">
       <MemoCount>0</MemoCount>
     </Instance>
     <Instance Guid="c1760efd-a2b1-4ae3-b195-9c40313af37b">
       <MemoCount>0</MemoCount>
     </Instance>
-    <Instance Guid="1eec70f6-96e9-41e6-b4de-d337b293accb">
+    <Instance Guid="b8c61c3b-3d38-4ec5-80f9-904c86b13d84">
+      <MemoCount>0</MemoCount>
+    </Instance>
+    <Instance Guid="1cd01f8b-2ca9-4ce0-b89c-a6dfe8880247">
+      <MemoCount>0</MemoCount>
+    </Instance>
+    <Instance Guid="17aacd54-df3c-4bab-ba09-96c06eb95651">
       <MemoCount>0</MemoCount>
     </Instance>
   </Class>
