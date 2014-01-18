@@ -123,6 +123,8 @@ __interrupt static void r_intc3_interrupt(void)
 __interrupt static void r_hall_sensor_common_interrupt (void) {
 	uint16_t	index;
 
+	/* Update Speed */
+	
 	/* Update Phase */
 	index = (PIN_HALL_SENSOR_A << 2);
 	index |= (PIN_HALL_SENSOR_B << 1);

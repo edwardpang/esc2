@@ -95,6 +95,8 @@ bit g_bit_rx_busy, g_bit_tx_busy;
 uint8_t	g_u8_tx_buf[TX_BUF_SIZE];
 uint8_t	g_u8_rx_buf[RX_BUF_SIZE];
 
+uint16_t	g_u16_speed_count_us;
+
 uint32_t	g_u32_tick;
 bit			g_bit_tick_overflow;
 
@@ -319,6 +321,15 @@ void throttle_disable (void) {
 }
 
 /***********************************************************************************************************************/
+void speed_measurement_enable ( ) {
+	g_u16_speed_count_us = 0;
+}
+
+void speed_measurement_disable ( ) {
+	g_u16_speed_count_us = 0;
+}
+
+/***********************************************************************************************************************/
 void app_init (void) {
 	g_app_state = APP_STATE_INIT;
 }
@@ -509,6 +520,7 @@ void app_handler (void) {
 
 		/* IDLE */
 		case APP_STATE_MOTOR_CONTROL_PRE_IDLE:
+			speed_measurement_disable ( );
 			hall_sensor_disable ( );
 			motor_driver_disable ( );
 			g_app_state = APP_STATE_MOTOR_CONTROL_IDLE;
@@ -525,6 +537,7 @@ void app_handler (void) {
 
 		/* IDLE REVERSIBLE */
 		case APP_STATE_MOTOR_CONTROL_PRE_IDLE_REVERSIBLE:
+			speed_measurement_disable ( );
 			hall_sensor_disable ( );
 			motor_driver_disable ( );
 			g_app_state = APP_STATE_MOTOR_CONTROL_IDLE_REVERSIBLE;
@@ -541,6 +554,7 @@ void app_handler (void) {
 
 		/* BREAK */
 		case APP_STATE_MOTOR_CONTROL_PRE_BREAK:
+			speed_measurement_enable ( );
 			motor_driver_break_enable ( );
 			hall_sensor_enable ( );
 			g_app_state = APP_STATE_MOTOR_CONTROL_BREAK;
@@ -555,6 +569,7 @@ void app_handler (void) {
 		
 		/* FWD */
 		case APP_STATE_MOTOR_CONTROL_PRE_FWD_DRIVING:
+			speed_measurement_enable ( );
 			motor_driver_farward_enable ( );
 			hall_sensor_enable ( );
 			g_app_state = APP_STATE_MOTOR_CONTROL_FWD_DRIVING;
@@ -569,6 +584,7 @@ void app_handler (void) {
 
 		/* REV */
 		case APP_STATE_MOTOR_CONTROL_PRE_REV_DRIVING:
+			speed_measurement_enable ( );
 			motor_driver_reverse_enable ( );
 			hall_sensor_enable ( );
 			g_app_state = APP_STATE_MOTOR_CONTROL_REV_DRIVING;
