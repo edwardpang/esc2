@@ -28,7 +28,7 @@
 * Device(s)    : R5F104BA
 * Tool-Chain   : CA78K0R
 * Description  : This file includes user definition.
-* Creation Date: 27/11/2013
+* Creation Date: 27/01/2014
 ***********************************************************************************************************************/
 
 #ifndef _USER_DEF_H
@@ -157,6 +157,9 @@ typedef enum _com_state_t {
 	COM_STATE_RX_TERMINATOR,
 	COM_STATE_NUM
 } com_state_t;
+
+#define SPEED_1US_TIMER_RESET_VALUE		_001F_TAU_TDR03_VALUE
+#define SPEED_1US_COUNTER_RESET_VALUE	_270F_TMRJ_TRJ0_VALUE
 
 /* End user code. Do not edit comment generated here */
 #endif

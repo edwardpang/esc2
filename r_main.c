@@ -28,7 +28,7 @@
 * Device(s)    : R5F104BA
 * Tool-Chain   : CA78K0R
 * Description  : This file implements main function.
-* Creation Date: 05/01/2014
+* Creation Date: 27/01/2014
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -322,11 +322,16 @@ void throttle_disable (void) {
 
 /***********************************************************************************************************************/
 void speed_measurement_enable ( ) {
+	TRJ0 = SPEED_1US_COUNTER_RESET_VALUE;
+	TDR03 = SPEED_1US_TIMER_RESET_VALUE;
 	g_u16_speed_count_us = 0;
+	R_TMR_RJ0_Start ( );
+	R_TAU0_Channel3_Start ( );
 }
 
 void speed_measurement_disable ( ) {
-	g_u16_speed_count_us = 0;
+	R_TAU0_Channel3_Stop ( );
+	R_TMR_RJ0_Stop ( );
 }
 
 /***********************************************************************************************************************/
@@ -367,8 +372,9 @@ void app_config (void) {
 
 /***********************************************************************************************************************/
 uint8_t com_process_command (void) {
-	uint8_t	msb, lsb;
-	uint8_t	retval = 0;
+	uint16_t	u16_dummy;
+	uint8_t		u8_dummy;
+	uint8_t		retval = 0;
 	
 	switch (g_u8_command) {
 		case COM_COMMAND_00_GET_STATUS:
@@ -377,12 +383,16 @@ uint8_t com_process_command (void) {
 			g_u8_tx_buf[2] = COM_COMMAND_00_GET_STATUS;
 			g_u8_tx_buf[3] = g_app_state;
 			g_u8_tx_buf[4] = g_throttle_direction;
-			msb = (uint8_t) ((g_u16_throttle_pos_in_pwm_duty_current & 0xFF00) >> 8);
-			lsb = (uint8_t) (g_u16_throttle_pos_in_pwm_duty_current & 0x00FF);
-			g_u8_tx_buf[5] = msb;
-			g_u8_tx_buf[6] = lsb;
-			g_u8_tx_buf[7] = 0;
-			g_u8_tx_buf[8] = 0;
+			u16_dummy = g_u16_throttle_pos_in_pwm_duty_current;
+			u8_dummy = (uint8_t) ((u16_dummy & 0xFF00) >> 8);
+			g_u8_tx_buf[5] = u8_dummy;
+			u8_dummy = (uint8_t) (u16_dummy & 0x00FF);
+			g_u8_tx_buf[6] = u8_dummy;
+			u16_dummy = g_u16_speed_count_us;
+			u8_dummy = (uint8_t) ((u16_dummy & 0xFF00) >> 8);
+			g_u8_tx_buf[7] = u8_dummy;
+			u8_dummy = (uint8_t) (u16_dummy & 0x00FF);
+			g_u8_tx_buf[8] = u8_dummy;
 			g_u8_tx_buf[9] = COM_TERMINATOR;
 			if (!g_bit_tx_busy) {
 				g_bit_tx_busy = 1;

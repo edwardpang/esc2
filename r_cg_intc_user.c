@@ -28,7 +28,7 @@
 * Device(s)    : R5F104BA
 * Tool-Chain   : CA78K0R
 * Description  : This file implements device driver for INTC module.
-* Creation Date: 28/11/2013
+* Creation Date: 27/01/2014
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -69,6 +69,8 @@ extern uint16_t	g_u16_ls_pwm_full, g_u16_ls_pwm_empty;
 extern uint16_t	g_u16_hs_pwm_full, g_u16_hs_pwm_empty;
 extern throttle_direction_t	g_throttle_direction;
 extern uint16_t	g_u16_throttle_pos_in_pwm_duty_current;
+
+extern uint16_t	g_u16_speed_count_us;
 /* End user code. Do not edit comment generated here */
 
 /***********************************************************************************************************************
@@ -124,6 +126,11 @@ __interrupt static void r_hall_sensor_common_interrupt (void) {
 	uint16_t	index;
 
 	/* Update Speed */
+	g_u16_speed_count_us = SPEED_1US_COUNTER_RESET_VALUE - TRJ0;
+	TDR03 = SPEED_1US_TIMER_RESET_VALUE;
+	R_TMR_RJ0_Stop ( );
+	TRJ0 = SPEED_1US_COUNTER_RESET_VALUE;
+	R_TMR_RJ0_Start ( );
 	
 	/* Update Phase */
 	index = (PIN_HALL_SENSOR_A << 2);
