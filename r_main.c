@@ -389,20 +389,53 @@ uint8_t com_process_command (void) {
 			g_u8_tx_buf[2] = COM_COMMAND_00_GET_STATUS;
 			g_u8_tx_buf[3] = g_app_state;
 			g_u8_tx_buf[4] = g_throttle_direction;
+			
 			u16_dummy = g_u16_throttle_pos_in_pwm_duty_current;
 			u8_dummy = (uint8_t) ((u16_dummy & 0xFF00) >> 8);
 			g_u8_tx_buf[5] = u8_dummy;
 			u8_dummy = (uint8_t) (u16_dummy & 0x00FF);
 			g_u8_tx_buf[6] = u8_dummy;
-			u16_dummy = g_u16_speed_count_us;
+
+			u16_dummy = g_u16_speed_count_us_degree_60;
 			u8_dummy = (uint8_t) ((u16_dummy & 0xFF00) >> 8);
 			g_u8_tx_buf[7] = u8_dummy;
 			u8_dummy = (uint8_t) (u16_dummy & 0x00FF);
 			g_u8_tx_buf[8] = u8_dummy;
-			g_u8_tx_buf[9] = COM_TERMINATOR;
+
+			u16_dummy = g_u16_speed_count_us_degree_120;
+			u8_dummy = (uint8_t) ((u16_dummy & 0xFF00) >> 8);
+			g_u8_tx_buf[9] = u8_dummy;
+			u8_dummy = (uint8_t) (u16_dummy & 0x00FF);
+			g_u8_tx_buf[10] = u8_dummy;
+
+			u16_dummy = g_u16_speed_count_us_degree_180;
+			u8_dummy = (uint8_t) ((u16_dummy & 0xFF00) >> 8);
+			g_u8_tx_buf[11] = u8_dummy;
+			u8_dummy = (uint8_t) (u16_dummy & 0x00FF);
+			g_u8_tx_buf[12] = u8_dummy;
+
+			u16_dummy = g_u16_speed_count_us_degree_240;
+			u8_dummy = (uint8_t) ((u16_dummy & 0xFF00) >> 8);
+			g_u8_tx_buf[13] = u8_dummy;
+			u8_dummy = (uint8_t) (u16_dummy & 0x00FF);
+			g_u8_tx_buf[14] = u8_dummy;
+
+			u16_dummy = g_u16_speed_count_us_degree_300;
+			u8_dummy = (uint8_t) ((u16_dummy & 0xFF00) >> 8);
+			g_u8_tx_buf[15] = u8_dummy;
+			u8_dummy = (uint8_t) (u16_dummy & 0x00FF);
+			g_u8_tx_buf[16] = u8_dummy;
+
+			u16_dummy = g_u16_speed_count_us_degree_360;
+			u8_dummy = (uint8_t) ((u16_dummy & 0xFF00) >> 8);
+			g_u8_tx_buf[17] = u8_dummy;
+			u8_dummy = (uint8_t) (u16_dummy & 0x00FF);
+			g_u8_tx_buf[18] = u8_dummy;
+
+			g_u8_tx_buf[19] = COM_TERMINATOR;
 			if (!g_bit_tx_busy) {
 				g_bit_tx_busy = 1;
-				R_UART1_Send (g_u8_tx_buf, 10);
+				R_UART1_Send (g_u8_tx_buf, 20);
 				retval = 1;
 			}			
 			break;
