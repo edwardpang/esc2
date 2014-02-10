@@ -96,6 +96,12 @@ uint8_t	g_u8_tx_buf[TX_BUF_SIZE];
 uint8_t	g_u8_rx_buf[RX_BUF_SIZE];
 
 uint16_t	g_u16_speed_count_us;
+uint16_t	g_u16_speed_count_us_degree_60;
+uint16_t	g_u16_speed_count_us_degree_120;
+uint16_t	g_u16_speed_count_us_degree_180;
+uint16_t	g_u16_speed_count_us_degree_240;
+uint16_t	g_u16_speed_count_us_degree_300;
+uint16_t	g_u16_speed_count_us_degree_360;
 
 uint32_t	g_u32_tick;
 bit			g_bit_tick_overflow;
