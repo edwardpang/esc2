@@ -28,7 +28,7 @@
 * Device(s)    : R5F104BA
 * Tool-Chain   : CA78K0R
 * Description  : This file implements device driver for TAU module.
-* Creation Date: 27/01/2014
+* Creation Date: 08/03/2014
 ***********************************************************************************************************************/
 
 #ifndef TAU_H
@@ -881,6 +881,14 @@ Macro definitions (Register bit)
 /***********************************************************************************************************************
 Macro definitions
 ***********************************************************************************************************************/
+/* 16-bit timer data register 00 (TDR00) */
+#define _0C7F_TAU_TDR00_VALUE                   (0x0C7FU)
+/* Clock divisor for TAU0 channel 0 */
+#define _0001_TAU0_CHANNEL0_DIVISOR             (0x0001U)
+/* 16-bit timer data register 01 (TDR01) */
+#define _0C7F_TAU_TDR01_VALUE                   (0x0C7FU)
+/* Clock divisor for TAU0 channel 1 */
+#define _0001_TAU0_CHANNEL1_DIVISOR             (0x0001U)
 /* Clock divisor for TAU0 channel 2 */
 #define _0001_TAU0_CHANNEL2_DIVISOR             (0x0001U)
 /* 16-bit timer data register 03 (TDR03) */
@@ -922,6 +930,10 @@ typedef enum
 Global functions
 ***********************************************************************************************************************/
 void R_TAU0_Create(void);
+void R_TAU0_Channel0_Start(void);
+void R_TAU0_Channel0_Stop(void);
+void R_TAU0_Channel1_Start(void);
+void R_TAU0_Channel1_Stop(void);
 void R_TAU0_Channel2_Start(void);
 void R_TAU0_Channel2_Stop(void);
 void R_TAU0_Channel2_Get_PulseWidth(uint32_t * const width);
