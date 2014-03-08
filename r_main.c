@@ -385,7 +385,7 @@ uint8_t com_process_command (void) {
 	switch (g_u8_command) {
 		case COM_COMMAND_00_GET_STATUS:
 			g_u8_tx_buf[0] = COM_PREAMBLE;
-			g_u8_tx_buf[1] = 8;
+			g_u8_tx_buf[1] = 18;
 			g_u8_tx_buf[2] = COM_COMMAND_00_GET_STATUS;
 			g_u8_tx_buf[3] = g_app_state;
 			g_u8_tx_buf[4] = g_throttle_direction;
