@@ -235,5 +235,49 @@ __interrupt static void r_hall_sensor_common_interrupt (void) {
 				break;
 		}
 	}
+	else if (g_app_state == APP_STATE_MOTOR_CONTROL_TURBO_DRIVING) {
+		switch (g_motor_phase_current) {
+			case MOTOR_PHASE_DEGREE_60:
+				PM1 |= (PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_LS_A | PIN_MOTOR_DRV_LS_C);
+				PM1 &= ~(PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_B);
+				g_u16_speed_count_us_degree_60 = g_u16_speed_count_us;
+				break;
+
+			case MOTOR_PHASE_DEGREE_120:
+				PM1 |= (PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_A | PIN_MOTOR_DRV_LS_C);
+				PM1 &= ~(PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_LS_B);
+				g_u16_speed_count_us_degree_120 = g_u16_speed_count_us;
+				break;
+
+			case MOTOR_PHASE_DEGREE_180:
+				PM1 |= (PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_A | PIN_MOTOR_DRV_LS_B);
+				PM1 &= ~(PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_LS_C);
+				g_u16_speed_count_us_degree_180 = g_u16_speed_count_us;
+				break;
+
+			case MOTOR_PHASE_DEGREE_240:
+				PM1 |= (PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_A | PIN_MOTOR_DRV_LS_B);
+				PM1 &= ~(PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_LS_C);
+				g_u16_speed_count_us_degree_240 = g_u16_speed_count_us;
+				break;
+
+			case MOTOR_PHASE_DEGREE_300:
+				PM1 |= (PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_B | PIN_MOTOR_DRV_LS_C);
+				PM1 &= ~(PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_LS_A);
+				g_u16_speed_count_us_degree_300 = g_u16_speed_count_us;
+				break;
+
+			case MOTOR_PHASE_DEGREE_360:
+				PM1 |= (PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_LS_B | PIN_MOTOR_DRV_LS_C);
+				PM1 &= ~(PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_A);
+				g_u16_speed_count_us_degree_360 = g_u16_speed_count_us;
+				break;
+
+			case MOTOR_PHASE_OPEN:
+			case MOTOR_PHASE_ERROR:
+			default:
+				break;
+		}
+	}
 }
 /* End user code. Do not edit comment generated here */
