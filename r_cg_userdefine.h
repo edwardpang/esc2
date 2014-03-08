@@ -161,5 +161,9 @@ typedef enum _com_state_t {
 #define SPEED_1US_TIMER_RESET_VALUE		_001F_TAU_TDR03_VALUE
 #define SPEED_1US_COUNTER_RESET_VALUE	_270F_TMRJ_TRJ0_VALUE
 
+#define TURBO_DRIVE_PHASE_SPEED_IN_US_MIDDLE				2500U
+#define TURBO_DRIVE_PHASE_SPEED_IN_US_TOLERENCE_PERCENTAGE	5U	
+
+
 /* End user code. Do not edit comment generated here */
 #endif

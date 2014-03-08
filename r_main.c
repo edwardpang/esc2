@@ -103,6 +103,12 @@ uint16_t	g_u16_speed_count_us_degree_240;
 uint16_t	g_u16_speed_count_us_degree_300;
 uint16_t	g_u16_speed_count_us_degree_360;
 
+uint16_t	g_u16_turbo_drive_phase_speed_in_us_middle;
+uint16_t	g_u16_turbo_drive_phase_speed_in_us_upper;			// upper limit should be a smaller number in us
+uint16_t	g_u16_turbo_drive_phase_speed_in_us_lower;			// lower limit should be a bigger number in us
+uint16_t	g_u16_turbo_drive_phase_speed_in_us_tolerence_percentage;
+uint16_t	g_u16_turbo_drive_phase_speed_in_us_tolerence;
+
 uint32_t	g_u32_tick;
 bit			g_bit_tick_overflow;
 
@@ -374,6 +380,12 @@ void app_config (void) {
 	g_u16_ls_pwm_empty = MOTOR_DRV_LS_PERIOD + 1U;
 	g_u16_throttle_pos_in_pwm_duty_current = g_u16_hs_pwm_empty;
 	g_u16_throttle_pos_in_pwm_duty_last = g_u16_hs_pwm_empty;
+
+	g_u16_turbo_drive_phase_speed_in_us_middle = TURBO_DRIVE_PHASE_SPEED_IN_US_MIDDLE;
+	g_u16_turbo_drive_phase_speed_in_us_tolerence_percentage = TURBO_DRIVE_PHASE_SPEED_IN_US_TOLERENCE_PERCENTAGE;
+	g_u16_turbo_drive_phase_speed_in_us_tolerence = g_u16_turbo_drive_phase_speed_in_us_middle * g_u16_turbo_drive_phase_speed_in_us_tolerence_percentage / 100U;
+	g_u16_turbo_drive_phase_speed_in_us_upper = g_u16_turbo_drive_phase_speed_in_us_middle - g_u16_turbo_drive_phase_speed_in_us_tolerence;
+	g_u16_turbo_drive_phase_speed_in_us_lower = g_u16_turbo_drive_phase_speed_in_us_middle + g_u16_turbo_drive_phase_speed_in_us_tolerence;
 }
 
 /***********************************************************************************************************************/
