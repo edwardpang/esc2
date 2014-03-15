@@ -71,6 +71,8 @@ extern uint16_t		g_u16_ls_pwm_full, g_u16_ls_pwm_empty;
 
 extern const motor_phase_t	abc2phase[MOTOR_PHASE_NUM];
 extern motor_phase_t	g_motor_phase_current;
+extern motor_phase_t	g_motor_phase_set_timer0;
+extern motor_phase_t	g_motor_phase_set_timer1;
 
 extern app_state_t 	g_app_state;
 /* End user code. Do not edit comment generated here */
@@ -84,6 +86,60 @@ extern app_state_t 	g_app_state;
 __interrupt static void r_tau0_channel0_interrupt(void)
 {
     /* Start user code. Do not edit comment generated here */
+	R_TAU0_Channel0_Stop ( );
+	switch (g_motor_phase_set_timer0) {
+#if 0
+		case MOTOR_PHASE_DEGREE_180:
+			PM1 |= (PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_LS_A | PIN_MOTOR_DRV_LS_C);
+			PM1 &= ~(PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_B);
+			break;
+
+		case MOTOR_PHASE_DEGREE_300:
+			PM1 |= (PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_A | PIN_MOTOR_DRV_LS_B);
+			PM1 &= ~(PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_LS_C);
+			break;
+
+		case MOTOR_PHASE_DEGREE_60:
+			PM1 |= (PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_B | PIN_MOTOR_DRV_LS_C);
+			PM1 &= ~(PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_LS_A);
+			break;
+#else
+		case MOTOR_PHASE_DEGREE_60:
+			PM1 |= (PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_LS_A | PIN_MOTOR_DRV_LS_C);
+			PM1 &= ~(PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_B);
+			break;
+			
+		case MOTOR_PHASE_DEGREE_120:
+			PM1 |= (PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_A | PIN_MOTOR_DRV_LS_C);
+			PM1 &= ~(PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_LS_B);
+			break;
+			
+		case MOTOR_PHASE_DEGREE_180:
+			PM1 |= (PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_A | PIN_MOTOR_DRV_LS_B);
+			PM1 &= ~(PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_LS_C);
+			break;
+			
+		case MOTOR_PHASE_DEGREE_240:
+			PM1 |= (PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_A | PIN_MOTOR_DRV_LS_B);
+			PM1 &= ~(PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_LS_C);
+			break;
+			
+		case MOTOR_PHASE_DEGREE_300:
+			PM1 |= (PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_B | PIN_MOTOR_DRV_LS_C);
+			PM1 &= ~(PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_LS_A);
+			break;
+			
+		case MOTOR_PHASE_DEGREE_360:
+			PM1 |= (PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_LS_B | PIN_MOTOR_DRV_LS_C);
+			PM1 &= ~(PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_A);
+			break;
+#endif
+
+		case MOTOR_PHASE_OPEN:
+		case MOTOR_PHASE_ERROR:
+		default:
+			break;
+	}
     /* End user code. Do not edit comment generated here */
 }
 
@@ -96,7 +152,60 @@ __interrupt static void r_tau0_channel0_interrupt(void)
 __interrupt static void r_tau0_channel1_interrupt(void)
 {
     /* Start user code. Do not edit comment generated here */
-    /* End user code. Do not edit comment generated here */
+	R_TAU0_Channel1_Stop ( );
+	switch (g_motor_phase_set_timer1) {
+#if 0
+		case MOTOR_PHASE_DEGREE_240:
+			PM1 |= (PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_A | PIN_MOTOR_DRV_LS_C);
+			PM1 &= ~(PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_LS_B);
+			break;
+
+		case MOTOR_PHASE_DEGREE_360:
+			PM1 |= (PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_A | PIN_MOTOR_DRV_LS_B);
+			PM1 &= ~(PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_LS_C);
+			break;
+
+		case MOTOR_PHASE_DEGREE_120:
+			PM1 |= (PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_LS_B | PIN_MOTOR_DRV_LS_C);
+			PM1 &= ~(PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_A);
+			break;
+#else
+		case MOTOR_PHASE_DEGREE_60:
+			PM1 |= (PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_LS_A | PIN_MOTOR_DRV_LS_C);
+			PM1 &= ~(PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_B);
+			break;
+			
+		case MOTOR_PHASE_DEGREE_120:
+			PM1 |= (PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_A | PIN_MOTOR_DRV_LS_C);
+			PM1 &= ~(PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_LS_B);
+			break;
+			
+		case MOTOR_PHASE_DEGREE_180:
+			PM1 |= (PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_A | PIN_MOTOR_DRV_LS_B);
+			PM1 &= ~(PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_LS_C);
+			break;
+			
+		case MOTOR_PHASE_DEGREE_240:
+			PM1 |= (PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_A | PIN_MOTOR_DRV_LS_B);
+			PM1 &= ~(PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_LS_C);
+			break;
+			
+		case MOTOR_PHASE_DEGREE_300:
+			PM1 |= (PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_B | PIN_MOTOR_DRV_LS_C);
+			PM1 &= ~(PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_LS_A);
+			break;
+			
+		case MOTOR_PHASE_DEGREE_360:
+			PM1 |= (PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_LS_B | PIN_MOTOR_DRV_LS_C);
+			PM1 &= ~(PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_A);
+			break;
+#endif
+		case MOTOR_PHASE_OPEN:
+		case MOTOR_PHASE_ERROR:
+		default:
+			break;
+	}
+	/* End user code. Do not edit comment generated here */
 }
 
 /***********************************************************************************************************************

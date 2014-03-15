@@ -60,7 +60,8 @@ app_state_t 	g_app_state;
 
 
 motor_phase_t	g_motor_phase_current;
-motor_phase_t	g_motor_phase_last;
+motor_phase_t	g_motor_phase_set_timer0;
+motor_phase_t	g_motor_phase_set_timer1;
 const motor_phase_t	abc2phase[MOTOR_PHASE_NUM] = {
 	MOTOR_PHASE_ERROR,
 	MOTOR_PHASE_DEGREE_360,
@@ -164,7 +165,8 @@ void motor_phase_reset (void) {
 	index |= (PIN_HALL_SENSOR_B << 1);
 	index |= (PIN_HALL_SENSOR_C);
 	g_motor_phase_current = abc2phase[index];
-	g_motor_phase_last = abc2phase[index];
+	g_motor_phase_set_timer0 = g_motor_phase_current;
+	g_motor_phase_set_timer1 = g_motor_phase_current;
 }
 
 /***********************************************************************************************************************/
@@ -571,6 +573,9 @@ void tick_enable (void) {
 
 /***********************************************************************************************************************/
 void app_handler (void) {
+	uint16_t	average_speed;
+	uint16_t	dummy;
+	
 	switch (g_app_state) {
 		case APP_STATE_INIT:
 			app_config ( );
@@ -637,11 +642,18 @@ void app_handler (void) {
 			break;
 			
 		case APP_STATE_MOTOR_CONTROL_FWD_DRIVING:
+			average_speed = g_u16_speed_count_us_degree_60;
+			average_speed += g_u16_speed_count_us_degree_120;
+			average_speed += g_u16_speed_count_us_degree_180;
+			average_speed += g_u16_speed_count_us_degree_240;
+			average_speed += g_u16_speed_count_us_degree_300;
+			average_speed += g_u16_speed_count_us_degree_360;
+			average_speed /= 6;
 			if (g_u16_throttle_pos_in_pwm_duty_current == g_u16_hs_pwm_empty)
 				g_app_state = APP_STATE_MOTOR_CONTROL_PRE_IDLE;
 			else if (g_throttle_direction == THROTTLE_DIRECTION_CW)
 				g_app_state = APP_STATE_MOTOR_CONTROL_PRE_BREAK;
-			else if ((g_u16_speed_count_us > 0 )&& (g_u16_speed_count_us < g_u16_turbo_drive_phase_speed_in_us_enter))
+			else if ((average_speed > 0 )&& (average_speed < g_u16_turbo_drive_phase_speed_in_us_enter))
 				g_app_state = APP_STATE_MOTOR_CONTROL_PRE_TURBO_DRIVING;
 			break;
 
@@ -662,15 +674,76 @@ void app_handler (void) {
 			
 		/* Turbo Driving */
 		case APP_STATE_MOTOR_CONTROL_PRE_TURBO_DRIVING:
+			if (g_motor_phase_current == MOTOR_PHASE_DEGREE_60) {
+				PM1 |= (PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_LS_A | PIN_MOTOR_DRV_LS_C);
+				PM1 &= ~(PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_B);
+				TDR01 = g_u16_speed_count_us_degree_360 * TURBO_DRIVE_PHASE_SPEED_1US_RESET_VALUE;
+				TDR00 = g_u16_speed_count_us_degree_60 * TURBO_DRIVE_PHASE_SPEED_1US_RESET_VALUE;
+				g_motor_phase_set_timer1 = MOTOR_PHASE_DEGREE_360;
+				g_motor_phase_set_timer0 = MOTOR_PHASE_DEGREE_60;
+				R_TAU0_Channel1_Start ( );
+			}
+			else if (g_motor_phase_current == MOTOR_PHASE_DEGREE_120) {
+				PM1 |= (PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_A | PIN_MOTOR_DRV_LS_C);
+				PM1 &= ~(PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_LS_B);
+				TDR00 = g_u16_speed_count_us_degree_60 * TURBO_DRIVE_PHASE_SPEED_1US_RESET_VALUE;
+				TDR01 = g_u16_speed_count_us_degree_120 * TURBO_DRIVE_PHASE_SPEED_1US_RESET_VALUE;
+				g_motor_phase_set_timer0 = MOTOR_PHASE_DEGREE_60;
+				g_motor_phase_set_timer1 = MOTOR_PHASE_DEGREE_120;
+				R_TAU0_Channel0_Start ( );
+			}
+			else if (g_motor_phase_current == MOTOR_PHASE_DEGREE_180) {
+				PM1 |= (PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_A | PIN_MOTOR_DRV_LS_B);
+				PM1 &= ~(PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_LS_C);
+				TDR00 = g_u16_speed_count_us_degree_120 * TURBO_DRIVE_PHASE_SPEED_1US_RESET_VALUE;
+				TDR01 = g_u16_speed_count_us_degree_180 * TURBO_DRIVE_PHASE_SPEED_1US_RESET_VALUE;
+				g_motor_phase_set_timer1 = MOTOR_PHASE_DEGREE_120;
+				g_motor_phase_set_timer0 = MOTOR_PHASE_DEGREE_180;
+				R_TAU0_Channel1_Start ( );
+			}
+			else if (g_motor_phase_current == MOTOR_PHASE_DEGREE_240) {
+				PM1 |= (PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_A | PIN_MOTOR_DRV_LS_B);
+				PM1 &= ~(PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_LS_C);
+				TDR00 = g_u16_speed_count_us_degree_180 * TURBO_DRIVE_PHASE_SPEED_1US_RESET_VALUE;
+				TDR01 = g_u16_speed_count_us_degree_240 * TURBO_DRIVE_PHASE_SPEED_1US_RESET_VALUE;
+				g_motor_phase_set_timer0 = MOTOR_PHASE_DEGREE_180;
+				g_motor_phase_set_timer1 = MOTOR_PHASE_DEGREE_240;
+				R_TAU0_Channel0_Start ( );
+			}
+			else if (g_motor_phase_current == MOTOR_PHASE_DEGREE_300) {
+				PM1 |= (PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_B | PIN_MOTOR_DRV_LS_C);
+				PM1 &= ~(PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_LS_A);
+				TDR00 = g_u16_speed_count_us_degree_240 * TURBO_DRIVE_PHASE_SPEED_1US_RESET_VALUE;
+				TDR01 = g_u16_speed_count_us_degree_300 * TURBO_DRIVE_PHASE_SPEED_1US_RESET_VALUE;
+				g_motor_phase_set_timer1 = MOTOR_PHASE_DEGREE_240;
+				g_motor_phase_set_timer0 = MOTOR_PHASE_DEGREE_300;
+				R_TAU0_Channel1_Start ( );
+			}
+			else if (g_motor_phase_current == MOTOR_PHASE_DEGREE_360) {
+				PM1 |= (PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_LS_B | PIN_MOTOR_DRV_LS_C);
+				PM1 &= ~(PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_A);
+				TDR00 = g_u16_speed_count_us_degree_300 * TURBO_DRIVE_PHASE_SPEED_1US_RESET_VALUE;
+				TDR01 = g_u16_speed_count_us_degree_360 * TURBO_DRIVE_PHASE_SPEED_1US_RESET_VALUE;
+				g_motor_phase_set_timer0 = MOTOR_PHASE_DEGREE_300;
+				g_motor_phase_set_timer1 = MOTOR_PHASE_DEGREE_360;
+				R_TAU0_Channel0_Start ( );
+			}			
 			g_app_state = APP_STATE_MOTOR_CONTROL_TURBO_DRIVING;
 			break;
 
 		case APP_STATE_MOTOR_CONTROL_TURBO_DRIVING:
+			average_speed = g_u16_speed_count_us_degree_60;
+			average_speed += g_u16_speed_count_us_degree_120;
+			average_speed += g_u16_speed_count_us_degree_180;
+			average_speed += g_u16_speed_count_us_degree_240;
+			average_speed += g_u16_speed_count_us_degree_300;
+			average_speed += g_u16_speed_count_us_degree_360;
+			average_speed /= 6;
 			if (g_u16_throttle_pos_in_pwm_duty_current == g_u16_hs_pwm_empty)
 				g_app_state = APP_STATE_MOTOR_CONTROL_PRE_IDLE;
 			else if (g_throttle_direction == THROTTLE_DIRECTION_CW)
 				g_app_state = APP_STATE_MOTOR_CONTROL_PRE_BREAK;
-			else if ((g_u16_speed_count_us > 0) && (g_u16_speed_count_us > g_u16_turbo_drive_phase_speed_in_us_leave))
+			else if (average_speed > g_u16_turbo_drive_phase_speed_in_us_leave)
 				g_app_state = APP_STATE_MOTOR_CONTROL_PRE_FWD_DRIVING;
 			break;
 

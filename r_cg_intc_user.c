@@ -62,7 +62,8 @@ Global variables and functions
 extern app_state_t 	g_app_state;
 
 extern motor_phase_t	g_motor_phase_current;
-extern motor_phase_t	g_motor_phase_last;
+extern motor_phase_t	g_motor_phase_set_timer0;
+extern motor_phase_t	g_motor_phase_set_timer1;
 extern const motor_phase_t	abc2phase[MOTOR_PHASE_NUM];
 
 extern uint16_t	g_u16_ls_pwm_full, g_u16_ls_pwm_empty;
@@ -143,7 +144,6 @@ __interrupt static void r_hall_sensor_common_interrupt (void) {
 	index = (PIN_HALL_SENSOR_A << 2);
 	index |= (PIN_HALL_SENSOR_B << 1);
 	index |= (PIN_HALL_SENSOR_C);
-	g_motor_phase_last = g_motor_phase_current;
 	g_motor_phase_current = abc2phase[index];
 
 	/* Update Motor Control */
@@ -238,39 +238,51 @@ __interrupt static void r_hall_sensor_common_interrupt (void) {
 	else if (g_app_state == APP_STATE_MOTOR_CONTROL_TURBO_DRIVING) {
 		switch (g_motor_phase_current) {
 			case MOTOR_PHASE_DEGREE_60:
-				PM1 |= (PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_LS_A | PIN_MOTOR_DRV_LS_C);
-				PM1 &= ~(PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_B);
 				g_u16_speed_count_us_degree_60 = g_u16_speed_count_us;
+				// prepare timer 0, start timer 1
+				TDR00 = g_u16_speed_count_us * TURBO_DRIVE_PHASE_SPEED_1US_RESET_VALUE;
+				g_motor_phase_set_timer0 = g_motor_phase_current;
+				R_TAU0_Channel1_Start ( );
 				break;
 
 			case MOTOR_PHASE_DEGREE_120:
-				PM1 |= (PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_A | PIN_MOTOR_DRV_LS_C);
-				PM1 &= ~(PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_LS_B);
 				g_u16_speed_count_us_degree_120 = g_u16_speed_count_us;
+				// prepare timer 1, start timer 0
+				TDR01 = g_u16_speed_count_us * TURBO_DRIVE_PHASE_SPEED_1US_RESET_VALUE;
+				g_motor_phase_set_timer1 = g_motor_phase_current;
+				R_TAU0_Channel0_Start ( );
 				break;
 
 			case MOTOR_PHASE_DEGREE_180:
-				PM1 |= (PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_A | PIN_MOTOR_DRV_LS_B);
-				PM1 &= ~(PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_LS_C);
 				g_u16_speed_count_us_degree_180 = g_u16_speed_count_us;
+				// prepare timer 0, start timer 1
+				TDR00 = g_u16_speed_count_us * TURBO_DRIVE_PHASE_SPEED_1US_RESET_VALUE;
+				g_motor_phase_set_timer0 = g_motor_phase_current;
+				R_TAU0_Channel1_Start ( );
 				break;
 
 			case MOTOR_PHASE_DEGREE_240:
-				PM1 |= (PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_A | PIN_MOTOR_DRV_LS_B);
-				PM1 &= ~(PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_LS_C);
 				g_u16_speed_count_us_degree_240 = g_u16_speed_count_us;
+				// prepare timer 1, start timer 0
+				TDR01 = g_u16_speed_count_us * TURBO_DRIVE_PHASE_SPEED_1US_RESET_VALUE;
+				g_motor_phase_set_timer1 = g_motor_phase_current;
+				R_TAU0_Channel0_Start ( );
 				break;
 
 			case MOTOR_PHASE_DEGREE_300:
-				PM1 |= (PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_B | PIN_MOTOR_DRV_LS_C);
-				PM1 &= ~(PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_LS_A);
 				g_u16_speed_count_us_degree_300 = g_u16_speed_count_us;
+				// prepare timer 0, start timer 1
+				TDR00 = g_u16_speed_count_us * TURBO_DRIVE_PHASE_SPEED_1US_RESET_VALUE;
+				g_motor_phase_set_timer0 = g_motor_phase_current;
+				R_TAU0_Channel1_Start ( );
 				break;
 
 			case MOTOR_PHASE_DEGREE_360:
-				PM1 |= (PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_LS_B | PIN_MOTOR_DRV_LS_C);
-				PM1 &= ~(PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_A);
 				g_u16_speed_count_us_degree_360 = g_u16_speed_count_us;
+				// prepare timer 1, start timer 0
+				TDR01 = g_u16_speed_count_us * TURBO_DRIVE_PHASE_SPEED_1US_RESET_VALUE;
+				g_motor_phase_set_timer1 = g_motor_phase_current;
+				R_TAU0_Channel0_Start ( );
 				break;
 
 			case MOTOR_PHASE_OPEN:
