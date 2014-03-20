@@ -109,6 +109,9 @@ uint16_t	g_u16_turbo_drive_phase_speed_in_us_leave;
 uint16_t	g_u16_turbo_drive_phase_speed_in_us_enter;
 uint16_t	g_u16_turbo_drive_phase_speed_in_us_tolerence_percentage;
 uint16_t	g_u16_turbo_drive_phase_speed_in_us_tolerence;
+uint8_t		g_u8_turbo_drive_phase_count_to_start;
+uint8_t		g_u8_turbo_drive_phase_count;
+bit			g_bit_turbo_drive_start;
 
 uint32_t	g_u32_tick;
 bit			g_bit_tick_overflow;
@@ -653,8 +656,12 @@ void app_handler (void) {
 				g_app_state = APP_STATE_MOTOR_CONTROL_PRE_IDLE;
 			else if (g_throttle_direction == THROTTLE_DIRECTION_CW)
 				g_app_state = APP_STATE_MOTOR_CONTROL_PRE_BREAK;
-			else if ((average_speed > 0 )&& (average_speed < g_u16_turbo_drive_phase_speed_in_us_enter))
+			else if ((average_speed > 0 )&& (average_speed < g_u16_turbo_drive_phase_speed_in_us_enter)) {
+				g_u8_turbo_drive_phase_count_to_start = TURBO_DRIVE_PHASE_COUNT_TO_START;
+				g_u8_turbo_drive_phase_count = 0;
+				g_bit_turbo_drive_start = 0;
 				g_app_state = APP_STATE_MOTOR_CONTROL_PRE_TURBO_DRIVING;
+			}
 			break;
 
 		/* REV */
@@ -674,61 +681,9 @@ void app_handler (void) {
 			
 		/* Turbo Driving */
 		case APP_STATE_MOTOR_CONTROL_PRE_TURBO_DRIVING:
-			if (g_motor_phase_current == MOTOR_PHASE_DEGREE_60) {
-				PM1 |= (PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_LS_A | PIN_MOTOR_DRV_LS_C);
-				PM1 &= ~(PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_B);
-				TDR01 = g_u16_speed_count_us_degree_360 * TURBO_DRIVE_PHASE_SPEED_1US_RESET_VALUE;
-				TDR00 = g_u16_speed_count_us_degree_60 * TURBO_DRIVE_PHASE_SPEED_1US_RESET_VALUE;
-				g_motor_phase_set_timer1 = MOTOR_PHASE_DEGREE_360;
-				g_motor_phase_set_timer0 = MOTOR_PHASE_DEGREE_60;
-				R_TAU0_Channel1_Start ( );
+			if (g_bit_turbo_drive_start) {
+				g_app_state = APP_STATE_MOTOR_CONTROL_TURBO_DRIVING;
 			}
-			else if (g_motor_phase_current == MOTOR_PHASE_DEGREE_120) {
-				PM1 |= (PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_A | PIN_MOTOR_DRV_LS_C);
-				PM1 &= ~(PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_LS_B);
-				TDR00 = g_u16_speed_count_us_degree_60 * TURBO_DRIVE_PHASE_SPEED_1US_RESET_VALUE;
-				TDR01 = g_u16_speed_count_us_degree_120 * TURBO_DRIVE_PHASE_SPEED_1US_RESET_VALUE;
-				g_motor_phase_set_timer0 = MOTOR_PHASE_DEGREE_60;
-				g_motor_phase_set_timer1 = MOTOR_PHASE_DEGREE_120;
-				R_TAU0_Channel0_Start ( );
-			}
-			else if (g_motor_phase_current == MOTOR_PHASE_DEGREE_180) {
-				PM1 |= (PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_A | PIN_MOTOR_DRV_LS_B);
-				PM1 &= ~(PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_LS_C);
-				TDR00 = g_u16_speed_count_us_degree_120 * TURBO_DRIVE_PHASE_SPEED_1US_RESET_VALUE;
-				TDR01 = g_u16_speed_count_us_degree_180 * TURBO_DRIVE_PHASE_SPEED_1US_RESET_VALUE;
-				g_motor_phase_set_timer1 = MOTOR_PHASE_DEGREE_120;
-				g_motor_phase_set_timer0 = MOTOR_PHASE_DEGREE_180;
-				R_TAU0_Channel1_Start ( );
-			}
-			else if (g_motor_phase_current == MOTOR_PHASE_DEGREE_240) {
-				PM1 |= (PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_A | PIN_MOTOR_DRV_LS_B);
-				PM1 &= ~(PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_LS_C);
-				TDR00 = g_u16_speed_count_us_degree_180 * TURBO_DRIVE_PHASE_SPEED_1US_RESET_VALUE;
-				TDR01 = g_u16_speed_count_us_degree_240 * TURBO_DRIVE_PHASE_SPEED_1US_RESET_VALUE;
-				g_motor_phase_set_timer0 = MOTOR_PHASE_DEGREE_180;
-				g_motor_phase_set_timer1 = MOTOR_PHASE_DEGREE_240;
-				R_TAU0_Channel0_Start ( );
-			}
-			else if (g_motor_phase_current == MOTOR_PHASE_DEGREE_300) {
-				PM1 |= (PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_B | PIN_MOTOR_DRV_LS_C);
-				PM1 &= ~(PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_LS_A);
-				TDR00 = g_u16_speed_count_us_degree_240 * TURBO_DRIVE_PHASE_SPEED_1US_RESET_VALUE;
-				TDR01 = g_u16_speed_count_us_degree_300 * TURBO_DRIVE_PHASE_SPEED_1US_RESET_VALUE;
-				g_motor_phase_set_timer1 = MOTOR_PHASE_DEGREE_240;
-				g_motor_phase_set_timer0 = MOTOR_PHASE_DEGREE_300;
-				R_TAU0_Channel1_Start ( );
-			}
-			else if (g_motor_phase_current == MOTOR_PHASE_DEGREE_360) {
-				PM1 |= (PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_LS_B | PIN_MOTOR_DRV_LS_C);
-				PM1 &= ~(PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_A);
-				TDR00 = g_u16_speed_count_us_degree_300 * TURBO_DRIVE_PHASE_SPEED_1US_RESET_VALUE;
-				TDR01 = g_u16_speed_count_us_degree_360 * TURBO_DRIVE_PHASE_SPEED_1US_RESET_VALUE;
-				g_motor_phase_set_timer0 = MOTOR_PHASE_DEGREE_300;
-				g_motor_phase_set_timer1 = MOTOR_PHASE_DEGREE_360;
-				R_TAU0_Channel0_Start ( );
-			}			
-			g_app_state = APP_STATE_MOTOR_CONTROL_TURBO_DRIVING;
 			break;
 
 		case APP_STATE_MOTOR_CONTROL_TURBO_DRIVING:

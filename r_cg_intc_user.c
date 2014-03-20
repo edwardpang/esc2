@@ -79,6 +79,11 @@ extern uint16_t g_u16_speed_count_us_degree_180;
 extern uint16_t g_u16_speed_count_us_degree_240;
 extern uint16_t g_u16_speed_count_us_degree_300;
 extern uint16_t g_u16_speed_count_us_degree_360;
+
+extern uint8_t	g_u8_turbo_drive_phase_count_to_start;
+extern uint8_t	g_u8_turbo_drive_phase_count;
+extern bit		g_bit_turbo_drive_start;
+
 /* End user code. Do not edit comment generated here */
 
 /***********************************************************************************************************************
@@ -235,7 +240,76 @@ __interrupt static void r_hall_sensor_common_interrupt (void) {
 				break;
 		}
 	}
+	else if (g_app_state == APP_STATE_MOTOR_CONTROL_PRE_TURBO_DRIVING) {
+		switch (g_motor_phase_current) {
+			case MOTOR_PHASE_DEGREE_60:
+				PM1 |= (PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_LS_A | PIN_MOTOR_DRV_LS_C);
+				PM1 &= ~(PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_B);
+				g_u16_speed_count_us_degree_60 = g_u16_speed_count_us;
+				TDR00 = g_u16_speed_count_us_degree_60 * TURBO_DRIVE_PHASE_SPEED_1US_RESET_VALUE;
+				g_motor_phase_set_timer0 = MOTOR_PHASE_DEGREE_60;
+				break;
+				
+			case MOTOR_PHASE_DEGREE_120:
+				PM1 |= (PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_A | PIN_MOTOR_DRV_LS_C);
+				PM1 &= ~(PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_LS_B);
+				g_u16_speed_count_us_degree_120 = g_u16_speed_count_us;
+				TDR01 = g_u16_speed_count_us_degree_120 * TURBO_DRIVE_PHASE_SPEED_1US_RESET_VALUE;
+				g_motor_phase_set_timer1 = MOTOR_PHASE_DEGREE_120;
+				break;
+				
+			case MOTOR_PHASE_DEGREE_180:
+				PM1 |= (PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_A | PIN_MOTOR_DRV_LS_B);
+				PM1 &= ~(PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_LS_C);
+				g_u16_speed_count_us_degree_180 = g_u16_speed_count_us;
+				TDR00 = g_u16_speed_count_us_degree_180 * TURBO_DRIVE_PHASE_SPEED_1US_RESET_VALUE;
+				g_motor_phase_set_timer0 = MOTOR_PHASE_DEGREE_180;
+				break;
+				
+			case MOTOR_PHASE_DEGREE_240:
+				PM1 |= (PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_A | PIN_MOTOR_DRV_LS_B);
+				PM1 &= ~(PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_LS_C);
+				g_u16_speed_count_us_degree_240 = g_u16_speed_count_us;
+				TDR01 = g_u16_speed_count_us_degree_240 * TURBO_DRIVE_PHASE_SPEED_1US_RESET_VALUE;
+				g_motor_phase_set_timer1 = MOTOR_PHASE_DEGREE_240;
+				break;
+				
+			case MOTOR_PHASE_DEGREE_300:
+				PM1 |= (PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_B | PIN_MOTOR_DRV_LS_C);
+				PM1 &= ~(PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_LS_A);
+				g_u16_speed_count_us_degree_300 = g_u16_speed_count_us;
+				TDR00 = g_u16_speed_count_us_degree_300 * TURBO_DRIVE_PHASE_SPEED_1US_RESET_VALUE;
+				g_motor_phase_set_timer0 = MOTOR_PHASE_DEGREE_300;
+				break;
+				
+			case MOTOR_PHASE_DEGREE_360:
+				PM1 |= (PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_LS_B | PIN_MOTOR_DRV_LS_C);
+				PM1 &= ~(PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_A);
+				g_u16_speed_count_us_degree_360 = g_u16_speed_count_us;
+				TDR01 = g_u16_speed_count_us_degree_360 * TURBO_DRIVE_PHASE_SPEED_1US_RESET_VALUE;
+				g_motor_phase_set_timer0 = MOTOR_PHASE_DEGREE_300;
+				break;
+
+			case MOTOR_PHASE_OPEN:
+			case MOTOR_PHASE_ERROR:
+			default:
+				break;
+		}
+		g_u8_turbo_drive_phase_count ++;
+		if (g_u8_turbo_drive_phase_count == g_u8_turbo_drive_phase_count_to_start) {
+			if (g_motor_phase_current == MOTOR_PHASE_DEGREE_120 || 
+				g_motor_phase_current == MOTOR_PHASE_DEGREE_240 ||
+				g_motor_phase_current == MOTOR_PHASE_DEGREE_360)
+				R_TAU0_Channel0_Start ( );
+			else if (g_motor_phase_current == MOTOR_PHASE_DEGREE_60 || 
+				g_motor_phase_current == MOTOR_PHASE_DEGREE_180 ||
+				g_motor_phase_current == MOTOR_PHASE_DEGREE_300)
+				R_TAU0_Channel1_Start ( );
+			g_bit_turbo_drive_start = 1;
+		}
+	}
 	else if (g_app_state == APP_STATE_MOTOR_CONTROL_TURBO_DRIVING) {
+		PIN_LED_GREEN = 1;
 		switch (g_motor_phase_current) {
 			case MOTOR_PHASE_DEGREE_60:
 				g_u16_speed_count_us_degree_60 = g_u16_speed_count_us;
@@ -290,6 +364,7 @@ __interrupt static void r_hall_sensor_common_interrupt (void) {
 			default:
 				break;
 		}
+		PIN_LED_GREEN = 0;
 	}
 }
 /* End user code. Do not edit comment generated here */
