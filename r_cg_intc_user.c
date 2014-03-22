@@ -86,6 +86,36 @@ extern bit		g_bit_turbo_drive_start;
 
 extern bit		g_bit_turbo_timer0_busy;
 extern bit		g_bit_turbo_timer1_busy;
+
+
+#define MACRO_TURN_ON_TIMER0	{ \
+    TMIF00 = 0U; \
+    TMMK00 = 0U; \
+    TS0 |= _0001_TAU_CH0_START_TRG_ON; \
+	g_bit_turbo_timer0_busy = 1; \
+}
+
+#define MACRO_TURN_OFF_TIMER0	{ \
+    TT0 |= _0001_TAU_CH0_STOP_TRG_ON; \
+    TMMK00 = 1U; \
+    TMIF00 = 0U; \
+	g_bit_turbo_timer0_busy = 0; \
+}
+
+#define MACRO_TURN_ON_TIMER1	{ \
+    TMIF01 = 0U; \
+    TMMK01 = 0U; \
+    TS0 |= _0002_TAU_CH1_START_TRG_ON; \
+	g_bit_turbo_timer1_busy = 1; \
+}
+
+#define MACRO_TURN_OFF_TIMER1	{ \
+    TT0 |= _0002_TAU_CH1_STOP_TRG_ON; \
+    TMMK01 = 1U; \
+    TMIF01 = 0U; \
+	g_bit_turbo_timer1_busy = 0; \
+}
+
 /* End user code. Do not edit comment generated here */
 
 /***********************************************************************************************************************
@@ -301,12 +331,14 @@ __interrupt static void r_hall_sensor_common_interrupt (void) {
 		if (g_u8_turbo_drive_phase_count == g_u8_turbo_drive_phase_count_to_start) {
 			if (g_motor_phase_current == MOTOR_PHASE_DEGREE_120 || 
 				g_motor_phase_current == MOTOR_PHASE_DEGREE_240 ||
-				g_motor_phase_current == MOTOR_PHASE_DEGREE_360)
-				R_TAU0_Channel0_Start ( );
+				g_motor_phase_current == MOTOR_PHASE_DEGREE_360) {
+				MACRO_TURN_ON_TIMER0;
+			}
 			else if (g_motor_phase_current == MOTOR_PHASE_DEGREE_60 || 
 				g_motor_phase_current == MOTOR_PHASE_DEGREE_180 ||
-				g_motor_phase_current == MOTOR_PHASE_DEGREE_300)
-				R_TAU0_Channel1_Start ( );
+				g_motor_phase_current == MOTOR_PHASE_DEGREE_300) {
+				MACRO_TURN_ON_TIMER1;
+			}
 			g_bit_turbo_drive_start = 1;
 		}
 	}
@@ -315,92 +347,80 @@ __interrupt static void r_hall_sensor_common_interrupt (void) {
 		switch (g_motor_phase_current) {
 			case MOTOR_PHASE_DEGREE_60:
 				if (g_bit_turbo_timer0_busy) {
-					R_TAU0_Channel0_Stop ( );
+					MACRO_TURN_OFF_TIMER0;
 					PM1 |= (PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_LS_A | PIN_MOTOR_DRV_LS_C);
 					PM1 &= ~(PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_B);
-					g_bit_turbo_timer0_busy = 0;
 				}
 				g_u16_speed_count_us_degree_60 = g_u16_speed_count_us;
 				// prepare timer 0, start timer 1
 				TDR00 = g_u16_speed_count_us * TURBO_DRIVE_PHASE_SPEED_1US_RESET_VALUE;
 				g_motor_phase_set_timer0 = g_motor_phase_current;
-				g_bit_turbo_timer1_busy = 1;
-				R_TAU0_Channel1_Start ( );
+				MACRO_TURN_ON_TIMER1;
 				break;
 
 			case MOTOR_PHASE_DEGREE_120:
 				if (g_bit_turbo_timer1_busy) {
-					R_TAU0_Channel1_Stop ( );
+					MACRO_TURN_OFF_TIMER1;
 					PM1 |= (PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_A | PIN_MOTOR_DRV_LS_C);
 					PM1 &= ~(PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_LS_B);
-					g_bit_turbo_timer1_busy = 0;
 				}
 				g_u16_speed_count_us_degree_120 = g_u16_speed_count_us;
 				// prepare timer 1, start timer 0
 				TDR01 = g_u16_speed_count_us * TURBO_DRIVE_PHASE_SPEED_1US_RESET_VALUE;
 				g_motor_phase_set_timer1 = g_motor_phase_current;
-				g_bit_turbo_timer0_busy = 1;
-				R_TAU0_Channel0_Start ( );
+				MACRO_TURN_ON_TIMER0;
 				break;
 
 			case MOTOR_PHASE_DEGREE_180:
 				if (g_bit_turbo_timer0_busy) {
-					R_TAU0_Channel0_Stop ( );
+					MACRO_TURN_OFF_TIMER0;
 					PM1 |= (PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_A | PIN_MOTOR_DRV_LS_B);
 					PM1 &= ~(PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_LS_C);
-					g_bit_turbo_timer0_busy = 0;
 				}
 				g_u16_speed_count_us_degree_180 = g_u16_speed_count_us;
 				// prepare timer 0, start timer 1
 				TDR00 = g_u16_speed_count_us * TURBO_DRIVE_PHASE_SPEED_1US_RESET_VALUE;
 				g_motor_phase_set_timer0 = g_motor_phase_current;
-				g_bit_turbo_timer1_busy = 1;
-				R_TAU0_Channel1_Start ( );
+				MACRO_TURN_ON_TIMER1;
 				break;
 
 			case MOTOR_PHASE_DEGREE_240:
 				if (g_bit_turbo_timer1_busy) {
-					R_TAU0_Channel1_Stop ( );
+					MACRO_TURN_OFF_TIMER1;
 					PM1 |= (PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_A | PIN_MOTOR_DRV_LS_B);
 					PM1 &= ~(PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_LS_C);
-					g_bit_turbo_timer1_busy = 0;
 				}
 				g_u16_speed_count_us_degree_240 = g_u16_speed_count_us;
 				// prepare timer 1, start timer 0
 				TDR01 = g_u16_speed_count_us * TURBO_DRIVE_PHASE_SPEED_1US_RESET_VALUE;
 				g_motor_phase_set_timer1 = g_motor_phase_current;
-				g_bit_turbo_timer0_busy = 1;
-				R_TAU0_Channel0_Start ( );
+				MACRO_TURN_ON_TIMER0;
 				break;
 
 			case MOTOR_PHASE_DEGREE_300:
 				if (g_bit_turbo_timer0_busy) {
-					R_TAU0_Channel0_Stop ( );
+					MACRO_TURN_OFF_TIMER0;
 					PM1 |= (PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_B | PIN_MOTOR_DRV_LS_C);
 					PM1 &= ~(PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_LS_A);
-					g_bit_turbo_timer0_busy = 0;
 				}
 				g_u16_speed_count_us_degree_300 = g_u16_speed_count_us;
 				// prepare timer 0, start timer 1
 				TDR00 = g_u16_speed_count_us * TURBO_DRIVE_PHASE_SPEED_1US_RESET_VALUE;
 				g_motor_phase_set_timer0 = g_motor_phase_current;
-				g_bit_turbo_timer1_busy = 1;
-				R_TAU0_Channel1_Start ( );
+				MACRO_TURN_ON_TIMER1;
 				break;
 
 			case MOTOR_PHASE_DEGREE_360:
 				if (g_bit_turbo_timer1_busy) {
-					R_TAU0_Channel1_Stop ( );
+					MACRO_TURN_OFF_TIMER1;
 					PM1 |= (PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_LS_B | PIN_MOTOR_DRV_LS_C);
 					PM1 &= ~(PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_A);
-					g_bit_turbo_timer1_busy = 0;
 				}
 				g_u16_speed_count_us_degree_360 = g_u16_speed_count_us;
 				// prepare timer 1, start timer 0
 				TDR01 = g_u16_speed_count_us * TURBO_DRIVE_PHASE_SPEED_1US_RESET_VALUE;
 				g_motor_phase_set_timer1 = g_motor_phase_current;
-				g_bit_turbo_timer0_busy = 1;
-				R_TAU0_Channel0_Start ( );
+				MACRO_TURN_ON_TIMER0;
 				break;
 
 			case MOTOR_PHASE_OPEN:
