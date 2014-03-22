@@ -268,6 +268,7 @@ __interrupt static void r_tau0_channel2_interrupt(void)
 	}
 	else if (g_app_state == APP_STATE_MOTOR_CONTROL_FWD_DRIVING ||
 			g_app_state == APP_STATE_MOTOR_CONTROL_REV_DRIVING ||
+			g_app_state == APP_STATE_MOTOR_CONTROL_PRE_TURBO_DRIVING ||
 			g_app_state == APP_STATE_MOTOR_CONTROL_TURBO_DRIVING) {
 	    MOTOR_DRV_HS_A = g_u16_throttle_pos_in_pwm_duty_current;
 	    MOTOR_DRV_HS_B = g_u16_throttle_pos_in_pwm_duty_current;

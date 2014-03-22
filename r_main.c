@@ -345,6 +345,12 @@ void speed_measurement_enable ( ) {
 	TRJ0 = SPEED_1US_COUNTER_RESET_VALUE;
 	TDR03 = SPEED_1US_TIMER_RESET_VALUE;
 	g_u16_speed_count_us = 0;
+	g_u16_speed_count_us_degree_60 = 0;
+	g_u16_speed_count_us_degree_120 = 0;
+	g_u16_speed_count_us_degree_180 = 0;
+	g_u16_speed_count_us_degree_240 = 0;
+	g_u16_speed_count_us_degree_300 = 0;
+	g_u16_speed_count_us_degree_360 = 0;
 	R_TMR_RJ0_Start ( );
 	R_TAU0_Channel3_Start ( );
 }
@@ -644,10 +650,6 @@ void app_handler (void) {
 			speed_measurement_enable ( );
 			motor_driver_farward_enable ( );
 			hall_sensor_enable ( );
-			R_TAU0_Channel0_Stop ( );
-			R_TAU0_Channel1_Stop ( );
-			g_bit_turbo_timer0_busy = 0;
-			g_bit_turbo_timer1_busy = 0;
 			g_app_state = APP_STATE_MOTOR_CONTROL_FWD_DRIVING;
 			break;
 			
@@ -705,12 +707,28 @@ void app_handler (void) {
 			average_speed += g_u16_speed_count_us_degree_300;
 			average_speed += g_u16_speed_count_us_degree_360;
 			average_speed /= 6;
-			if (g_u16_throttle_pos_in_pwm_duty_current == g_u16_hs_pwm_empty)
+			
+			if (g_u16_throttle_pos_in_pwm_duty_current == g_u16_hs_pwm_empty) {
+				R_TAU0_Channel0_Stop ( );
+				R_TAU0_Channel1_Stop ( );
+				g_bit_turbo_timer0_busy = 0;
+				g_bit_turbo_timer1_busy = 0;
 				g_app_state = APP_STATE_MOTOR_CONTROL_PRE_IDLE;
-			else if (g_throttle_direction == THROTTLE_DIRECTION_CW)
+			}
+			else if (g_throttle_direction == THROTTLE_DIRECTION_CW) {
+				R_TAU0_Channel0_Stop ( );
+				R_TAU0_Channel1_Stop ( );
+				g_bit_turbo_timer0_busy = 0;
+				g_bit_turbo_timer1_busy = 0;
 				g_app_state = APP_STATE_MOTOR_CONTROL_PRE_BREAK;
-			else if (average_speed > g_u16_turbo_drive_phase_speed_in_us_leave)
+			}
+			else if (average_speed > g_u16_turbo_drive_phase_speed_in_us_leave) {
+				R_TAU0_Channel0_Stop ( );
+				R_TAU0_Channel1_Stop ( );
+				g_bit_turbo_timer0_busy = 0;
+				g_bit_turbo_timer1_busy = 0;
 				g_app_state = APP_STATE_MOTOR_CONTROL_PRE_FWD_DRIVING;
+			}
 			break;
 
 		default:

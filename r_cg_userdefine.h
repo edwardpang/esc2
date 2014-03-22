@@ -169,7 +169,7 @@ typedef enum _com_state_t {
 #define TURBO_DRIVE_PHASE_SPEED_IN_US_TOLERENCE_PERCENTAGE	(5U)
 #define TURBO_DRIVE_PHASE_SPEED_1US_RESET_VALUE				(0x001FU)
 #define TURBO_DRIVE_PHASE_COUNT_TO_START					(2U)
-#define TURBO_DRIVE_TEST_DEGREE								(30U)
+#define TURBO_DRIVE_TEST_DEGREE								(50U)
 #define TURBO_DRIVE_PHASE_DEGREE							(60U)
 /* End user code. Do not edit comment generated here */
 #endif
