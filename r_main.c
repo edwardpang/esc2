@@ -126,6 +126,11 @@ void app_config (void);
 void app_handler (void);
 void com_init (void);
 void com_handler (void);
+
+#define MACRO_GET_AVERAGE_SPEED	 \
+	((g_u16_speed_count_us_degree_60 + g_u16_speed_count_us_degree_120 + g_u16_speed_count_us_degree_180 + \
+	g_u16_speed_count_us_degree_240 + g_u16_speed_count_us_degree_300 + g_u16_speed_count_us_degree_360) / 6)
+
 /* End user code. Do not edit comment generated here */
 void R_MAIN_UserInit(void);
 
@@ -654,13 +659,7 @@ void app_handler (void) {
 			break;
 			
 		case APP_STATE_MOTOR_CONTROL_FWD_DRIVING:
-			average_speed = g_u16_speed_count_us_degree_60;
-			average_speed += g_u16_speed_count_us_degree_120;
-			average_speed += g_u16_speed_count_us_degree_180;
-			average_speed += g_u16_speed_count_us_degree_240;
-			average_speed += g_u16_speed_count_us_degree_300;
-			average_speed += g_u16_speed_count_us_degree_360;
-			average_speed /= 6;
+			average_speed = MACRO_GET_AVERAGE_SPEED;
 			if (g_u16_throttle_pos_in_pwm_duty_current == g_u16_hs_pwm_empty)
 				g_app_state = APP_STATE_MOTOR_CONTROL_PRE_IDLE;
 			else if (g_throttle_direction == THROTTLE_DIRECTION_CW)
@@ -700,14 +699,7 @@ void app_handler (void) {
 			break;
 
 		case APP_STATE_MOTOR_CONTROL_TURBO_DRIVING:
-			average_speed = g_u16_speed_count_us_degree_60;
-			average_speed += g_u16_speed_count_us_degree_120;
-			average_speed += g_u16_speed_count_us_degree_180;
-			average_speed += g_u16_speed_count_us_degree_240;
-			average_speed += g_u16_speed_count_us_degree_300;
-			average_speed += g_u16_speed_count_us_degree_360;
-			average_speed /= 6;
-			
+			average_speed = MACRO_GET_AVERAGE_SPEED;
 			if (g_u16_throttle_pos_in_pwm_duty_current == g_u16_hs_pwm_empty) {
 				R_TAU0_Channel0_Stop ( );
 				R_TAU0_Channel1_Stop ( );
