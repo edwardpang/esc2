@@ -644,6 +644,10 @@ void app_handler (void) {
 			speed_measurement_enable ( );
 			motor_driver_farward_enable ( );
 			hall_sensor_enable ( );
+			R_TAU0_Channel0_Stop ( );
+			R_TAU0_Channel1_Stop ( );
+			g_bit_turbo_timer0_busy = 0;
+			g_bit_turbo_timer1_busy = 0;
 			g_app_state = APP_STATE_MOTOR_CONTROL_FWD_DRIVING;
 			break;
 			
@@ -662,6 +666,8 @@ void app_handler (void) {
 			else if ((average_speed > 0 )&& (average_speed < g_u16_turbo_drive_phase_speed_in_us_enter)) {
 				g_u8_turbo_drive_phase_count_to_start = TURBO_DRIVE_PHASE_COUNT_TO_START;
 				g_u8_turbo_drive_phase_count = 0;
+				R_TAU0_Channel0_Stop ( );
+				R_TAU0_Channel1_Stop ( );
 				g_bit_turbo_timer0_busy = 0;
 				g_bit_turbo_timer1_busy = 0;
 				g_bit_turbo_drive_start = 0;
