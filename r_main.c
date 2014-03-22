@@ -113,6 +113,9 @@ uint8_t		g_u8_turbo_drive_phase_count_to_start;
 uint8_t		g_u8_turbo_drive_phase_count;
 bit			g_bit_turbo_drive_start;
 
+bit			g_bit_turbo_timer0_busy;
+bit			g_bit_turbo_timer1_busy;
+
 uint32_t	g_u32_tick;
 bit			g_bit_tick_overflow;
 
@@ -659,6 +662,8 @@ void app_handler (void) {
 			else if ((average_speed > 0 )&& (average_speed < g_u16_turbo_drive_phase_speed_in_us_enter)) {
 				g_u8_turbo_drive_phase_count_to_start = TURBO_DRIVE_PHASE_COUNT_TO_START;
 				g_u8_turbo_drive_phase_count = 0;
+				g_bit_turbo_timer0_busy = 0;
+				g_bit_turbo_timer1_busy = 0;
 				g_bit_turbo_drive_start = 0;
 				g_app_state = APP_STATE_MOTOR_CONTROL_PRE_TURBO_DRIVING;
 			}
