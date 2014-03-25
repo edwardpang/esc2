@@ -47,6 +47,7 @@ Includes
 #include "r_cg_macrodriver.h"
 #include "r_cg_timer.h"
 /* Start user code for include. Do not edit comment generated here */
+#include "macro.h"
 /* End user code. Do not edit comment generated here */
 #include "r_cg_userdefine.h"
 
@@ -88,56 +89,34 @@ __interrupt static void r_tau0_channel0_interrupt(void)
     /* Start user code. Do not edit comment generated here */
 	R_TAU0_Channel0_Stop ( );
 	switch (g_motor_phase_set_timer0) {
-#if 0
-		case MOTOR_PHASE_DEGREE_180:
-			PM1 |= (PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_LS_A | PIN_MOTOR_DRV_LS_C);
-			PM1 &= ~(PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_B);
-			break;
-
 		case MOTOR_PHASE_DEGREE_300:
-			PM1 |= (PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_A | PIN_MOTOR_DRV_LS_B);
-			PM1 &= ~(PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_LS_C);
-			break;
-
-		case MOTOR_PHASE_DEGREE_60:
-			PM1 |= (PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_B | PIN_MOTOR_DRV_LS_C);
-			PM1 &= ~(PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_LS_A);
-			break;
-#else
-		case MOTOR_PHASE_DEGREE_300:
-			PM1 |= (PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_LS_A | PIN_MOTOR_DRV_LS_C);
-			PM1 &= ~(PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_B);
+			MACRO_MOTOR_DRIVE_FWD_SWITCH_PHASE_DEGREE_60;
 			break;
 			
 		case MOTOR_PHASE_DEGREE_360:
-			PM1 |= (PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_A | PIN_MOTOR_DRV_LS_C);
-			PM1 &= ~(PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_LS_B);
+			MACRO_MOTOR_DRIVE_FWD_SWITCH_PHASE_DEGREE_120;
 			break;
 			
 		case MOTOR_PHASE_DEGREE_60:
-			PM1 |= (PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_A | PIN_MOTOR_DRV_LS_B);
-			PM1 &= ~(PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_LS_C);
+			MACRO_MOTOR_DRIVE_FWD_SWITCH_PHASE_DEGREE_180;
 			break;
 			
 		case MOTOR_PHASE_DEGREE_120:
-			PM1 |= (PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_A | PIN_MOTOR_DRV_LS_B);
-			PM1 &= ~(PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_LS_C);
+			MACRO_MOTOR_DRIVE_FWD_SWITCH_PHASE_DEGREE_240;
 			break;
 			
 		case MOTOR_PHASE_DEGREE_180:
-			PM1 |= (PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_B | PIN_MOTOR_DRV_LS_C);
-			PM1 &= ~(PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_LS_A);
+			MACRO_MOTOR_DRIVE_FWD_SWITCH_PHASE_DEGREE_300;
 			break;
 			
 		case MOTOR_PHASE_DEGREE_240:
-			PM1 |= (PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_LS_B | PIN_MOTOR_DRV_LS_C);
-			PM1 &= ~(PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_A);
+			MACRO_MOTOR_DRIVE_FWD_SWITCH_PHASE_DEGREE_360;
 			break;
-#endif
 
 		case MOTOR_PHASE_OPEN:
 		case MOTOR_PHASE_ERROR:
 		default:
+			MACRO_MOTOR_DRIVE_SWITCH_PHASE_UNKNOWN;
 			break;
 	}
     /* End user code. Do not edit comment generated here */
@@ -154,55 +133,34 @@ __interrupt static void r_tau0_channel1_interrupt(void)
     /* Start user code. Do not edit comment generated here */
 	R_TAU0_Channel1_Stop ( );
 	switch (g_motor_phase_set_timer1) {
-#if 0
-		case MOTOR_PHASE_DEGREE_240:
-			PM1 |= (PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_A | PIN_MOTOR_DRV_LS_C);
-			PM1 &= ~(PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_LS_B);
-			break;
-
-		case MOTOR_PHASE_DEGREE_360:
-			PM1 |= (PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_A | PIN_MOTOR_DRV_LS_B);
-			PM1 &= ~(PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_LS_C);
-			break;
-
-		case MOTOR_PHASE_DEGREE_120:
-			PM1 |= (PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_LS_B | PIN_MOTOR_DRV_LS_C);
-			PM1 &= ~(PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_A);
-			break;
-#else
 		case MOTOR_PHASE_DEGREE_300:
-			PM1 |= (PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_LS_A | PIN_MOTOR_DRV_LS_C);
-			PM1 &= ~(PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_B);
+			MACRO_MOTOR_DRIVE_FWD_SWITCH_PHASE_DEGREE_60;
 			break;
 			
 		case MOTOR_PHASE_DEGREE_360:
-			PM1 |= (PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_A | PIN_MOTOR_DRV_LS_C);
-			PM1 &= ~(PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_LS_B);
+			MACRO_MOTOR_DRIVE_FWD_SWITCH_PHASE_DEGREE_120;
 			break;
 			
 		case MOTOR_PHASE_DEGREE_60:
-			PM1 |= (PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_A | PIN_MOTOR_DRV_LS_B);
-			PM1 &= ~(PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_LS_C);
+			MACRO_MOTOR_DRIVE_FWD_SWITCH_PHASE_DEGREE_180;
 			break;
 			
 		case MOTOR_PHASE_DEGREE_120:
-			PM1 |= (PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_A | PIN_MOTOR_DRV_LS_B);
-			PM1 &= ~(PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_LS_C);
+			MACRO_MOTOR_DRIVE_FWD_SWITCH_PHASE_DEGREE_240;
 			break;
 			
 		case MOTOR_PHASE_DEGREE_180:
-			PM1 |= (PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_B | PIN_MOTOR_DRV_LS_C);
-			PM1 &= ~(PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_LS_A);
+			MACRO_MOTOR_DRIVE_FWD_SWITCH_PHASE_DEGREE_300;
 			break;
 			
 		case MOTOR_PHASE_DEGREE_240:
-			PM1 |= (PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_LS_B | PIN_MOTOR_DRV_LS_C);
-			PM1 &= ~(PIN_MOTOR_DRV_HS_C | PIN_MOTOR_DRV_LS_A);
+			MACRO_MOTOR_DRIVE_FWD_SWITCH_PHASE_DEGREE_360;
 			break;
-#endif
+
 		case MOTOR_PHASE_OPEN:
 		case MOTOR_PHASE_ERROR:
 		default:
+			MACRO_MOTOR_DRIVE_SWITCH_PHASE_UNKNOWN;
 			break;
 	}
 	/* End user code. Do not edit comment generated here */
