@@ -59,7 +59,9 @@ Global variables and functions
 /* Start user code for global. Do not edit comment generated here */
 app_state_t 	g_app_state;
 
-
+bit				g_bit_motor_drive_hs_active;
+bit				g_bit_motor_drive_ls_active;
+bit				g_bit_motor_drive_pwm;
 motor_phase_t	g_motor_phase_current;
 motor_phase_t	g_motor_phase_set_timer0;
 motor_phase_t	g_motor_phase_set_timer1;
@@ -184,8 +186,7 @@ void motor_phase_reset (void) {
 /***********************************************************************************************************************/
 void motor_driver_disable (void) {
 	PIN_MOTOR_DRIVER_ENABLE = MOTOR_DISABLE;
-	PM1 |= (PIN_MOTOR_DRV_HS_A |PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_HS_C | 
-			PIN_MOTOR_DRV_LS_A | PIN_MOTOR_DRV_LS_B | PIN_MOTOR_DRV_LS_C);
+	MACRO_MOTOR_DRIVE_SWITCH_PHASE_OFF;
 	MOTOR_DRV_HS_A = g_u16_hs_pwm_empty;
 	MOTOR_DRV_HS_B = g_u16_hs_pwm_empty;
 	MOTOR_DRV_HS_C = g_u16_hs_pwm_empty;
@@ -203,12 +204,22 @@ void motor_driver_farward_enable (void) {
 	
 	MOTOR_DRV_LS_PERIOD = g_u16_ls_pwm_full;
 
-	MOTOR_DRV_HS_A = g_u16_throttle_pos_in_pwm_duty_current;
-	MOTOR_DRV_HS_B = g_u16_throttle_pos_in_pwm_duty_current;
-	MOTOR_DRV_HS_C = g_u16_throttle_pos_in_pwm_duty_current;
-	MOTOR_DRV_LS_A = g_u16_ls_pwm_full;
-	MOTOR_DRV_LS_B = g_u16_ls_pwm_full;
-	MOTOR_DRV_LS_C = g_u16_ls_pwm_full;
+	if (g_bit_motor_drive_pwm == MOTOR_DRIVE_HS_PWM) {
+		MOTOR_DRV_HS_A = g_u16_throttle_pos_in_pwm_duty_current;
+		MOTOR_DRV_HS_B = g_u16_throttle_pos_in_pwm_duty_current;
+		MOTOR_DRV_HS_C = g_u16_throttle_pos_in_pwm_duty_current;
+		MOTOR_DRV_LS_A = g_u16_ls_pwm_full;
+		MOTOR_DRV_LS_B = g_u16_ls_pwm_full;
+		MOTOR_DRV_LS_C = g_u16_ls_pwm_full;
+	}
+	else {
+		MOTOR_DRV_HS_A = g_u16_ls_pwm_full;
+		MOTOR_DRV_HS_B = g_u16_ls_pwm_full;
+		MOTOR_DRV_HS_C = g_u16_ls_pwm_full;
+		MOTOR_DRV_LS_A = g_u16_throttle_pos_in_pwm_duty_current;
+		MOTOR_DRV_LS_B = g_u16_throttle_pos_in_pwm_duty_current;
+		MOTOR_DRV_LS_C = g_u16_throttle_pos_in_pwm_duty_current;
+	}
 	switch (g_motor_phase_current) {
 		case MOTOR_PHASE_DEGREE_60:
 			MACRO_MOTOR_DRIVE_FWD_SWITCH_PHASE_DEGREE_60;
@@ -253,12 +264,22 @@ void motor_driver_reverse_enable (void) {
 	
 	MOTOR_DRV_LS_PERIOD = g_u16_ls_pwm_full;
 
-	MOTOR_DRV_HS_A = g_u16_throttle_pos_in_pwm_duty_current;
-	MOTOR_DRV_HS_B = g_u16_throttle_pos_in_pwm_duty_current;
-	MOTOR_DRV_HS_C = g_u16_throttle_pos_in_pwm_duty_current;
-	MOTOR_DRV_LS_A = g_u16_ls_pwm_full;
-	MOTOR_DRV_LS_B = g_u16_ls_pwm_full;
-	MOTOR_DRV_LS_C = g_u16_ls_pwm_full;
+	if (g_bit_motor_drive_pwm == MOTOR_DRIVE_HS_PWM) {
+		MOTOR_DRV_HS_A = g_u16_throttle_pos_in_pwm_duty_current;
+		MOTOR_DRV_HS_B = g_u16_throttle_pos_in_pwm_duty_current;
+		MOTOR_DRV_HS_C = g_u16_throttle_pos_in_pwm_duty_current;
+		MOTOR_DRV_LS_A = g_u16_ls_pwm_full;
+		MOTOR_DRV_LS_B = g_u16_ls_pwm_full;
+		MOTOR_DRV_LS_C = g_u16_ls_pwm_full;
+	}
+	else {
+		MOTOR_DRV_HS_A = g_u16_ls_pwm_full;
+		MOTOR_DRV_HS_B = g_u16_ls_pwm_full;
+		MOTOR_DRV_HS_C = g_u16_ls_pwm_full;
+		MOTOR_DRV_LS_A = g_u16_throttle_pos_in_pwm_duty_current;
+		MOTOR_DRV_LS_B = g_u16_throttle_pos_in_pwm_duty_current;
+		MOTOR_DRV_LS_C = g_u16_throttle_pos_in_pwm_duty_current;
+	}
 	switch (g_motor_phase_current) {
 		case MOTOR_PHASE_DEGREE_60:
 			MACRO_MOTOR_DRIVE_REV_SWITCH_PHASE_DEGREE_60;
@@ -365,6 +386,20 @@ void app_init (void) {
 void app_config (void) {
 	uint16_t	index;
 	uint16_t	tmp;
+	
+	/* Hardware dependent configuration should be read before any application state */
+	g_bit_motor_drive_pwm = MOTOR_DRIVE_HS_PWM;
+	g_bit_motor_drive_hs_active = MOTOR_DRIVE_ACTIVE_HIGH;
+	g_bit_motor_drive_ls_active = MOTOR_DRIVE_ACTIVE_HIGH;
+	if (g_bit_motor_drive_hs_active == MOTOR_DRIVE_ACTIVE_HIGH)
+		TRDPOCR0 = _01_TMRD_TRDIOB_OUTPUT_ACTIVE_H | _02_TMRD_TRDIOC_OUTPUT_ACTIVE_H | _04_TMRD_TRDIOD_OUTPUT_ACTIVE_H;
+	else
+		TRDPOCR0 = _00_TMRD_TRDIOB_OUTPUT_ACTIVE_L | _00_TMRD_TRDIOC_OUTPUT_ACTIVE_L | _00_TMRD_TRDIOD_OUTPUT_ACTIVE_L;
+
+	if (g_bit_motor_drive_ls_active == MOTOR_DRIVE_ACTIVE_HIGH)
+		TRDPOCR1 = _01_TMRD_TRDIOB_OUTPUT_ACTIVE_H | _02_TMRD_TRDIOC_OUTPUT_ACTIVE_H | _04_TMRD_TRDIOD_OUTPUT_ACTIVE_H;
+	else
+		TRDPOCR1 = _00_TMRD_TRDIOB_OUTPUT_ACTIVE_L | _00_TMRD_TRDIOC_OUTPUT_ACTIVE_L | _00_TMRD_TRDIOD_OUTPUT_ACTIVE_L;
 	
 	/* Throttle Input */
 	g_u16_throttle_pos_max 				= THROTTLE_POS_MAX;

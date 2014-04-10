@@ -81,6 +81,12 @@ User definitions
 #define MOTOR_ENABLE			1
 #define MOTOR_DISABLE			0
 
+#define MOTOR_DRIVE_HS_PWM		1
+#define MOTOR_DRIVE_LS_PWM		0
+
+#define MOTOR_DRIVE_ACTIVE_HIGH	1
+#define MOTOR_DRIVE_ACTIVE_LOW	0
+
 #define BREAK_PERIOD			(0xF9FFU)	// 0xFA00 * 0.03125 = 1ms
 
 typedef enum _throttle_direction_t {

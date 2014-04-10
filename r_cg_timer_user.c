@@ -74,6 +74,7 @@ extern const motor_phase_t	abc2phase[MOTOR_PHASE_NUM];
 extern motor_phase_t	g_motor_phase_current;
 extern motor_phase_t	g_motor_phase_set_timer0;
 extern motor_phase_t	g_motor_phase_set_timer1;
+extern bit				g_bit_motor_drive_pwm;
 
 extern app_state_t 	g_app_state;
 /* End user code. Do not edit comment generated here */
@@ -228,9 +229,16 @@ __interrupt static void r_tau0_channel2_interrupt(void)
 			g_app_state == APP_STATE_MOTOR_CONTROL_REV_DRIVING ||
 			g_app_state == APP_STATE_MOTOR_CONTROL_PRE_TURBO_DRIVING ||
 			g_app_state == APP_STATE_MOTOR_CONTROL_TURBO_DRIVING) {
-	    MOTOR_DRV_HS_A = g_u16_throttle_pos_in_pwm_duty_current;
-	    MOTOR_DRV_HS_B = g_u16_throttle_pos_in_pwm_duty_current;
-	    MOTOR_DRV_HS_C = g_u16_throttle_pos_in_pwm_duty_current;
+		if (g_bit_motor_drive_pwm == MOTOR_DRIVE_HS_PWM) {
+		    MOTOR_DRV_HS_A = g_u16_throttle_pos_in_pwm_duty_current;
+		    MOTOR_DRV_HS_B = g_u16_throttle_pos_in_pwm_duty_current;
+		    MOTOR_DRV_HS_C = g_u16_throttle_pos_in_pwm_duty_current;
+		}
+		else {
+		    MOTOR_DRV_LS_A = g_u16_throttle_pos_in_pwm_duty_current;
+		    MOTOR_DRV_LS_B = g_u16_throttle_pos_in_pwm_duty_current;
+		    MOTOR_DRV_LS_C = g_u16_throttle_pos_in_pwm_duty_current;
+		}
 	}
     /* End user code. Do not edit comment generated here */
 }

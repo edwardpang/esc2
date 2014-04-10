@@ -30,9 +30,11 @@
 }
 
 /****************************************************************************************************/
-#define MACRO_MOTOR_DRIVE_SWITCH_PHASE_UNKNOWN { \
+#define MACRO_MOTOR_DRIVE_SWITCH_PHASE_OFF { \
 	PM1 |= (PIN_MOTOR_DRV_HS_A | PIN_MOTOR_DRV_HS_B | PIN_MOTOR_DRV_HS_C | \
 			PIN_MOTOR_DRV_LS_A | PIN_MOTOR_DRV_LS_B | PIN_MOTOR_DRV_LS_C); }
+
+#define MACRO_MOTOR_DRIVE_SWITCH_PHASE_UNKNOWN MACRO_MOTOR_DRIVE_SWITCH_PHASE_OFF
 
 /****************************************************************************************************/
 #define MACRO_MOTOR_DRIVE_FWD_SWITCH_PHASE_DEGREE_60 { \
