@@ -95,3 +95,8 @@
 			PIN_MOTOR_DRV_LS_A | PIN_MOTOR_DRV_LS_B | PIN_MOTOR_DRV_LS_C); }
 
 /****************************************************************************************************/
+#define MACRO_GET_AVERAGE_SPEED	 \
+	((g_u16_speed_count_us_degree_60 + g_u16_speed_count_us_degree_120 + g_u16_speed_count_us_degree_180 + \
+	g_u16_speed_count_us_degree_240 + g_u16_speed_count_us_degree_300 + g_u16_speed_count_us_degree_360) / 6)
+
+/****************************************************************************************************/

@@ -177,5 +177,7 @@ typedef enum _com_state_t {
 #define TURBO_DRIVE_PHASE_COUNT_TO_START					(2U)
 #define TURBO_DRIVE_TEST_DEGREE								(50U)
 #define TURBO_DRIVE_PHASE_DEGREE							(60U)
+#define TURBO_DRIVE_DELAY_TABLE_SIZE						(10U)
+#define TURBO_DRIVE_DELAY_DIVIDEND							(100/10U)	// 10 -> speed* 10% = speed / 10, 20 -> speed * 5% = speed / 20
 /* End user code. Do not edit comment generated here */
 #endif

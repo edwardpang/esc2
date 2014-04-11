@@ -118,6 +118,8 @@ bit			g_bit_turbo_drive_start;
 
 bit			g_bit_turbo_timer0_busy;
 bit			g_bit_turbo_timer1_busy;
+uint8_t		g_u16_turbo_drive_delay_step_cur;
+uint16_t	g_u16_turbo_drive_delay_step_table[TURBO_DRIVE_DELAY_TABLE_SIZE];
 
 uint32_t	g_u32_tick;
 bit			g_bit_tick_overflow;
@@ -129,10 +131,6 @@ void app_config (void);
 void app_handler (void);
 void com_init (void);
 void com_handler (void);
-
-#define MACRO_GET_AVERAGE_SPEED	 \
-	((g_u16_speed_count_us_degree_60 + g_u16_speed_count_us_degree_120 + g_u16_speed_count_us_degree_180 + \
-	g_u16_speed_count_us_degree_240 + g_u16_speed_count_us_degree_300 + g_u16_speed_count_us_degree_360) / 6)
 
 /* End user code. Do not edit comment generated here */
 void R_MAIN_UserInit(void);
@@ -431,6 +429,10 @@ void app_config (void) {
 	g_u16_turbo_drive_phase_speed_in_us_tolerence = g_u16_turbo_drive_phase_speed_in_us_middle * g_u16_turbo_drive_phase_speed_in_us_tolerence_percentage / 100U;
 	g_u16_turbo_drive_phase_speed_in_us_leave = g_u16_turbo_drive_phase_speed_in_us_middle + g_u16_turbo_drive_phase_speed_in_us_tolerence;
 	g_u16_turbo_drive_phase_speed_in_us_enter = g_u16_turbo_drive_phase_speed_in_us_middle - g_u16_turbo_drive_phase_speed_in_us_tolerence;
+	
+	g_u16_turbo_drive_delay_step_cur = 0;
+	for (index = 0; index<TURBO_DRIVE_DELAY_TABLE_SIZE; index++)
+		g_u16_turbo_drive_delay_step_table[index] = (TURBO_DRIVE_PHASE_DEGREE - (index * 5));
 }
 
 /***********************************************************************************************************************/
@@ -698,6 +700,7 @@ void app_handler (void) {
 				g_bit_turbo_timer0_busy = 0;
 				g_bit_turbo_timer1_busy = 0;
 				g_bit_turbo_drive_start = 0;
+				g_u16_turbo_drive_delay_step_cur = 0;
 				g_app_state = APP_STATE_MOTOR_CONTROL_PRE_TURBO_DRIVING;
 			}
 			break;

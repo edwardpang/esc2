@@ -88,6 +88,9 @@ extern bit		g_bit_turbo_drive_start;
 extern bit		g_bit_turbo_timer0_busy;
 extern bit		g_bit_turbo_timer1_busy;
 
+extern uint8_t	g_u16_turbo_drive_delay_step_cur;
+extern uint16_t	g_u16_turbo_drive_delay_step_table[TURBO_DRIVE_DELAY_TABLE_SIZE];
+
 /* End user code. Do not edit comment generated here */
 
 /***********************************************************************************************************************
@@ -142,6 +145,7 @@ __interrupt static void r_intc3_interrupt(void)
 __interrupt static void r_hall_sensor_common_interrupt (void) {
 	uint16_t	index;
 	uint16_t	timer_value_with_delay;
+	uint16_t	delta;
 
 	/* Update Speed */
 	g_u16_speed_count_us = SPEED_1US_COUNTER_RESET_VALUE - TRJ0;
@@ -222,6 +226,7 @@ __interrupt static void r_hall_sensor_common_interrupt (void) {
 		}
 	}
 	else if (g_app_state == APP_STATE_MOTOR_CONTROL_PRE_TURBO_DRIVING) {
+		//timer_value_with_delay = (TURBO_DRIVE_PHASE_SPEED_1US_RESET_VALUE * g_u16_turbo_drive_delay_step_table[0]) / TURBO_DRIVE_PHASE_DEGREE;
 		timer_value_with_delay = (TURBO_DRIVE_PHASE_SPEED_1US_RESET_VALUE * TURBO_DRIVE_TEST_DEGREE) / TURBO_DRIVE_PHASE_DEGREE;
 		if (g_motor_phase_current ==  MOTOR_PHASE_DEGREE_60) {
 			MACRO_MOTOR_DRIVE_FWD_SWITCH_PHASE_DEGREE_60;
@@ -282,14 +287,33 @@ __interrupt static void r_hall_sensor_common_interrupt (void) {
 	}
 	else if (g_app_state == APP_STATE_MOTOR_CONTROL_TURBO_DRIVING) {
 		PIN_LED_GREEN = 1;
+		delta = g_u16_speed_count_us / TURBO_DRIVE_DELAY_DIVIDEND;
 		timer_value_with_delay = (TURBO_DRIVE_PHASE_SPEED_1US_RESET_VALUE * TURBO_DRIVE_TEST_DEGREE) / TURBO_DRIVE_PHASE_DEGREE;
+		
 		if (g_motor_phase_current == MOTOR_PHASE_DEGREE_60) {
 			if (g_bit_turbo_timer0_busy) {
 				MACRO_TURN_OFF_TIMER0;
 				MACRO_MOTOR_DRIVE_FWD_SWITCH_PHASE_DEGREE_60;
 			}
+#if 0
+			if (g_u16_speed_count_us_degree_60 < (g_u16_speed_count_us - delta)) {
+				// deceleration
+				if (g_u16_turbo_drive_delay_step_cur)
+					g_u16_turbo_drive_delay_step_cur --;
+			}
+			else if (g_u16_speed_count_us_degree_60 < (g_u16_speed_count_us + delta)) {
+				// steady speed
+				if (g_u16_turbo_drive_delay_step_cur < (TURBO_DRIVE_DELAY_TABLE_SIZE-1))
+					g_u16_turbo_drive_delay_step_cur ++;				
+			}
+			else {
+				// acceleration
+				// keep going
+			}
+#endif
 			g_u16_speed_count_us_degree_60 = g_u16_speed_count_us;
 			// prepare timer 0, start timer 1
+			//timer_value_with_delay = (TURBO_DRIVE_PHASE_SPEED_1US_RESET_VALUE * g_u16_turbo_drive_delay_step_table[g_u16_turbo_drive_delay_step_cur]) / TURBO_DRIVE_PHASE_DEGREE;
 			TDR00 = g_u16_speed_count_us * timer_value_with_delay;
 			g_motor_phase_set_timer0 = g_motor_phase_current;
 			MACRO_TURN_ON_TIMER1;
@@ -299,8 +323,25 @@ __interrupt static void r_hall_sensor_common_interrupt (void) {
 				MACRO_TURN_OFF_TIMER1;
 				MACRO_MOTOR_DRIVE_FWD_SWITCH_PHASE_DEGREE_120;
 			}
+#if 0
+			if (g_u16_speed_count_us_degree_120 < (g_u16_speed_count_us - delta)) {
+				// deceleration
+				if (g_u16_turbo_drive_delay_step_cur)
+					g_u16_turbo_drive_delay_step_cur --;
+			}
+			else if (g_u16_speed_count_us_degree_120 < (g_u16_speed_count_us + delta)) {
+				// steady speed
+				if (g_u16_turbo_drive_delay_step_cur < (TURBO_DRIVE_DELAY_TABLE_SIZE-1))
+					g_u16_turbo_drive_delay_step_cur ++;				
+			}
+			else {
+				// acceleration
+				// keep going
+			}
+#endif
 			g_u16_speed_count_us_degree_120 = g_u16_speed_count_us;
 			// prepare timer 1, start timer 0
+//			timer_value_with_delay = (TURBO_DRIVE_PHASE_SPEED_1US_RESET_VALUE * g_u16_turbo_drive_delay_step_table[g_u16_turbo_drive_delay_step_cur]) / TURBO_DRIVE_PHASE_DEGREE;
 			TDR01 = g_u16_speed_count_us * timer_value_with_delay;
 			g_motor_phase_set_timer1 = g_motor_phase_current;
 			MACRO_TURN_ON_TIMER0;
@@ -310,8 +351,25 @@ __interrupt static void r_hall_sensor_common_interrupt (void) {
 				MACRO_TURN_OFF_TIMER0;
 				MACRO_MOTOR_DRIVE_FWD_SWITCH_PHASE_DEGREE_180;
 			}
+#if 0
+			if (g_u16_speed_count_us_degree_180 < (g_u16_speed_count_us - delta)) {
+				// deceleration
+				if (g_u16_turbo_drive_delay_step_cur)
+					g_u16_turbo_drive_delay_step_cur --;
+			}
+			else if (g_u16_speed_count_us_degree_180 < (g_u16_speed_count_us + delta)) {
+				// steady speed
+				if (g_u16_turbo_drive_delay_step_cur < (TURBO_DRIVE_DELAY_TABLE_SIZE-1))
+					g_u16_turbo_drive_delay_step_cur ++;				
+			}
+			else {
+				// acceleration
+				// keep going
+			}
+#endif
 			g_u16_speed_count_us_degree_180 = g_u16_speed_count_us;
 			// prepare timer 0, start timer 1
+//			timer_value_with_delay = (TURBO_DRIVE_PHASE_SPEED_1US_RESET_VALUE * g_u16_turbo_drive_delay_step_table[g_u16_turbo_drive_delay_step_cur]) / TURBO_DRIVE_PHASE_DEGREE;
 			TDR00 = g_u16_speed_count_us * timer_value_with_delay;
 			g_motor_phase_set_timer0 = g_motor_phase_current;
 			MACRO_TURN_ON_TIMER1;
@@ -321,8 +379,25 @@ __interrupt static void r_hall_sensor_common_interrupt (void) {
 				MACRO_TURN_OFF_TIMER1;
 				MACRO_MOTOR_DRIVE_FWD_SWITCH_PHASE_DEGREE_240;
 			}
+#if 0
+			if (g_u16_speed_count_us_degree_240 < (g_u16_speed_count_us - delta)) {
+				// deceleration
+				if (g_u16_turbo_drive_delay_step_cur)
+					g_u16_turbo_drive_delay_step_cur --;
+			}
+			else if (g_u16_speed_count_us_degree_240 < (g_u16_speed_count_us + delta)) {
+				// steady speed
+				if (g_u16_turbo_drive_delay_step_cur < (TURBO_DRIVE_DELAY_TABLE_SIZE-1))
+					g_u16_turbo_drive_delay_step_cur ++;				
+			}
+			else {
+				// acceleration
+				// keep going
+			}
+#endif
 			g_u16_speed_count_us_degree_240 = g_u16_speed_count_us;
 			// prepare timer 1, start timer 0
+//			timer_value_with_delay = (TURBO_DRIVE_PHASE_SPEED_1US_RESET_VALUE * g_u16_turbo_drive_delay_step_table[g_u16_turbo_drive_delay_step_cur]) / TURBO_DRIVE_PHASE_DEGREE;
 			TDR01 = g_u16_speed_count_us * timer_value_with_delay;
 			g_motor_phase_set_timer1 = g_motor_phase_current;
 			MACRO_TURN_ON_TIMER0;
@@ -332,8 +407,25 @@ __interrupt static void r_hall_sensor_common_interrupt (void) {
 				MACRO_TURN_OFF_TIMER0;
 				MACRO_MOTOR_DRIVE_FWD_SWITCH_PHASE_DEGREE_300;
 			}
+#if 0
+			if (g_u16_speed_count_us_degree_300 < (g_u16_speed_count_us - delta)) {
+				// deceleration
+				if (g_u16_turbo_drive_delay_step_cur)
+					g_u16_turbo_drive_delay_step_cur --;
+			}
+			else if (g_u16_speed_count_us_degree_300 < (g_u16_speed_count_us + delta)) {
+				// steady speed
+				if (g_u16_turbo_drive_delay_step_cur < (TURBO_DRIVE_DELAY_TABLE_SIZE-1))
+					g_u16_turbo_drive_delay_step_cur ++;				
+			}
+			else {
+				// acceleration
+				// keep going
+			}
+#endif
 			g_u16_speed_count_us_degree_300 = g_u16_speed_count_us;
 			// prepare timer 0, start timer 1
+//			timer_value_with_delay = (TURBO_DRIVE_PHASE_SPEED_1US_RESET_VALUE * g_u16_turbo_drive_delay_step_table[g_u16_turbo_drive_delay_step_cur]) / TURBO_DRIVE_PHASE_DEGREE;
 			TDR00 = g_u16_speed_count_us * timer_value_with_delay;
 			g_motor_phase_set_timer0 = g_motor_phase_current;
 			MACRO_TURN_ON_TIMER1;
@@ -343,8 +435,25 @@ __interrupt static void r_hall_sensor_common_interrupt (void) {
 				MACRO_TURN_OFF_TIMER1;
 				MACRO_MOTOR_DRIVE_FWD_SWITCH_PHASE_DEGREE_360;
 			}
+#if 0
+			if (g_u16_speed_count_us_degree_360 < (g_u16_speed_count_us - delta)) {
+				// deceleration
+				if (g_u16_turbo_drive_delay_step_cur)
+					g_u16_turbo_drive_delay_step_cur --;
+			}
+			else if (g_u16_speed_count_us_degree_360 < (g_u16_speed_count_us + delta)) {
+				// steady speed
+				if (g_u16_turbo_drive_delay_step_cur < (TURBO_DRIVE_DELAY_TABLE_SIZE-1))
+					g_u16_turbo_drive_delay_step_cur ++;				
+			}
+			else {
+				// acceleration
+				// keep going
+			}
+#endif
 			g_u16_speed_count_us_degree_360 = g_u16_speed_count_us;
 			// prepare timer 1, start timer 0
+//			timer_value_with_delay = (TURBO_DRIVE_PHASE_SPEED_1US_RESET_VALUE * g_u16_turbo_drive_delay_step_table[g_u16_turbo_drive_delay_step_cur]) / TURBO_DRIVE_PHASE_DEGREE;
 			TDR01 = g_u16_speed_count_us * timer_value_with_delay;
 			g_motor_phase_set_timer1 = g_motor_phase_current;
 			MACRO_TURN_ON_TIMER0;
