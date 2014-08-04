@@ -81,8 +81,8 @@ User definitions
 #define MOTOR_ENABLE			1
 #define MOTOR_DISABLE			0
 
-#define MOTOR_DRIVE_HS_PWM		1
-#define MOTOR_DRIVE_LS_PWM		0
+#define MOTOR_DRIVE_HS_PWM		0
+#define MOTOR_DRIVE_LS_PWM		1
 
 #define MOTOR_DRIVE_ACTIVE_HIGH	1
 #define MOTOR_DRIVE_ACTIVE_LOW	0
