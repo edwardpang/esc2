@@ -282,7 +282,7 @@ __interrupt static void r_hall_sensor_common_interrupt (void) {
 				g_motor_phase_current == MOTOR_PHASE_DEGREE_300) {
 				MACRO_TURN_ON_TIMER1;
 			}
-			g_bit_turbo_drive_start = 1;
+			//g_bit_turbo_drive_start = 1;
 		}
 	}
 	else if (g_app_state == APP_STATE_MOTOR_CONTROL_TURBO_DRIVING) {
