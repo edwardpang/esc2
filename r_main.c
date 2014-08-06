@@ -386,7 +386,7 @@ void app_config (void) {
 	uint16_t	tmp;
 	
 	/* Hardware dependent configuration should be read before any application state */
-	g_bit_motor_drive_pwm = MOTOR_DRIVE_HS_PWM;
+	g_bit_motor_drive_pwm = MOTOR_DRIVE_LS_PWM;
 	g_bit_motor_drive_hs_active = MOTOR_DRIVE_ACTIVE_HIGH;
 	g_bit_motor_drive_ls_active = MOTOR_DRIVE_ACTIVE_LOW;
 	if (g_bit_motor_drive_hs_active == MOTOR_DRIVE_ACTIVE_HIGH)
