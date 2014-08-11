@@ -262,7 +262,7 @@ __interrupt static void r_hall_sensor_common_interrupt (void) {
 			MACRO_MOTOR_DRIVE_FWD_SWITCH_PHASE_DEGREE_360;
 			g_u16_speed_count_us_degree_360 = g_u16_speed_count_us;
 			TDR01 = g_u16_speed_count_us_degree_360 * timer_value_with_delay;
-			g_motor_phase_set_timer0 = MOTOR_PHASE_DEGREE_300;
+			g_motor_phase_set_timer0 = MOTOR_PHASE_DEGREE_360;
 		}
 		else {
 			// MOTOR_PHASE_OPEN:
