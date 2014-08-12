@@ -276,6 +276,7 @@ __interrupt static void r_hall_sensor_common_interrupt (void) {
 		}
 		g_u8_turbo_drive_phase_count ++;
 		if (g_u8_turbo_drive_phase_count == g_u8_turbo_drive_phase_count_to_start) {
+#if 0
 			if (g_motor_phase_current == MOTOR_PHASE_DEGREE_120 || 
 				g_motor_phase_current == MOTOR_PHASE_DEGREE_240 ||
 				g_motor_phase_current == MOTOR_PHASE_DEGREE_360) {
@@ -286,6 +287,7 @@ __interrupt static void r_hall_sensor_common_interrupt (void) {
 				g_motor_phase_current == MOTOR_PHASE_DEGREE_300) {
 				MACRO_TURN_ON_TIMER1;
 			}
+#endif
 			g_bit_turbo_drive_start = 1;
 		}
 		PIN_LED_GREEN = 1;
