@@ -226,6 +226,10 @@ __interrupt static void r_hall_sensor_common_interrupt (void) {
 		}
 	}
 	else if (g_app_state == APP_STATE_MOTOR_CONTROL_PRE_TURBO_DRIVING) {
+		PIN_LED_GREEN = 1;
+		PIN_LED_GREEN = 0;
+		PIN_LED_GREEN = 1;
+		PIN_LED_GREEN = 0;
 		//timer_value_with_delay = (TURBO_DRIVE_PHASE_SPEED_1US_RESET_VALUE * g_u16_turbo_drive_delay_step_table[0]) / TURBO_DRIVE_PHASE_DEGREE;
 		timer_value_with_delay = (TURBO_DRIVE_PHASE_SPEED_1US_RESET_VALUE * TURBO_DRIVE_TEST_DEGREE) / TURBO_DRIVE_PHASE_DEGREE;
 		if (g_motor_phase_current ==  MOTOR_PHASE_DEGREE_60) {
@@ -284,6 +288,11 @@ __interrupt static void r_hall_sensor_common_interrupt (void) {
 			}
 			g_bit_turbo_drive_start = 1;
 		}
+		PIN_LED_GREEN = 1;
+		PIN_LED_GREEN = 0;
+		PIN_LED_GREEN = 1;
+		PIN_LED_GREEN = 0;
+
 	}
 	else if (g_app_state == APP_STATE_MOTOR_CONTROL_TURBO_DRIVING) {
 		PIN_LED_GREEN = 1;
