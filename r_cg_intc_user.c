@@ -304,8 +304,8 @@ __interrupt static void r_hall_sensor_common_interrupt (void) {
 		if (g_motor_phase_current == MOTOR_PHASE_DEGREE_60) {
 			if (g_bit_turbo_timer0_busy) {
 				MACRO_TURN_OFF_TIMER0;
-				MACRO_MOTOR_DRIVE_FWD_SWITCH_PHASE_DEGREE_60;
 			}
+			MACRO_MOTOR_DRIVE_FWD_SWITCH_PHASE_DEGREE_60;
 #if 0
 			if (g_u16_speed_count_us_degree_60 < (g_u16_speed_count_us - delta)) {
 				// deceleration
@@ -332,8 +332,8 @@ __interrupt static void r_hall_sensor_common_interrupt (void) {
 		else if (g_motor_phase_current == MOTOR_PHASE_DEGREE_120) {
 			if (g_bit_turbo_timer1_busy) {
 				MACRO_TURN_OFF_TIMER1;
-				MACRO_MOTOR_DRIVE_FWD_SWITCH_PHASE_DEGREE_120;
 			}
+			MACRO_MOTOR_DRIVE_FWD_SWITCH_PHASE_DEGREE_120;
 #if 0
 			if (g_u16_speed_count_us_degree_120 < (g_u16_speed_count_us - delta)) {
 				// deceleration
@@ -360,8 +360,8 @@ __interrupt static void r_hall_sensor_common_interrupt (void) {
 		else if (g_motor_phase_current == MOTOR_PHASE_DEGREE_180) {
 			if (g_bit_turbo_timer0_busy) {
 				MACRO_TURN_OFF_TIMER0;
-				MACRO_MOTOR_DRIVE_FWD_SWITCH_PHASE_DEGREE_180;
 			}
+			MACRO_MOTOR_DRIVE_FWD_SWITCH_PHASE_DEGREE_180;
 #if 0
 			if (g_u16_speed_count_us_degree_180 < (g_u16_speed_count_us - delta)) {
 				// deceleration
@@ -388,8 +388,8 @@ __interrupt static void r_hall_sensor_common_interrupt (void) {
 		else if (g_motor_phase_current == MOTOR_PHASE_DEGREE_240) {
 			if (g_bit_turbo_timer1_busy) {
 				MACRO_TURN_OFF_TIMER1;
-				MACRO_MOTOR_DRIVE_FWD_SWITCH_PHASE_DEGREE_240;
 			}
+			MACRO_MOTOR_DRIVE_FWD_SWITCH_PHASE_DEGREE_240;
 #if 0
 			if (g_u16_speed_count_us_degree_240 < (g_u16_speed_count_us - delta)) {
 				// deceleration
@@ -416,8 +416,8 @@ __interrupt static void r_hall_sensor_common_interrupt (void) {
 		else if (g_motor_phase_current == MOTOR_PHASE_DEGREE_300) {
 			if (g_bit_turbo_timer0_busy) {
 				MACRO_TURN_OFF_TIMER0;
-				MACRO_MOTOR_DRIVE_FWD_SWITCH_PHASE_DEGREE_300;
 			}
+			MACRO_MOTOR_DRIVE_FWD_SWITCH_PHASE_DEGREE_300;
 #if 0
 			if (g_u16_speed_count_us_degree_300 < (g_u16_speed_count_us - delta)) {
 				// deceleration
@@ -444,8 +444,8 @@ __interrupt static void r_hall_sensor_common_interrupt (void) {
 		else if (g_motor_phase_current == MOTOR_PHASE_DEGREE_360) {
 			if (g_bit_turbo_timer1_busy) {
 				MACRO_TURN_OFF_TIMER1;
-				MACRO_MOTOR_DRIVE_FWD_SWITCH_PHASE_DEGREE_360;
 			}
+			MACRO_MOTOR_DRIVE_FWD_SWITCH_PHASE_DEGREE_360;
 #if 0
 			if (g_u16_speed_count_us_degree_360 < (g_u16_speed_count_us - delta)) {
 				// deceleration
