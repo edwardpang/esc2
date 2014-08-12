@@ -76,6 +76,8 @@ extern motor_phase_t	g_motor_phase_set_timer0;
 extern motor_phase_t	g_motor_phase_set_timer1;
 extern bit				g_bit_motor_drive_pwm;
 
+extern bit		g_bit_turbo_drive_start;
+
 extern app_state_t 	g_app_state;
 /* End user code. Do not edit comment generated here */
 
@@ -89,36 +91,38 @@ __interrupt static void r_tau0_channel0_interrupt(void)
 {
     /* Start user code. Do not edit comment generated here */
 	R_TAU0_Channel0_Stop ( );
-	switch (g_motor_phase_set_timer0) {
-		case MOTOR_PHASE_DEGREE_300:
-			MACRO_MOTOR_DRIVE_FWD_SWITCH_PHASE_DEGREE_60;
-			break;
-			
-		case MOTOR_PHASE_DEGREE_360:
-			MACRO_MOTOR_DRIVE_FWD_SWITCH_PHASE_DEGREE_120;
-			break;
-			
-		case MOTOR_PHASE_DEGREE_60:
-			MACRO_MOTOR_DRIVE_FWD_SWITCH_PHASE_DEGREE_180;
-			break;
-			
-		case MOTOR_PHASE_DEGREE_120:
-			MACRO_MOTOR_DRIVE_FWD_SWITCH_PHASE_DEGREE_240;
-			break;
-			
-		case MOTOR_PHASE_DEGREE_180:
-			MACRO_MOTOR_DRIVE_FWD_SWITCH_PHASE_DEGREE_300;
-			break;
-			
-		case MOTOR_PHASE_DEGREE_240:
-			MACRO_MOTOR_DRIVE_FWD_SWITCH_PHASE_DEGREE_360;
-			break;
+	if (g_bit_turbo_drive_start) {
+		switch (g_motor_phase_set_timer0) {
+			case MOTOR_PHASE_DEGREE_300:
+				MACRO_MOTOR_DRIVE_FWD_SWITCH_PHASE_DEGREE_60;
+				break;
+				
+			case MOTOR_PHASE_DEGREE_360:
+				MACRO_MOTOR_DRIVE_FWD_SWITCH_PHASE_DEGREE_120;
+				break;
+				
+			case MOTOR_PHASE_DEGREE_60:
+				MACRO_MOTOR_DRIVE_FWD_SWITCH_PHASE_DEGREE_180;
+				break;
+				
+			case MOTOR_PHASE_DEGREE_120:
+				MACRO_MOTOR_DRIVE_FWD_SWITCH_PHASE_DEGREE_240;
+				break;
+				
+			case MOTOR_PHASE_DEGREE_180:
+				MACRO_MOTOR_DRIVE_FWD_SWITCH_PHASE_DEGREE_300;
+				break;
+				
+			case MOTOR_PHASE_DEGREE_240:
+				MACRO_MOTOR_DRIVE_FWD_SWITCH_PHASE_DEGREE_360;
+				break;
 
-		case MOTOR_PHASE_OPEN:
-		case MOTOR_PHASE_ERROR:
-		default:
-			MACRO_MOTOR_DRIVE_SWITCH_PHASE_UNKNOWN;
-			break;
+			case MOTOR_PHASE_OPEN:
+			case MOTOR_PHASE_ERROR:
+			default:
+				MACRO_MOTOR_DRIVE_SWITCH_PHASE_UNKNOWN;
+				break;
+		}
 	}
     /* End user code. Do not edit comment generated here */
 }
@@ -133,36 +137,38 @@ __interrupt static void r_tau0_channel1_interrupt(void)
 {
     /* Start user code. Do not edit comment generated here */
 	R_TAU0_Channel1_Stop ( );
-	switch (g_motor_phase_set_timer1) {
-		case MOTOR_PHASE_DEGREE_300:
-			MACRO_MOTOR_DRIVE_FWD_SWITCH_PHASE_DEGREE_60;
-			break;
-			
-		case MOTOR_PHASE_DEGREE_360:
-			MACRO_MOTOR_DRIVE_FWD_SWITCH_PHASE_DEGREE_120;
-			break;
-			
-		case MOTOR_PHASE_DEGREE_60:
-			MACRO_MOTOR_DRIVE_FWD_SWITCH_PHASE_DEGREE_180;
-			break;
-			
-		case MOTOR_PHASE_DEGREE_120:
-			MACRO_MOTOR_DRIVE_FWD_SWITCH_PHASE_DEGREE_240;
-			break;
-			
-		case MOTOR_PHASE_DEGREE_180:
-			MACRO_MOTOR_DRIVE_FWD_SWITCH_PHASE_DEGREE_300;
-			break;
-			
-		case MOTOR_PHASE_DEGREE_240:
-			MACRO_MOTOR_DRIVE_FWD_SWITCH_PHASE_DEGREE_360;
-			break;
+	if (g_bit_turbo_drive_start) {
+		switch (g_motor_phase_set_timer1) {
+			case MOTOR_PHASE_DEGREE_300:
+				MACRO_MOTOR_DRIVE_FWD_SWITCH_PHASE_DEGREE_60;
+				break;
+				
+			case MOTOR_PHASE_DEGREE_360:
+				MACRO_MOTOR_DRIVE_FWD_SWITCH_PHASE_DEGREE_120;
+				break;
+				
+			case MOTOR_PHASE_DEGREE_60:
+				MACRO_MOTOR_DRIVE_FWD_SWITCH_PHASE_DEGREE_180;
+				break;
+				
+			case MOTOR_PHASE_DEGREE_120:
+				MACRO_MOTOR_DRIVE_FWD_SWITCH_PHASE_DEGREE_240;
+				break;
+				
+			case MOTOR_PHASE_DEGREE_180:
+				MACRO_MOTOR_DRIVE_FWD_SWITCH_PHASE_DEGREE_300;
+				break;
+				
+			case MOTOR_PHASE_DEGREE_240:
+				MACRO_MOTOR_DRIVE_FWD_SWITCH_PHASE_DEGREE_360;
+				break;
 
-		case MOTOR_PHASE_OPEN:
-		case MOTOR_PHASE_ERROR:
-		default:
-			MACRO_MOTOR_DRIVE_SWITCH_PHASE_UNKNOWN;
-			break;
+			case MOTOR_PHASE_OPEN:
+			case MOTOR_PHASE_ERROR:
+			default:
+				MACRO_MOTOR_DRIVE_SWITCH_PHASE_UNKNOWN;
+				break;
+		}
 	}
 	/* End user code. Do not edit comment generated here */
 }
